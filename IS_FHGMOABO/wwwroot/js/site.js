@@ -2,3 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+function ExitLoginForm () {
+    const element = document.getElementById('login-form');
+    element.classList.add('animate__backOutDown');
+}
