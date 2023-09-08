@@ -6,31 +6,31 @@
 
 <div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
 
-    <div id="login-form" class="col-md-4 border border-2 rounded-4 border-secondary justify-content-center bg-dark text-light animate__animated animate__backInUp animate__faster">
+    <div id="login-form" class="shadow col-md-4 border border-2 rounded-4 border-secondary justify-content-center bg-dark text-light animate__animated animate__backInUp animate__faster">
 
         <h1 class="d-flex justify-content-center mt-3">Вход в систему</h1>
 
 
         <form asp-controller="Account" asp-action="Login" method="post">
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger mt-3 text-center" })
+            @Html.ValidationSummary(true, "", new { @class = "text-warning alert alert-warning mt-3 text-center p-0" })
 
             <div class="form-group mt-5">
                 <label asp-for="UserName"></label>
                 <input type="text" asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+                <span asp-validation-for="UserName" class="text-warning"></span>
             </div>
 
             <div class="form-group mt-3">
                 <label asp-for="Password"></label>
                 <input type="password" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <span asp-validation-for="Password" class="text-warning"></span>
             </div>
 
-            <div class="form-group mt-3 text-center">
+            <div class="form-group form-switch mt-3 text-center">
                 <div class="checkbox">
                     <label asp-for="RememberMe">
-                        <input asp-for="RememberMe" />
+                        <input class="form-check-input" asp-for="RememberMe" />
                         @Html.DisplayNameFor(m => m.RememberMe)
                     </label>
                 </div>
