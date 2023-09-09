@@ -24,6 +24,7 @@ namespace IS_FHGMOABO.DAL
         /// Тип улицы
         /// </summary>
         [Required]
+        [MaxLength(127)]
         public string Type { get; set; }
 
         /// <summary>
@@ -32,72 +33,78 @@ namespace IS_FHGMOABO.DAL
         [Required]
         public string Street { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Район
         /// </summary>
         public string? Region { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Населеный пункт
         /// </summary>
         [Required]
         public string InhabitedLocality { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Округ
         /// </summary>
         public string? District { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Субъект
         /// </summary>
         [Required]
         public string? Subject { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Страна
         /// </summary>
         [Required]
         public string Country { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Кадастровый номер дома
         /// </summary>
         public string? HouseCadastralNumber { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Кадастровый номер участка
         /// </summary>
         public string? PlotCadastralNumber { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Паспортная площадь дома
         /// </summary>
         [Required]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal HousesPassportedFloorArea { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Паспортная площадь участка
         /// </summary>
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal? PlotPassportedFloorArea { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Площадь жилых помещений
         /// </summary>
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal? ResidentialPremisesPassportedArea { get; set; }
 
-        // <summary>
-        /// Площадь не жилых помещений
+        /// <summary>
+        /// Площадь нежилых помещений
         /// </summary>
+        [Required]
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal? NonResidentialPremisesPassportedArea { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Дата добавления или изменения
         /// </summary>
         [Required]
         public DateTime Created { get; set; }
 
-        // <summary>
+        /// <summary>
         /// Дата удаление или сохранения старых данных
         /// </summary>
         public DateTime? Deleted { get; set; }
