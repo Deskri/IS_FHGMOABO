@@ -89,14 +89,14 @@ namespace IS_FHGMOABO.DAL
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal? ResidentialPremisesPassportedArea { get; set; }
+        public decimal ResidentialPremisesPassportedArea { get; set; }
 
         /// <summary>
         /// Площадь нежилых помещений
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal? NonResidentialPremisesPassportedArea { get; set; }
+        public decimal NonResidentialPremisesPassportedArea { get; set; }
 
         /// <summary>
         /// Дата добавления или изменения

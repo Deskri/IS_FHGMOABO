@@ -1,0 +1,19 @@
+﻿@*
+    
+*@
+
+<!-- Button trigger modal -->
+<button id="addButton" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addModal">
+    <i class="bi bi-building-fill-add"></i> Добавить МКД
+</button>
+
+@await Html.PartialAsync("Add")
+
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+        myInput.focus()
+    })
+</script>
