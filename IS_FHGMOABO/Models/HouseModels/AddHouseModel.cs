@@ -10,7 +10,7 @@ namespace IS_FHGMOABO.Models.HouseModels
         /// </summary>
         [Required(ErrorMessage = "Требуется внести номер дома")]
         [Display(Name = "Номер дома")]
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         /// <summary>
         /// Тип улицы
@@ -22,7 +22,7 @@ namespace IS_FHGMOABO.Models.HouseModels
         /// <summary>
         /// Улица
         /// </summary>
-        [Required(ErrorMessage = "Требуется внести улица")]
+        [Required(ErrorMessage = "Требуется внести улицу")]
         [Display(Name = "Улица")]
         public string Street { get; set; }
 

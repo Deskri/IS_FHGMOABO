@@ -18,7 +18,7 @@ namespace IS_FHGMOABO.DAL
         /// Номер дома
         /// </summary>
         [Required]
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         /// <summary>
         /// Тип улицы
