@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IS_FHGMOABO.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body style="margin: 0px;">
 
@@ -18,8 +19,8 @@
 
             <div class="list-group list-group-flush text-center">
 
-                <a class="bg-secondary text-light list-group-item list-group-item-action list-group-item-light p-3" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <a class="bg-secondary text-light list-group-item list-group-item-action list-group-item-light p-3" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a class="bg-secondary text-light list-group-item list-group-item-action list-group-item-light p-3" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-heart-fill"></i> Главная</a>
+                <a class="bg-secondary text-light list-group-item list-group-item-action list-group-item-light p-3" asp-area="" asp-controller="House" asp-action="Index"><i class="bi bi-building-fill"></i> МКД</a>
 
             </div>
         </div>
@@ -29,7 +30,7 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
                 <div class="container-fluid">
 
-                    <button class="btn btn-warning" id="sidebarToggle">&#60; Боковое меню</button>
+                    <button class="btn btn-warning" id="sidebarToggle"><i class="bi bi-reply-all-fill"></i> Боковое меню</button>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -39,7 +40,7 @@
                                 {
                                     @Html.AntiForgeryToken()
 
-                                    <button type="submit" class="btn btn-warning">Выйти</button>
+                                    <button type="submit" class="btn btn-warning">Выйти <i class="bi bi-box-arrow-right"></i></button>
                                 }
                             </li>
                         </ul>
@@ -47,7 +48,7 @@
                 </div>
             </nav>
             <!-- Page content-->
-            <div id="main" class="container-fluid" style="overflow: auto; width:auto;">
+            <div id="main" class="container-fluid pt-3" style="overflow: auto; width:auto;">
 
                 @RenderBody()
 

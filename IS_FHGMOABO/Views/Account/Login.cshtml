@@ -13,7 +13,7 @@
 
         <form asp-controller="Account" asp-action="Login" method="post">
 
-            @Html.ValidationSummary(true, "", new { @class = "text-warning alert alert-warning mt-3 text-center p-0" })
+            <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group mt-5">
                 <label asp-for="UserName"></label>

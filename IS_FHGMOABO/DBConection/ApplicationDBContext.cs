@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using IS_FHGMOABO.DAL;
 
 namespace IS_FHGMOABO.DBConection
 {
@@ -10,5 +11,7 @@ namespace IS_FHGMOABO.DBConection
         {
 
         }
+
+        public DbSet<House> Houses { get; set; }
     }
 }
