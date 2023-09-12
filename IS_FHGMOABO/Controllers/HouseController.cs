@@ -20,15 +20,18 @@ namespace IS_FHGMOABO.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-/*            var model = await _applicationDBContext.Houses.ToListAsync();*/
-            return View(/*model*/);
+            var model = new IndexHouseModel();
+            model.Houses = await _applicationDBContext.Houses
+                                .Where(x => x.Deleted == null)
+                                .ToListAsync();
+            return View(model);
         }
 
         [Authorize]
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            return PartialView("Add");
+            return PartialView("Add", new AddHouseModel());
         }
 
         [Authorize]
@@ -62,7 +65,13 @@ namespace IS_FHGMOABO.Controllers
                 return RedirectToAction("Index", "House");
             }
 
-            return View("Index", _addHouseModel);
+            var model = new IndexHouseModel();
+            model.AddHouse = _addHouseModel;
+            model.Houses = await _applicationDBContext.Houses
+                                .Where(x => x.Deleted == null)
+                                .ToListAsync();
+
+            return View("Index", model);
         }
     }
 }
