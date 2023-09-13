@@ -29,6 +29,21 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
+        public async Task<IActionResult> Archive()
+        {
+            var model = await _applicationDBContext.Houses
+                                .Where(x => x.Deleted != null)
+                                .ToListAsync();
+            return View(model);
+        }
+
+        public IActionResult Details () 
+        { 
+            return PartialView("Details", new House()); 
+        }
+
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Add()
         {
             return PartialView("Add", new AddHouseModel());
