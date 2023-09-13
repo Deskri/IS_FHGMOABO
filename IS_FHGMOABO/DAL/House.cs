@@ -108,5 +108,10 @@ namespace IS_FHGMOABO.DAL
         /// Дата удаление или сохранения старых данных
         /// </summary>
         public DateTime? Deleted { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство для связи с Room
+        /// </summary>
+        public ICollection<Room> Rooms { get; set; }
     }
 }

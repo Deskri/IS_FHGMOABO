@@ -66,7 +66,7 @@
                     </div>
                     <div class="card-footer bg-dark bg-gradient text-end rounded-bottom-4">
 
-                        <a class="btn btn-warning mt-1 mb-1 me-1"><i class="bi bi-building-fill-up"></i> Помещения</a>
+                        <a class="btn btn-warning mt-1 mb-1 me-1" asp-controller="Room" asp-action="Index" asp-route-id="@house.Id"><i class="bi bi-building-fill-up"></i> Помещения</a>
                         <button id="detailsButton_@house.Id" type="button" class="btn btn-warning mt-1 mb-1 ms-1 me-1" data-bs-toggle="modal" data-bs-target="#detailsModal_@house.Id">
                             <i class="bi bi-search"></i> Подробнее
                         </button>
