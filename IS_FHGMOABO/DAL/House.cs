@@ -53,7 +53,7 @@ namespace IS_FHGMOABO.DAL
         /// Субъект
         /// </summary>
         [Required]
-        public string? Subject { get; set; }
+        public string Subject { get; set; }
 
         /// <summary>
         /// Страна

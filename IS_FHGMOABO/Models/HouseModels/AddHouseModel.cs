@@ -48,8 +48,8 @@ namespace IS_FHGMOABO.Models.HouseModels
         /// <summary>
         /// Субъект
         /// </summary>
-        [Display(Name = "Субъект (необязательно)")]
-        public string? Subject { get; set; }
+        [Display(Name = "Субъект")]
+        public string Subject { get; set; }
 
         /// <summary>
         /// Страна

@@ -1,49 +1,36 @@
-﻿@using IS_FHGMOABO.DAL;
-@using IS_FHGMOABO.Models.HouseModels;
-@model IS_FHGMOABO.Models.HouseModels.IndexHouseModel
+﻿@model List<IS_FHGMOABO.DAL.House>
 
 @*
 
 *@
 
 <div class="row">
-    <div class="col">
-        <h2>Реестр МКД</h2>
-    </div>
-    <div class="col text-end">
+    <div class="col text-start">
 
-        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="House" asp-action="Archive"><i class="bi bi-archive-fill"></i> Архив МКД</a>
-
-        <!-- Button trigger modal -->
-        <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
-            <i class="bi bi-building-fill-add"></i> Добавить МКД
-        </button>
+        <h2 style="margin-bottom:0px;"><a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="House" asp-action="Index"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a> Архив МКД</h2>
 
     </div>
 </div>
 
 <div class="row mt-3 shadow">
 
-    @if (Model.Houses == null || Model.Houses.Count == 0)
+    @if (Model == null || Model.Count == 0)
     {
         <div class="alert alert-warning text-center">
-            <h1 class="mt-3">Отсутствет информация в системе о МКД</h1>
+            <h1 class="mt-3">В системе отсутсутствует информация об архивных МКД</h1>
         </div>
     }
     else
     {
-        @foreach (var house in Model.Houses)
+        @foreach (var house in Model)
         {
             <div class="col-lg-6 mt-3">
                 <div class="card shadow rounded-4">
                     <div class="card-header bg-dark bg-gradient text-light rounded-top-4">
 
                         <div class="row">
-                            <div class="col-11 text-center">
+                            <div class="col-12 text-center">
                                 <h5>@house.Type @house.Street, дом @house.Number </h5>
-                            </div>
-                            <div class="col text-end">
-                                <a href="#" class="text-warning"><i class="bi bi-pencil"></i></a>
                             </div>
                         </div>
 
@@ -51,7 +38,7 @@
                     <div class="row">
                         <div class="col-3 text-center">
 
-                            <i class="bi bi-house-check-fill" style="font-size: 6em"></i>
+                            <i class="bi bi-house-dash-fill" style="font-size: 6em"></i>
 
                         </div>
                         <div class="col-9">
@@ -66,11 +53,9 @@
                     </div>
                     <div class="card-footer bg-dark bg-gradient text-end rounded-bottom-4">
 
-                        <a class="btn btn-warning mt-1 mb-1 me-1"><i class="bi bi-building-fill-up"></i> Помещения</a>
                         <button id="detailsButton_@house.Id" type="button" class="btn btn-warning mt-1 mb-1 ms-1 me-1" data-bs-toggle="modal" data-bs-target="#detailsModal_@house.Id">
                             <i class="bi bi-search"></i> Подробнее
                         </button>
-                        <a class="btn btn-danger mt-1 mb-1 ms-1"><i class="bi bi-trash2-fill"></i> Удалить</a>
 
                     </div>
                 </div>
@@ -81,10 +66,6 @@
     }
 
 </div>
-
-
-
-@await Html.PartialAsync("Add", new AddHouseModel())
 
 <script>
     var myModal = document.getElementById('myModal')

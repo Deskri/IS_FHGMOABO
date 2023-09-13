@@ -1,0 +1,153 @@
+﻿@model IS_FHGMOABO.DAL.House
+
+@{
+}
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal_@Model.Id" tabindex="-1" aria-labelledby="detailsModalLabel_@Model.Id">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header bg-dark rounded-top-4">
+
+                <h5 class="modal-title text-warning" id="addModalLabel">Подробнее об МКД</h5>
+                <button type="button" class="btn-close border border-warning btn-outline-warning" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p class="mb3">
+                    В этом разделе Вы можете более детально ознакомиться с информацией о многоквартирном доме по адресу @Model.Type @Model.Street, дом @Model.Number.
+                </p>
+
+                <h2 class="mt-3 mb-3">Адрес: @Model.Type @Model.Street, дом @Model.Number</h2>
+
+                <form>
+
+                    @if (Model.Region != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Район</label>
+                            <input class="form-control" asp-for="Region" readonly />
+
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+
+                        <label>Населеный пункт</label>
+                        <input class="form-control" asp-for="InhabitedLocality" readonly />
+
+                    </div>
+
+                    @if (Model.District != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Район</label>
+                            <input class="form-control" asp-for="District" readonly />
+
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+
+                        <label>Субъект</label>
+                        <input class="form-control" asp-for="Subject" readonly />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label>Страна</label>
+                        <input class="form-control" asp-for="Country" readonly />
+
+                    </div>
+
+                    @if (Model.HouseCadastralNumber != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Кадастровый номер дома</label>
+                            <input class="form-control" asp-for="HouseCadastralNumber" readonly />
+
+                        </div>
+                    }
+
+                    @if (Model.PlotCadastralNumber != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Кадастровый номер участка</label>
+                            <input class="form-control" asp-for="PlotCadastralNumber" readonly />
+
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+
+                        <label>Паспортная площадь дома</label>
+                        <input class="form-control" asp-for="HousesPassportedFloorArea" readonly />
+
+                    </div>
+
+                    @if (Model.PlotPassportedFloorArea != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Паспортная площадь участка</label>
+                            <input class="form-control" asp-for="PlotPassportedFloorArea" readonly />
+
+                        </div>
+                    }
+
+                    <div class="form-group mb-3">
+
+                        <label>Площадь жилых помещений</label>
+                        <input class="form-control" asp-for="ResidentialPremisesPassportedArea" readonly />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label>Площадь нежилых помещений</label>
+                        <input class="form-control" asp-for="NonResidentialPremisesPassportedArea" readonly />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label>Создано</label>
+                        <input class="form-control" asp-for="Created" readonly />
+
+                    </div>
+
+                    @if (Model.Deleted != null)
+                    {
+                        <div class="form-group mb-3">
+
+                            <label>Удалено</label>
+                            <input class="form-control" asp-for="Deleted" readonly />
+
+                        </div>
+                    }
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer bg-dark rounded-bottom-4">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div> 
