@@ -50,7 +50,25 @@ namespace IS_FHGMOABO.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddRoomModel _addRoomModel)
         {
-            if (ModelState.IsValid)
+            bool _modelState = ModelState.IsValid;
+
+            var sameNumber = await _applicationDBContext.Rooms
+                        .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
+                                            && x.Deleted == null);
+
+            if (sameNumber != null)
+            {
+                ModelState.AddModelError("Number", "Номер помещения не должно повторяться.");
+                _modelState = false;
+            }
+
+            if (_addRoomModel.TotalArea == 0)
+            {
+                ModelState.AddModelError("TotalArea", "Общая площадь помещения не должна быть равна 0.");
+                _modelState = false;
+            }
+
+            if (_modelState)
             {
                 var room = new Room()
                 {
@@ -71,7 +89,7 @@ namespace IS_FHGMOABO.Controllers
                 await _applicationDBContext.AddAsync(room);
                 await _applicationDBContext.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Room");
+                return RedirectToAction("Index", "Room", _addRoomModel.HouseId);
             }
 
             var model = new IndexRoomModel();
