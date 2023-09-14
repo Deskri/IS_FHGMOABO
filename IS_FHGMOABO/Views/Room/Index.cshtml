@@ -1,16 +1,36 @@
-﻿@model List<IS_FHGMOABO.DAL.Room>
+﻿@using IS_FHGMOABO.Models.RoomModels;
+@model IS_FHGMOABO.Models.RoomModels.IndexRoomModel
 
 @{
 }
 
-@if (Model.Count == 0)
-{
-    <h1>Нет данных о помещениях</h1>
-}
-else
-{
-    foreach (var room in Model)
-    {
-        <h1>@room.Number</h1>
-    }
-}
+<div class="row">
+    <div class="col-12">
+        <h3><a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="House" asp-action="Index"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a> Реестр помещений по адресу: @Model.House.Type @Model.House.Street, дом @Model.House.Number</h3>
+    </div>
+    <div class="col-6">
+        
+    </div>
+    <div class="col-6 text-end">
+
+        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="" asp-action=""><i class="bi bi-archive-fill"></i> Архив помещений</a>
+
+        <!-- Button trigger modal -->
+        <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="bi bi-building-fill-add"></i> Добавить помещение
+        </button>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("Add", new AddRoomModel() { HouseId = Model.House.Id})
+
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+        myInput.focus()
+    })
+</script>
+

@@ -17,7 +17,7 @@ namespace IS_FHGMOABO.Models.HouseModels
         /// </summary>
         [Required(ErrorMessage = "Требуется внести тип улицы")]
         [Display(Name = "Тип улицы")]
-        public Type type { get; set; }
+        public StreetType Type { get; set; }
 
         /// <summary>
         /// Улица
@@ -97,7 +97,7 @@ namespace IS_FHGMOABO.Models.HouseModels
         [Display(Name = "Площадь нежилых помещений")]
         public decimal NonResidentialPremisesPassportedArea { get; set; }
 
-        public enum Type
+        public enum StreetType
         {
             улица,
             бульвар,

@@ -36,9 +36,9 @@
                         <div class="col">
                             <div class="form-group mb-3">
 
-                                <label asp-for="type"></label>
-                                @Html.DropDownListFor(model => model.type, new SelectList(Enum.GetValues(typeof(AddHouseModel.Type))), "Выберите тип", new { @class = "form-control" })
-                                <span asp-validation-for="type" class="text-danger"></span>
+                                <label asp-for="Type"></label>
+                                @Html.DropDownListFor(model => model.Type, new SelectList(Enum.GetValues(typeof(AddHouseModel.StreetType))), "Выберите тип", new { @class = "form-control" })
+                                <span asp-validation-for="Type" class="text-danger"></span>
 
                             </div>
                         </div>
