@@ -15,7 +15,7 @@ namespace IS_FHGMOABO.Models.RoomModels
         /// </summary>
         [Required(ErrorMessage = "Требуется внести тип помещения")]
         [Display(Name = "Тип помещения")]
-        public RoomType Type { get; set; }
+        public RoomType? Type { get; set; }
 
         /// <summary>
         /// Номер помещения
@@ -29,7 +29,7 @@ namespace IS_FHGMOABO.Models.RoomModels
         /// </summary>
         [Required(ErrorMessage = "Требуется внести назначение")]
         [Display(Name = "Назначение")]
-        public RoomPurpose Purpose { get; set; }
+        public RoomPurpose? Purpose { get; set; }
 
         /// <summary>
         /// Общая площадь

@@ -99,6 +99,8 @@ namespace IS_FHGMOABO.Controllers
             model.AddRoom = _addRoomModel;
             model.Rooms = await _applicationDBContext.Rooms
                         .Where(x => x.HouseId == _addRoomModel.HouseId)
+                        .OrderBy(x => x.Type)
+                        .ThenBy(x => x.Number)
                         .ToListAsync();
 
             model.House = await _applicationDBContext.Houses

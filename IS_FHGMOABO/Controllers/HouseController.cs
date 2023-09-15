@@ -24,6 +24,7 @@ namespace IS_FHGMOABO.Controllers
             model.Houses = await _applicationDBContext.Houses
                                 .Where(x => x.Deleted == null)
                                 .ToListAsync();
+
             return View(model);
         }
 
