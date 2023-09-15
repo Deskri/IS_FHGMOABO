@@ -4,128 +4,191 @@
 @{
 }
 
-<!-- Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel">
+<div class="collapse mb-3" id="collapseAdd">
+    <div class="card card-body">
+        <h3>Добавление в систему нового помещения</h3>
 
-    <div class="modal-dialog modal-lg">
+        <form method="post" asp-controller="Room" asp-action="Add">
 
-        <div class="modal-content rounded-4">
+            <table class="table table-striped table-bordered border border-2 border-dark bg-light bg-opacity-75">
 
-            <div class="modal-header bg-dark rounded-top-4">
+                <thead class="text-center align-middle">
 
-                <h5 class="modal-title text-warning" id="addModalLabel">Добавление нового помещения</h5>
-                <button type="button" class="btn-close border border-warning btn-outline-warning" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <tr>
 
-            </div>
+                        <th rowspan="2">
 
-            <form method="post" asp-controller="Room" asp-action="Add">
+                            @Html.DisplayNameFor(model => model.Type)
 
-                <div class="modal-body">
+                        </th>
+                        <th rowspan="2">
 
-                    <p class="mb3">
-                        Данный раздел позовляет Вам внести в информационную систему сведения о помещении многоквартирного дома. Вы должны в обязательном порядке ввести все текстовые поля, которые не помечены, как необязательные. Следите внимательно за вводимой информацией.
-                    </p>
-                    
-                    <input type="hidden" asp-for="HouseId"/>
+                            @Html.DisplayNameFor(model => model.Number)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="Type"></label>
-                        @Html.DropDownListFor(model => model.Type, new SelectList(Enum.GetValues(typeof(AddRoomModel.RoomType))), "Выберите тип", new { @class = "form-control" })
-                        <span asp-validation-for="Type" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            @Html.DisplayNameFor(model => model.Purpose)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="Number"></label>
-                        <input asp-for="Number" class="form-control" />
-                        <span asp-validation-for="Number" class="text-danger"></span>
+                        <th colspan="3">
 
-                    </div>
+                            Площади
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="Purpose"></label>
-                        @Html.DropDownListFor(model => model.Purpose, new SelectList(Enum.GetValues(typeof(AddRoomModel.RoomPurpose))), "Выберите тип", new { @class = "form-control" })
-                        <span asp-validation-for="Purpose" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            @Html.DisplayNameFor(model => model.Floor)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="TotalArea"></label>
-                        <input type="number" step="0.01" asp-for="TotalArea" class="form-control" />
-                        <span asp-validation-for="TotalArea" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            @Html.DisplayNameFor(model => model.Entrance)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="LivingArea"></label>
-                        <input type="number" step="0.01" asp-for="LivingArea" class="form-control" />
-                        <span asp-validation-for="LivingArea" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            @Html.DisplayNameFor(model => model.CadastralNumber)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="UsableArea"></label>
-                        <input type="number" step="0.01" asp-for="UsableArea" class="form-control" />
-                        <span asp-validation-for="UsableArea" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            @Html.DisplayNameFor(model => model.IsPrivatized)
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="Floor"></label>
-                        <input type="number" asp-for="Floor" class="form-control" />
-                        <span asp-validation-for="Floor" class="text-danger"></span>
+                        <th rowspan="2">
 
-                    </div>
+                            Дейстия
 
-                    <div class="form-group mb-3">
+                        </th>
 
-                        <label asp-for="Entrance"></label>
-                        <input type="number" asp-for="Entrance" class="form-control" />
-                        <span asp-validation-for="Entrance" class="text-danger"></span>
+                    </tr>
 
-                    </div>
+                    <tr>
 
-                    <div class="form-group mb-3">
+                        <th>
 
-                        <label asp-for="CadastralNumber"></label>
-                        <input asp-for="CadastralNumber" class="form-control" />
-                        <span asp-validation-for="CadastralNumber" class="text-danger"></span>
+                            @Html.DisplayNameFor(model => model.TotalArea)
 
-                    </div>
+                        </th>
+                        <th>
 
-                    <div class="form-group form-switch mb-3">
+                            @Html.DisplayNameFor(model => model.LivingArea)
 
-                        <div class="checkbox">
-                            <label asp-for="IsPrivatized">
-                                <input class="form-check-input" asp-for="IsPrivatized" />
-                                @Html.DisplayNameFor(m => m.IsPrivatized)
-                            </label>
-                            <span asp-validation-for="IsPrivatized" class="text-danger"></span>
-                        </div>
+                        </th>
+                        <th>
 
-                    </div>
-                </div>
+                            @Html.DisplayNameFor(model => model.UsableArea)
 
-                <div class="modal-footer bg-dark rounded-bottom-4">
+                        </th>
 
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-warning">Сохранить</button>
+                    </tr>
 
-                </div>
+                </thead>
 
-            </form>
+                <tbody>
 
-        </div>
+                    <tr>
 
+                        <input type="hidden" asp-for="HouseId" />
+
+                        <th>
+
+                            @Html.DropDownListFor(model => model.Type, new SelectList(Enum.GetValues(typeof(AddRoomModel.RoomType))), "Выберите", new { @class = "form-control" })
+                            <span asp-validation-for="Type" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            <input asp-for="Number" class="form-control" />
+                            <span asp-validation-for="Number" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            @Html.DropDownListFor(model => model.Purpose, new SelectList(Enum.GetValues(typeof(AddRoomModel.RoomPurpose))), "Выберите", new { @class = "form-control" })
+                            <span asp-validation-for="Purpose" class="text-danger"></span>
+
+
+                        </th>
+
+                        <th>
+
+                            <input type="number" step="0.01" asp-for="TotalArea" class="form-control" />
+                            <span asp-validation-for="TotalArea" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            <input type="number" step="0.01" asp-for="LivingArea" class="form-control" />
+                            <span asp-validation-for="LivingArea" class="text-danger"></span>
+
+
+                        </th>
+
+                        <th>
+
+                            <input type="number" step="0.01" asp-for="UsableArea" class="form-control" />
+                            <span asp-validation-for="UsableArea" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            <input type="number" asp-for="Floor" class="form-control" />
+                            <span asp-validation-for="Floor" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            <input type="number" asp-for="Entrance" class="form-control" />
+                            <span asp-validation-for="Entrance" class="text-danger"></span>
+
+                        </th>
+
+                        <th>
+
+                            <input asp-for="CadastralNumber" class="form-control" />
+                            <span asp-validation-for="CadastralNumber" class="text-danger"></span>
+
+                        </th>
+
+                        <th class="form-switch text-center align-middle">
+
+                            <div class="checkbox">
+
+                                <input class="form-check-input ms-0" asp-for="IsPrivatized" />
+                                <span asp-validation-for="IsPrivatized" class="text-danger"></span>
+
+                            </div>
+
+                        </th>
+
+                        <th class="text-center align-middle">
+
+                            <button type="submit" class="btn btn-warning" title="Сохранить"><i class="bi bi-box-arrow-down"></i></button>
+
+                        </th>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </form>
     </div>
-
 </div>
 
 @if (ViewData.ModelState.IsValid == false)
