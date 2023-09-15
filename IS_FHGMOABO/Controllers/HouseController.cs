@@ -58,7 +58,7 @@ namespace IS_FHGMOABO.Controllers
                 var house = new House()
                 {
                     Number = _addHouseModel.Number,
-                    Type = _addHouseModel.type.ToString(),
+                    Type = _addHouseModel.Type.ToString(),
                     Street = _addHouseModel.Street,
                     Region = _addHouseModel.Region,
                     InhabitedLocality = _addHouseModel.InhabitedLocality,

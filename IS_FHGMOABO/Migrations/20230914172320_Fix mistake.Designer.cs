@@ -4,6 +4,7 @@ using IS_FHGMOABO.DBConection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IS_FHGMOABO.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230914172320_Fix mistake")]
+    partial class Fixmistake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,7 +127,7 @@ namespace IS_FHGMOABO.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Purpose")
                         .IsRequired()
@@ -144,6 +147,9 @@ namespace IS_FHGMOABO.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HouseId");
+
+                    b.HasIndex("Number")
+                        .IsUnique();
 
                     b.ToTable("Rooms");
                 });

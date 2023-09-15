@@ -1,0 +1,135 @@
+﻿@using IS_FHGMOABO.Models.RoomModels;
+@model IS_FHGMOABO.Models.RoomModels.IndexRoomModel
+
+@{
+}
+
+<div class="row">
+    <div class="col-6">
+
+        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="House" asp-action="Index"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a>
+
+    </div>
+
+    <div class="col-6 text-end">
+
+        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="" asp-action=""><i class="bi bi-archive-fill"></i> Архив помещений</a>
+
+        <!-- Button trigger modal -->
+        <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="bi bi-building-fill-add"></i> Добавить помещение
+        </button>
+
+    </div>
+
+    <hr class="border border-dark border-2">
+
+    <div class="col-12 mb-3">
+
+        <h2> Реестр помещений по адресу: @Model.House.Type @Model.House.Street, дом @Model.House.Number</h2>
+
+    </div>
+</div>
+
+<table class="table table-striped table-bordered border border-2 border-dark bg-light bg-opacity-75">
+    <thead class="text-center align-middle">
+        <tr>
+            <th rowspan="2">
+                Номер
+            </th>
+            <th rowspan="2">
+                Назначение
+            </th>
+            <th colspan="3">
+                Площади
+            </th>
+            <th rowspan="2">
+                Этаж
+            </th>
+            <th rowspan="2">
+                Подъезд
+            </th>
+            <th rowspan="2">
+                Кадастровый номер
+            </th>
+            <th rowspan="2">
+                Приватизировано
+            </th>
+            <th rowspan="2">
+                Дейстия
+            </th>
+        </tr>
+        <tr>
+            <th>
+                Общая площадь
+            </th>
+            <th>
+                Жилая площадь
+            </th>
+            <th>
+                Полезная площадь
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model.Rooms)
+        {
+            <tr>
+                <th>
+                    @room.Type №@room.Number
+                </th>
+                <th>
+                    @room.Purpose
+                </th>
+                <th>
+                    @room.TotalArea
+                </th>
+                <th>
+                    @room.LivingArea
+                </th>
+                <th>
+                    @room.UsableArea
+                </th>
+                <th>
+                    @room.Floor
+                </th>
+                <th>
+                    @room.Entrance
+                </th>
+                <th>
+                    @room.CadastralNumber
+                </th>
+
+                @if (room.IsPrivatized)
+                {
+                    <th>
+                        Да
+                    </th>
+                }
+                else
+                {
+                    <th>
+                        Нет
+                    </th>
+                }
+                <th>
+                    <a class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить"><i class="bi bi-trash2-fill"></i></a>
+                </th>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@await Html.PartialAsync("Add", new AddRoomModel() { HouseId = Model.House.Id})
+
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+        myInput.focus()
+    })
+</script>
+

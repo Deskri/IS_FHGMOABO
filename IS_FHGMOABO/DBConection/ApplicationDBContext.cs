@@ -13,5 +13,6 @@ namespace IS_FHGMOABO.DBConection
         }
 
         public DbSet<House> Houses { get; set; }
+        public DbSet<Room> Rooms { get; set; }
     }
 }
