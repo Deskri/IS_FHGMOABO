@@ -26,6 +26,8 @@ namespace IS_FHGMOABO.Controllers
 
             model.Rooms = await _applicationDBContext.Rooms
                         .Where(x => x.HouseId == id)
+                        .OrderBy(x => x.Type)
+                        .ThenBy(x => x.Number)
                         .ToListAsync();
 
             model.House = await _applicationDBContext.Houses
@@ -54,6 +56,7 @@ namespace IS_FHGMOABO.Controllers
 
             var sameNumber = await _applicationDBContext.Rooms
                         .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
+                                            && x.Type == _addRoomModel.Type.ToString()
                                             && x.Deleted == null);
 
             if (sameNumber != null)
@@ -89,7 +92,7 @@ namespace IS_FHGMOABO.Controllers
                 await _applicationDBContext.AddAsync(room);
                 await _applicationDBContext.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Room", _addRoomModel.HouseId);
+                return RedirectToAction("Index", "Room", new { id = _addRoomModel.HouseId });
             }
 
             var model = new IndexRoomModel();
