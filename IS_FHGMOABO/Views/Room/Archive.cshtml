@@ -52,6 +52,12 @@ else
                 <th rowspan="2">
                     Приватизировано
                 </th>
+                <th rowspan="2">
+                    Создано
+                </th>
+                <th rowspan="2">
+                    Удалено/Изменено
+                </th>
             </tr>
             <tr>
                 <th>
@@ -106,6 +112,12 @@ else
                             Нет
                         </th>
                     }
+                    <th>
+                        @room.Created
+                    </th>
+                    <th>
+                        @room.Deleted
+                    </th>
 
                 </tr>
             }
