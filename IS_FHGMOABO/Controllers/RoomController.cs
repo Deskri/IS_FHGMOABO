@@ -25,7 +25,7 @@ namespace IS_FHGMOABO.Controllers
             var model = new IndexRoomModel();
 
             model.Rooms = await _applicationDBContext.Rooms
-                        .Where(x => x.HouseId == id)
+                        .Where(x => x.HouseId == id && x.Deleted == null)
                         .OrderBy(x => x.Type)
                         .ThenBy(x => x.Number)
                         .ToListAsync();
@@ -39,6 +39,43 @@ namespace IS_FHGMOABO.Controllers
             };
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Archive(int id)
+        {
+            var model = new IndexRoomModel();
+
+            model.Rooms = await _applicationDBContext.Rooms
+                        .Where(x => x.HouseId == id && x.Deleted != null)
+                        .OrderBy(x => x.Type)
+                        .ThenBy(x => x.Number)
+                        .ToListAsync();
+
+            model.House = await _applicationDBContext.Houses
+                        .FirstOrDefaultAsync(x => x.Id == id);
+
+            model.AddRoom = new AddRoomModel()
+            {
+                HouseId = id,
+            };
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id, int idIndex)
+        {
+            var room = await _applicationDBContext.Rooms.FindAsync(id);
+
+            if (room != null)
+            {
+                room.Deleted = DateTime.Now;
+
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Room", new { id = idIndex });
+            };
+
+            return RedirectToAction("Index", "Room", new { id = idIndex });
         }
 
         [Authorize]
