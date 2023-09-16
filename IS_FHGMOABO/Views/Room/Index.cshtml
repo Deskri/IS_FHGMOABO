@@ -126,7 +126,7 @@ else
                         </th>
                     }
                     <th class="text-center">
-                        <a class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить"><i class="bi bi-trash2-fill"></i></a>
+                        <a class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить" asp-area="" asp-controller="Room" asp-action="Delete" asp-route-id="@room.Id" asp-route-idIndex="@Model.House.Id"><i class="bi bi-trash2-fill"></i></a>
                     </th>
 
                 </tr>

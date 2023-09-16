@@ -62,6 +62,22 @@ namespace IS_FHGMOABO.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Delete(int id, int idIndex)
+        {
+            var room = await _applicationDBContext.Rooms.FindAsync(id);
+
+            if (room != null)
+            {
+                room.Deleted = DateTime.Now;
+
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Room", new { id = idIndex });
+            };
+
+            return RedirectToAction("Index", "Room", new { id = idIndex });
+        }
+
         [Authorize]
         [HttpGet]
         public IActionResult Add()
