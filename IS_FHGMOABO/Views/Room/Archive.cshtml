@@ -1,5 +1,4 @@
-﻿@using IS_FHGMOABO.Models.RoomModels;
-@model IS_FHGMOABO.Models.RoomModels.IndexRoomModel
+﻿@model IS_FHGMOABO.Models.RoomModels.IndexRoomModel
 
 @{
 }
@@ -7,30 +6,15 @@
 <div class="row">
     <div class="col-6">
 
-        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="House" asp-action="Index"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a>
+        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Room" asp-action="Index" asp-route-id="@Model.House.Id"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a>
 
     </div>
-
-    <div class="col-6 text-end">
-
-        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="Room" asp-action="Archive" asp-route-id="@Model.House.Id"><i class="bi bi-archive-fill"></i> Архив помещений</a>
-
-        <button id="addButton" class="btn btn-warning btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
-            <i class="bi bi-building-fill-add"></i> Добавить помещение
-        </button>
-
-
-    </div>
-
-    @await Html.PartialAsync("Add", new AddRoomModel() { 
-        HouseId = Model.House.Id,
-    })
 
     <hr class="border border-dark border-2">
 
     <div class="col-12 mb-3">
 
-        <h2> Реестр помещений <span class="badge bg-warning text-black">@Model.House.Type @Model.House.Street, дом @Model.House.Number</span></h2>
+        <h2> Архив помещений <span class="badge bg-warning text-black">@Model.House.Type @Model.House.Street, дом @Model.House.Number</span></h2>
 
     </div>
 
@@ -39,7 +23,7 @@
 @if (Model.Rooms == null || Model.Rooms.Count == 0)
 {
     <div class="alert alert-warning text-center">
-        <h1 class="mt-3">В системе отсутсутствует информация о помещениях по адресу @Model.House.Type @Model.House.Street, дом @Model.House.Number</h1>
+        <h1 class="mt-3">В системе отсутсутствует информация об архивных помещениях по адресу @Model.House.Type @Model.House.Street, дом @Model.House.Number</h1>
     </div>
 }
 else
@@ -134,13 +118,3 @@ else
         </tbody>
     </table>
 }
-
-<script>
-    var myModal = document.getElementById('myModal')
-    var myInput = document.getElementById('myInput')
-
-    myModal.addEventListener('shown.bs.modal', function () {
-        myInput.focus()
-    })
-</script>
-
