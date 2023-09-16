@@ -25,6 +25,20 @@ namespace IS_FHGMOABO.Controllers
                                 .Where(x => x.Deleted == null)
                                 .ToListAsync();
 
+            foreach (var house in model.Houses)
+            {
+                var rooms = await _applicationDBContext.Rooms.Where(x => x.HouseId == house.Id && x.Deleted == null).ToListAsync();
+
+                if (rooms == null || rooms.Count == 0)
+                {
+                    house.RoomsCount = 0;
+                }
+                else
+                {
+                    house.RoomsCount = rooms.Count();
+                }
+            }
+
             return View(model);
         }
 

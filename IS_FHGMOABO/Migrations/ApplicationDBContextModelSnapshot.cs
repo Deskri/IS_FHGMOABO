@@ -87,7 +87,7 @@ namespace IS_FHGMOABO.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Houses");
+                    b.ToTable("Houses", (string)null);
                 });
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.Room", b =>
@@ -145,7 +145,7 @@ namespace IS_FHGMOABO.Migrations
 
                     b.HasIndex("HouseId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

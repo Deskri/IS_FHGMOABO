@@ -112,5 +112,8 @@ namespace IS_FHGMOABO.DAL
         /// Навигационное свойство для связи с Room
         /// </summary>
         public ICollection<Room> Rooms { get; set; }
+
+        [NotMapped]
+        public int RoomsCount { get; set; }
     }
 }
