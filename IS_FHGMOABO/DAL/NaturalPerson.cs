@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IS_FHGMOABO.DAL
 {
+    [Table("NaturalPersons")]
     public class NaturalPerson
     {
         /// <summary>

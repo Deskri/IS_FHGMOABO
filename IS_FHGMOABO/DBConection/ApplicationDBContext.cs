@@ -14,5 +14,8 @@ namespace IS_FHGMOABO.DBConection
 
         public DbSet<House> Houses { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<LegalPerson> LegalPersons { get; set; }
+        public DbSet<NaturalPerson> NaturalPersons { get; set; }
+        public DbSet<Property> Properties { get; set; }
     }
 }

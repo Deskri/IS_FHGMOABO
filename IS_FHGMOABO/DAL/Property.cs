@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IS_FHGMOABO.DAL
 {
+    [Table("Properties")]
     public class Property
     {
         /// <summary>
@@ -43,11 +44,6 @@ namespace IS_FHGMOABO.DAL
         public ICollection<NaturalPerson> NaturalPersons { get; set; }
 
         /// <summary>
-        /// Навигационное свойство для связи с промежуточной таблицей физических лиц
-        /// </summary>
-        public ICollection<PropertyNaturalPerson> PropertyNaturalPersons { get; set; }
-
-        /// <summary>
         /// Вид собственности
         /// </summary>
         [Required]
@@ -57,8 +53,8 @@ namespace IS_FHGMOABO.DAL
         /// Доля
         /// </summary>
         [Required]
-        [Column(TypeName = "decimal(1, 9)")]
-        public string Share { get; set; }
+        [Column(TypeName = "decimal(10, 9)")]
+        public decimal Share { get; set; }
 
         /// <summary>
         /// Дата вступления в собственность
