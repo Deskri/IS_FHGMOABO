@@ -113,6 +113,9 @@ namespace IS_FHGMOABO.DAL
         /// </summary>
         public ICollection<Room> Rooms { get; set; }
 
+        /// <summary>
+        /// Колличество помещений в МКД
+        /// </summary>
         [NotMapped]
         public int RoomsCount { get; set; }
     }
