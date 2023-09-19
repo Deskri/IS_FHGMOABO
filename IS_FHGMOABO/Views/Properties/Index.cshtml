@@ -1,0 +1,28 @@
+﻿
+@{
+}
+
+<div class="row">
+    <div class="col">
+        <h2>Реестр собственников</h2>
+    </div>
+    <div class="col text-end">
+
+        <!-- Button trigger modal -->
+        <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="bi bi-person-fill-add"></i> Добавить собственность
+        </button>
+
+    </div>
+</div>
+
+@await Html.PartialAsync("Add")
+
+<script>
+    var myModal = document.getElementById('myModal')
+    var myInput = document.getElementById('myInput')
+
+    myModal.addEventListener('shown.bs.modal', function () {
+        myInput.focus()
+    })
+</script>
