@@ -1,0 +1,179 @@
+﻿@{
+}
+
+<form>
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Первый собственник</h4>
+
+            <div class="form-group mb-3">
+
+                <label>Имя</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Фамилия</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Отчество</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Дата рождения</label>
+                <input type="date" class="form-control" />
+
+            </div>
+
+        </div>
+
+        <div class="col-6">
+
+            <h4>Второй собственник</h4>
+
+            <div class="form-group mb-3">
+
+                <label>Имя</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Фамилия</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Отчество</label>
+                <input class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Дата рождения</label>
+                <input type="date" class="form-control" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <h4>Адрес</h4>
+
+        <div class="form-group mb-3">
+
+            <label for="roomDataList">Введите, чтобы найти</label>
+            <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти">
+            <datalist id="datalistOptions">
+                <option value="1" label="ул. Ульяны Громовой, д.4, кв.1"></option>
+                <option value="2" label="ул. Ульяны Громовой, д.4, кв.2"></option>
+                <option value="3" label="ул. Ульяны Громовой, д.4, кв.3"></option>
+            </datalist>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="col-6">
+
+            <h4>Доля собственности</h4>
+
+            <div class="form-group mb-3">
+
+                <label>Доля</label>
+                <div class="input-group">
+
+                    <input type="number" class="form-control" />
+                    <span class="input-group-text">/</span>
+                    <input type="number" class="form-control" />
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-6">
+
+            <h4>Даты</h4>
+
+            <div class="form-group mb-3">
+
+                <label>Дата вступления в собственность</label>
+                <input type="date" class="form-control" />
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label>Дата окончания собственности</label>
+                <input type="date" class="form-control" />
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <h4>Документ</h4>
+
+        <div class="form-group mb-3">
+
+            <label>Вид государственной регистрации</label>
+            <input class="form-control" />
+
+        </div>
+
+        <div class="form-group mb-3">
+
+            <label>Вид государственной регистрации</label>
+            <input class="form-control" />
+
+        </div>
+
+        <div class="form-group mb-3">
+
+            <label>Кем выдано</label>
+            <input class="form-control" />
+
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="d-grid gap-2">
+
+        <button type="submit" class="btn btn-warning btn-lg" data-bs-dismiss="modal">Добавить</button>
+
+    </div>
+
+</form>
