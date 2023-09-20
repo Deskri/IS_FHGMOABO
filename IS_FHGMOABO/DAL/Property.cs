@@ -30,18 +30,18 @@ namespace IS_FHGMOABO.DAL
         /// Внешний ключ для связи с юридическим лицом
         /// </summary>
         [ForeignKey("LegalPerson")]
-        public int LeagalPersonId { get; set; }
+        public int? LeagalPersonId { get; set; }
 
         /// <summary>
         /// Навигационное свойство для связи с юридическим лицом
         /// </summary>
         [InverseProperty("Properties")]
-        public LegalPerson LegalPerson { get; set; }
+        public LegalPerson? LegalPerson { get; set; }
 
         /// <summary>
         /// Навигационное свойство для связи с физискими лицами
         /// </summary>
-        public ICollection<NaturalPerson> NaturalPersons { get; set; }
+        public ICollection<NaturalPerson>? NaturalPersons { get; set; }
 
         /// <summary>
         /// Вид собственности
@@ -65,21 +65,21 @@ namespace IS_FHGMOABO.DAL
         /// <summary>
         /// Дата окончания собственности
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         /// <summary>
         /// Вид государственной регистрации
         /// </summary>
-        public string TypeOfStateRegistration { get; set; }
+        public string? TypeOfStateRegistration { get; set; }
 
         /// <summary>
         /// Номер государственной регистрации
         /// </summary>
-        public string StateRegistrationNumber { get; set; }
+        public string? StateRegistrationNumber { get; set; }
 
         /// <summary>
         /// Кем выдано право
         /// </summary>
-        public string ByWhomIssued { get; set; }
+        public string? ByWhomIssued { get; set; }
     }
 }

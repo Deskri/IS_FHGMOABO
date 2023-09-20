@@ -1,4 +1,6 @@
-﻿
+﻿@using IS_FHGMOABO.Models.PropertiesModels;
+@model IS_FHGMOABO.Models.PropertiesModels.IndexPropertiesModel
+
 @{
 }
 
@@ -16,7 +18,7 @@
     </div>
 </div>
 
-@await Html.PartialAsync("Add")
+@await Html.PartialAsync("Add", new AddPropertiesModel())
 
 <script>
     var myModal = document.getElementById('myModal')

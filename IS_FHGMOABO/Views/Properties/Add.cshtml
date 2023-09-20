@@ -1,5 +1,4 @@
-﻿@using IS_FHGMOABO.Models.HouseModels;
-@model IS_FHGMOABO.Models.HouseModels.AddHouseModel
+﻿@model IS_FHGMOABO.Models.PropertiesModels.AddPropertiesModel
 
 @{
 
@@ -55,7 +54,7 @@
 
                                 <hr>
 
-                                @await Html.PartialAsync("AddFullPropertyNaturalPerson")
+                                @await Html.PartialAsync("AddFullPropertyNaturalPerson", Model.AddFullPropertyNaturalPerson)
 
                             </div>
 

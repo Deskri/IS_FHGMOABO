@@ -2,6 +2,6 @@
 {
     public class IndexPropertiesModel
     {
-        
+        public AddPropertiesModel AddProperties { get; set; }
     }
 }
