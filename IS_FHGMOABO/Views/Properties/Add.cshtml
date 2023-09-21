@@ -1,0 +1,226 @@
+﻿@model IS_FHGMOABO.Models.PropertiesModels.AddPropertiesModel
+
+@{
+
+}
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header bg-dark rounded-top-4">
+
+                <h5 class="modal-title text-warning" id="addModalLabel">Добавление в систему новой записи о собственности</h5>
+                <button type="button" class="btn-close border border-warning btn-outline-warning" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div class="row mt-3">
+
+                    <div class="form-group">
+                        <h4>Выберите тип собственности</h4>
+
+                        <select class="form-control mt-3" id="selectForm">
+                            <option value="">Выберите</option>
+                            <option value="formFullProperty">Собственность (полная собственность)</option>
+                            <option value="formSharedProperty">Долевая собственность</option>
+                            <option value="formJointProperty">Совместная собственность</option>
+                        </select>
+                    </div>
+
+                    <div id="formContainer">
+
+                        @await Html.PartialAsync("AddFullProperty", Model.AddFullProperty)
+
+                        <div id="formSharedProperty" hidden>
+
+                            <hr>
+
+                            <h4>Выберите кем является собственник</h4>
+
+                            <select class="form-control mt-3" id="selectFormSharedProperty">
+
+                                <option value="">Выберите</option>
+                                <option value="formSharedPropertyNaturalPerson">Физическое лицо</option>
+                                <option value="formSharedPropertyLegalPerson">Юридическое лицо</option>
+
+                            </select>
+
+                            <div id="formSharedPropertyNaturalPerson" hidden>
+
+                                <hr>
+
+                                @await Html.PartialAsync("AddSharedPropertyNaturalPerson")
+                                
+                            </div>
+
+                            <div id="formSharedPropertyLegalPerson" hidden>
+
+                                <hr>
+
+                                @await Html.PartialAsync("AddSharedPropertyLegalPerson")
+                                
+                            </div>
+
+                        </div>
+
+                        <div id="formJointProperty" hidden>
+
+                            <hr>
+
+                            @await Html.PartialAsync("AddJointProperty")
+
+                        </div>
+
+                    </div>
+                </div>
+
+                
+
+            </div>
+
+            <div class="modal-footer bg-dark rounded-bottom-4">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == true)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+            document.getElementById('selectForm').value = 'formFullProperty';
+            document.getElementById('selectFormFullProperty').value = 'formFullPropertyNaturalPerson';
+
+            var formFullProperty = document.getElementById('formFullProperty');
+            var formSharedProperty = document.getElementById('formSharedProperty');
+            var formJointProperty = document.getElementById('formJointProperty');
+
+            formFullProperty.hidden = false;
+            formSharedProperty.hidden = true;
+            formJointProperty.hidden = true;
+
+            var formFullPropertyNaturalPerson = document.getElementById('formFullPropertyNaturalPerson');
+            var formFullPropertyLegalPerson = document.getElementById('formFullPropertyLegalPerson');
+
+            formFullPropertyNaturalPerson.hidden = false;
+            formFullPropertyLegalPerson.hidden = true;
+        };
+    </script>
+}
+
+@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == false)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+            document.getElementById('selectForm').value = 'formFullProperty';
+            document.getElementById('selectFormFullProperty').value = 'formFullPropertyNaturalPerson';
+
+            var formFullProperty = document.getElementById('formFullProperty');
+            var formSharedProperty = document.getElementById('formSharedProperty');
+            var formJointProperty = document.getElementById('formJointProperty');
+
+            formFullProperty.hidden = false;
+            formSharedProperty.hidden = true;
+            formJointProperty.hidden = true;
+
+            var formFullPropertyNaturalPerson = document.getElementById('formFullPropertyNaturalPerson');
+            var formFullPropertyLegalPerson = document.getElementById('formFullPropertyLegalPerson');
+
+            formFullPropertyNaturalPerson.hidden = true;
+            formFullPropertyLegalPerson.hidden = false;
+        };
+    </script>
+}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectForm = document.getElementById('selectForm');
+        var formFullProperty = document.getElementById('formFullProperty');
+        var formSharedProperty = document.getElementById('formSharedProperty');
+        var formJointProperty = document.getElementById('formJointProperty');
+
+        selectForm.addEventListener('change', function () {
+            var selectedForm = selectForm.value;
+
+            formFullProperty.hidden = true;
+            formSharedProperty.hidden = true;
+            formJointProperty.hidden = true;
+
+            if (selectedForm === 'formFullProperty') {
+                formFullProperty.hidden = false;
+            } else if (selectedForm === 'formSharedProperty') {
+                formSharedProperty.hidden = false;
+            } else if (selectedForm === 'formJointProperty') {
+                formJointProperty.hidden = false;
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectForm = document.getElementById('selectFormFullProperty');
+        var formFullPropertyNaturalPerson = document.getElementById('formFullPropertyNaturalPerson');
+        var formFullPropertyLegalPerson = document.getElementById('formFullPropertyLegalPerson');
+
+        selectForm.addEventListener('change', function () {
+            var selectedForm = selectForm.value;
+
+            formFullPropertyNaturalPerson.hidden = true;
+            formFullPropertyLegalPerson.hidden = true;
+
+            if (selectedForm === 'formFullPropertyNaturalPerson') {
+                formFullPropertyNaturalPerson.hidden = false;
+            } else if (selectedForm === 'formFullPropertyLegalPerson') {
+                formFullPropertyLegalPerson.hidden = false;
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectForm = document.getElementById('selectFormSharedProperty');
+        var formSharedPropertyNaturalPerson = document.getElementById('formSharedPropertyNaturalPerson');
+        var formSharedPropertyLegalPerson = document.getElementById('formSharedPropertyLegalPerson');
+
+        selectForm.addEventListener('change', function () {
+            var selectedForm = selectForm.value;
+
+            formSharedPropertyNaturalPerson.hidden = true;
+            formSharedPropertyLegalPerson.hidden = true;
+
+            if (selectedForm === 'formSharedPropertyNaturalPerson') {
+                formSharedPropertyNaturalPerson.hidden = false;
+            } else if (selectedForm === 'formSharedPropertyLegalPerson') {
+                formSharedPropertyLegalPerson.hidden = false;
+            }
+        });
+    });
+</script>
+
+@* @if (ViewData.ModelState.IsValid == false)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+        };
+    </script>
+} *@
+

@@ -4,6 +4,7 @@ using IS_FHGMOABO.DBConection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IS_FHGMOABO.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230917083054_Creating propeties")]
+    partial class Creatingpropeties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,15 +146,16 @@ namespace IS_FHGMOABO.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ByWhomIssued")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateOfTaking")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EndDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LeagalPersonId")
+                    b.Property<int>("LeagalPersonId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoomId")
@@ -161,6 +165,7 @@ namespace IS_FHGMOABO.Migrations
                         .HasColumnType("decimal(10, 9)");
 
                     b.Property<string>("StateRegistrationNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -168,6 +173,7 @@ namespace IS_FHGMOABO.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeOfStateRegistration")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -454,7 +460,9 @@ namespace IS_FHGMOABO.Migrations
                 {
                     b.HasOne("IS_FHGMOABO.DAL.LegalPerson", "LegalPerson")
                         .WithMany("Properties")
-                        .HasForeignKey("LeagalPersonId");
+                        .HasForeignKey("LeagalPersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("IS_FHGMOABO.DAL.Room", "Room")
                         .WithMany("Properties")
