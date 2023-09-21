@@ -98,7 +98,7 @@ namespace IS_FHGMOABO.Controllers
 
             if (sameNumber != null)
             {
-                ModelState.AddModelError("Number", "Номер помещения не должно повторяться.");
+                ModelState.AddModelError("Number", "Номер помещения не должен повторяться.");
                 _modelState = false;
             }
 

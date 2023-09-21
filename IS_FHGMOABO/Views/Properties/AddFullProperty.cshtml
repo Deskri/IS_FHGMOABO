@@ -1,0 +1,283 @@
+﻿@model IS_FHGMOABO.Models.PropertiesModels.AddFullPropertyModel
+
+@{
+}
+
+<div id="formFullProperty" hidden>
+
+    <hr>
+
+    <h4>Выберите кем является собственник</h4>
+
+    <select class="form-control mt-3" id="selectFormFullProperty">
+
+        <option value="">Выберите</option>
+        <option value="formFullPropertyNaturalPerson">Физическое лицо</option>
+        <option value="formFullPropertyLegalPerson">Юридическое лицо</option>
+
+    </select>
+
+    <div id="formFullPropertyNaturalPerson" hidden>
+
+        <hr>
+
+        <form method="post" asp-controller="Properties" asp-action="AddFullProperty">
+
+            <input type="checkbox" asp-for="IsNaturalPerson" checked hidden />
+
+            <div class="row">
+
+                <span asp-validation-for="Rooms" class="text-danger"></span>
+
+                <div class="col-12">
+
+                    <h4><label asp-for="NaturalPerson"></label></h4>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="NaturalPerson.FirstName"></label>
+                        <input class="form-control" asp-for="NaturalPerson.FirstName" />
+                        <span asp-validation-for="NaturalPerson.FirstName" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="NaturalPerson.LastName"></label>
+                        <input class="form-control" asp-for="NaturalPerson.LastName" />
+                        <span asp-validation-for="NaturalPerson.LastName" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="NaturalPerson.Patronymic"></label>
+                        <input class="form-control" asp-for="NaturalPerson.Patronymic" />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="NaturalPerson.DateOfBirth"></label>
+                        <input type="date" class="form-control" asp-for="NaturalPerson.DateOfBirth" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <h4>Адрес</h4>
+
+                <div class="form-group mb-3">
+
+                    <label for="roomDataList">Введите, чтобы найти</label>
+                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти" asp-for="RoomId">
+                    <datalist id="datalistOptions">
+                        @if (Model.Rooms != null)
+                        {
+                            @foreach (var room in Model.Rooms)
+                            {
+                                <option value="@room.Id" label="@room.House.Type @room.House.Street, д.@room.House.Number, @room.Type @room.Number"></option>
+                            }
+                        }
+                    </datalist>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <h4><label asp-for="PropertyDate"></label></h4>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
+                        <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <h4>Документ подтверждающий право собственности</h4>
+
+                <div class="form-group mb-3">
+
+                    <label>Вид государственной регистрации</label>
+                    <input class="form-control" asp-for="StateRegistration.Type" />
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label>Вид государственной регистрации</label>
+                    <input class="form-control" asp-for="StateRegistration.Number" />
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label>Кем выдано</label>
+                    <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="d-grid gap-2">
+
+                <button type="submit" class="btn btn-warning btn-lg">Добавить</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <div id="formFullPropertyLegalPerson" hidden>
+
+        <hr>
+
+        <form method="post" asp-controller="Properties" asp-action="AddFullProperty">
+
+            <input type="checkbox" asp-for="IsNaturalPerson" hidden />
+
+            <div class="row">
+
+                <span asp-validation-for="Rooms" class="text-danger"></span>
+
+                <div class="col-12">
+
+                    <h4><label asp-for="LegalPerson"></label></h4>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="LegalPerson.Name"></label>
+                        <input class="form-control" asp-for="LegalPerson.Name" />
+                        <span asp-validation-for="LegalPerson.Name" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <h4>Адрес</h4>
+
+                <div class="form-group mb-3">
+
+                    <label for="roomDataList">Введите, чтобы найти</label>
+                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти" asp-for="RoomId">
+                    <datalist id="datalistOptions">
+                        @if (Model.Rooms != null)
+                        {
+                            @foreach (var room in Model.Rooms)
+                            {
+                                <option value="@room.Id" label="@room.House.Type @room.House.Street, д.@room.House.Number, @room.Type @room.Number"></option>
+                            }
+                        }
+                    </datalist>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <div class="col-12">
+
+                    <h4><label asp-for="PropertyDate"></label></h4>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
+                        <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+
+                <h4>Документ подтверждающий право собственности</h4>
+
+                <div class="form-group mb-3">
+
+                    <label>Вид государственной регистрации</label>
+                    <input class="form-control" asp-for="StateRegistration.Type" />
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label>Вид государственной регистрации</label>
+                    <input class="form-control" asp-for="StateRegistration.Number" />
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label>Кем выдано</label>
+                    <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <div class="d-grid gap-2">
+
+                <button type="submit" class="btn btn-warning btn-lg">Добавить</button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
