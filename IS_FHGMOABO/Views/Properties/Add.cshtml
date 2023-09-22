@@ -38,37 +38,7 @@
 
                         @await Html.PartialAsync("AddFullProperty", Model.AddFullProperty)
 
-                        <div id="formSharedProperty" hidden>
-
-                            <hr>
-
-                            <h4>Выберите кем является собственник</h4>
-
-                            <select class="form-control mt-3" id="selectFormSharedProperty">
-
-                                <option value="">Выберите</option>
-                                <option value="formSharedPropertyNaturalPerson">Физическое лицо</option>
-                                <option value="formSharedPropertyLegalPerson">Юридическое лицо</option>
-
-                            </select>
-
-                            <div id="formSharedPropertyNaturalPerson" hidden>
-
-                                <hr>
-
-                                @await Html.PartialAsync("AddSharedPropertyNaturalPerson")
-                                
-                            </div>
-
-                            <div id="formSharedPropertyLegalPerson" hidden>
-
-                                <hr>
-
-                                @await Html.PartialAsync("AddSharedPropertyLegalPerson")
-                                
-                            </div>
-
-                        </div>
+                        @await Html.PartialAsync("AddSharedProperty", Model.AddFullProperty)
 
                         <div id="formJointProperty" hidden>
 
@@ -214,13 +184,3 @@
         });
     });
 </script>
-
-@* @if (ViewData.ModelState.IsValid == false)
-{
-    <script>
-        window.onload = function () {
-            document.getElementById("addButton").click();
-        };
-    </script>
-} *@
-

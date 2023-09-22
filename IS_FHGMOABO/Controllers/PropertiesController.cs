@@ -185,6 +185,9 @@ namespace IS_FHGMOABO.Controllers
                 model.AddProperties.AddFullProperty = _add;
                 model.AddProperties.AddFullProperty.Rooms = rooms;
 
+                serializedModel = JsonConvert.SerializeObject(model);
+                TempData["IndexPropertiesModel"] = serializedModel;
+
                 return View("Index", model);
             }
 
@@ -200,14 +203,7 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult AddSharedPropertyNaturalPerson()
-        {
-            return PartialView();
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult AddSharedPropertyLegalPerson()
+        public IActionResult AddSharedProperty()
         {
             return PartialView();
         }
