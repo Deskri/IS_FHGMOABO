@@ -51,5 +51,10 @@ namespace IS_FHGMOABO.Models.PropertiesModels
         public StateRegistration? StateRegistration { get; set; }
 
         public List<Room>? Rooms { get; set; }
+
+        /// <summary>
+        /// Предназначено для отслеживания возвращается ли эта модель.
+        /// </summary>
+        public bool IsReturn { get; set; } = false;
     }
 }

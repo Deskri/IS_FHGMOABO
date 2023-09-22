@@ -137,6 +137,8 @@ namespace IS_FHGMOABO.Controllers
                         await _applicationDBContext.AddAsync(property);
                         await _applicationDBContext.SaveChangesAsync();
 
+                        _add.IsReturn = false;
+
                         return RedirectToAction("Index", "Properties");
                     }
                 }
@@ -172,6 +174,8 @@ namespace IS_FHGMOABO.Controllers
                         await _applicationDBContext.AddAsync(property);
                         await _applicationDBContext.SaveChangesAsync();
 
+                        _add.IsReturn = false;
+
                         return RedirectToAction("Index", "Properties");
                     }
                 }
@@ -187,6 +191,8 @@ namespace IS_FHGMOABO.Controllers
 
             if (TempData.ContainsKey("IndexPropertiesModel"))
             {
+                _add.IsReturn = true;
+
                 var serializedModel = TempData["IndexPropertiesModel"] as string;
                 var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
 
@@ -205,6 +211,8 @@ namespace IS_FHGMOABO.Controllers
 
                 return View("Index", model);
             }
+
+            _add.IsReturn = true;
 
             return View("Index", new IndexPropertiesModel
             {
@@ -335,6 +343,8 @@ namespace IS_FHGMOABO.Controllers
                         await _applicationDBContext.AddAsync(property);
                         await _applicationDBContext.SaveChangesAsync();
 
+                        _add.IsReturn = false;
+
                         return RedirectToAction("Index", "Properties");
                     }
                 }
@@ -370,6 +380,8 @@ namespace IS_FHGMOABO.Controllers
                         await _applicationDBContext.AddAsync(property);
                         await _applicationDBContext.SaveChangesAsync();
 
+                        _add.IsReturn = false;
+
                         return RedirectToAction("Index", "Properties");
                     }
                 }
@@ -385,6 +397,8 @@ namespace IS_FHGMOABO.Controllers
 
             if (TempData.ContainsKey("IndexPropertiesModel"))
             {
+                _add.IsReturn = true;
+
                 var serializedModel = TempData["IndexPropertiesModel"] as string;
                 var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
 
@@ -403,6 +417,8 @@ namespace IS_FHGMOABO.Controllers
 
                 return View("Index", model);
             }
+
+            _add.IsReturn = true;
 
             return View("Index", new IndexPropertiesModel
             {

@@ -35,7 +35,7 @@
 
                         <label asp-for="NaturalPerson.FirstName"></label>
                         <input class="form-control" asp-for="NaturalPerson.FirstName" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="NaturalPerson.FirstName" class="text-danger"></span>
                         }
@@ -46,7 +46,7 @@
 
                         <label asp-for="NaturalPerson.LastName"></label>
                         <input class="form-control" asp-for="NaturalPerson.LastName" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="NaturalPerson.LastName" class="text-danger"></span>
                         }
@@ -57,7 +57,7 @@
 
                         <label asp-for="NaturalPerson.Patronymic"></label>
                         <input class="form-control" asp-for="NaturalPerson.Patronymic" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="NaturalPerson.Patronymic" class="text-danger"></span>
                         }
@@ -68,7 +68,7 @@
 
                         <label asp-for="NaturalPerson.DateOfBirth"></label>
                         <input type="date" class="form-control" asp-for="NaturalPerson.DateOfBirth" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="NaturalPerson.DateOfBirth" class="text-danger"></span>
                         }
@@ -98,7 +98,7 @@
                             }
                         }
                     </datalist>
-                    @if (Model.IsNaturalPerson)
+                    @if (Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="Rooms" class="text-danger"></span>
                         <span asp-validation-for="RoomId" class="text-danger"></span>
@@ -120,7 +120,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
                         }
@@ -131,7 +131,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
-                        @if (Model.IsNaturalPerson)
+                        @if (Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
                         }
@@ -152,7 +152,7 @@
 
                     <label asp-for="StateRegistration.Type"></label>
                     <input class="form-control" asp-for="StateRegistration.Type" />
-                    @if (Model.IsNaturalPerson)
+                    @if (Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
                     }
@@ -163,7 +163,7 @@
 
                     <label asp-for="StateRegistration.Number"></label>
                     <input class="form-control" asp-for="StateRegistration.Number" />
-                    @if (Model.IsNaturalPerson)
+                    @if (Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
                     }
@@ -174,7 +174,7 @@
 
                     <label asp-for="StateRegistration.ByWhomIssued"></label>
                     <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
-                    @if (Model.IsNaturalPerson)
+                    @if (Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
                     }
@@ -211,7 +211,7 @@
 
                         <label asp-for="LegalPerson.Name"></label>
                         <input class="form-control" asp-for="LegalPerson.Name" />
-                        @if (!Model.IsNaturalPerson)
+                        @if (!Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="LegalPerson.Name" class="text-danger"></span>
                         }
@@ -241,7 +241,7 @@
                             }
                         }
                     </datalist>
-                    @if (!Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="Rooms" class="text-danger"></span>
                         <span asp-validation-for="RoomId" class="text-danger"></span>
@@ -263,7 +263,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
-                        @if (!Model.IsNaturalPerson)
+                        @if (!Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
                         }
@@ -274,7 +274,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
-                        @if (!Model.IsNaturalPerson)
+                        @if (!Model.IsNaturalPerson && Model.IsReturn)
                         {
                             <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
                         }
@@ -295,7 +295,7 @@
 
                     <label>Вид государственной регистрации</label>
                     <input class="form-control" asp-for="StateRegistration.Type" />
-                    @if (!Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
                     }
@@ -306,7 +306,7 @@
 
                     <label>Вид государственной регистрации</label>
                     <input class="form-control" asp-for="StateRegistration.Number" />
-                    @if (!Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
                     }
@@ -317,7 +317,7 @@
 
                     <label>Кем выдано</label>
                     <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
-                    @if (!Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
                         <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
                     }

@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                
+
 
             </div>
 
@@ -68,7 +68,7 @@
 
 </div>
 
-@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == true)
+@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == true && Model.AddFullProperty.IsReturn == true)
 {
     <script>
         window.onload = function () {
@@ -93,7 +93,7 @@
     </script>
 }
 
-@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == false)
+@if (ViewData.ModelState.IsValid == false && Model.AddFullProperty.IsNaturalPerson == false && Model.AddFullProperty.IsReturn == true)
 {
     <script>
         window.onload = function () {
@@ -114,6 +114,74 @@
 
             formFullPropertyNaturalPerson.hidden = true;
             formFullPropertyLegalPerson.hidden = false;
+        };
+    </script>
+}
+
+@if (ViewData.ModelState.IsValid == false && Model.AddSharedProperty.IsNaturalPerson == true && Model.AddSharedProperty.IsReturn == true)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+            document.getElementById('selectForm').value = 'formSharedProperty';
+            document.getElementById('selectFormSharedProperty').value = 'formSharedPropertyNaturalPerson';
+
+            var formFullProperty = document.getElementById('formFullProperty');
+            var formSharedProperty = document.getElementById('formSharedProperty');
+            var formJointProperty = document.getElementById('formJointProperty');
+
+            formFullProperty.hidden = true;
+            formSharedProperty.hidden = false;
+            formJointProperty.hidden = true;
+
+            var formSharedPropertyNaturalPerson = document.getElementById('formSharedPropertyNaturalPerson');
+            var formSharedPropertyLegalPerson = document.getElementById('formSharedPropertyLegalPerson');
+
+            formSharedPropertyNaturalPerson.hidden = false;
+            formSharedPropertyLegalPerson.hidden = true;
+        };
+    </script>           
+}
+
+@if (ViewData.ModelState.IsValid == false && Model.AddSharedProperty.IsNaturalPerson == false && Model.AddSharedProperty.IsReturn == true)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+            document.getElementById('selectForm').value = 'formSharedProperty';
+            document.getElementById('selectFormSharedProperty').value = 'formSharedPropertyLegalPerson';
+
+            var formFullProperty = document.getElementById('formFullProperty');
+            var formSharedProperty = document.getElementById('formSharedProperty');
+            var formJointProperty = document.getElementById('formJointProperty');
+
+            formFullProperty.hidden = true;
+            formSharedProperty.hidden = false;
+            formJointProperty.hidden = true;
+
+            var formSharedPropertyNaturalPerson = document.getElementById('formSharedPropertyNaturalPerson');
+            var formSharedPropertyLegalPerson = document.getElementById('formSharedPropertyLegalPerson');
+
+            formSharedPropertyNaturalPerson.hidden = true;
+            formSharedPropertyLegalPerson.hidden = false;
+        };
+    </script>
+}
+
+@if (ViewData.ModelState.IsValid == false && Model.AddJointProperty.IsReturn == true)
+{
+    <script>
+        window.onload = function () {
+            document.getElementById("addButton").click();
+            document.getElementById('selectForm').value = 'formJointProperty';
+
+            var formFullProperty = document.getElementById('formFullProperty');
+            var formSharedProperty = document.getElementById('formSharedProperty');
+            var formJointProperty = document.getElementById('formJointProperty');
+
+            formFullProperty.hidden = true;
+            formSharedProperty.hidden = true;
+            formJointProperty.hidden = false;
         };
     </script>
 }
