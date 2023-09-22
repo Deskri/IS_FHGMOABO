@@ -124,6 +124,12 @@
                             <input type="number" step="1" class="form-control" asp-for="Share.Dividend" />
                             <span class="input-group-text">/</span>
                             <input type="number" step="1" class="form-control" asp-for="Share.Divisor" />
+                            @if (Model.IsNaturalPerson)
+                            {
+                                <span asp-validation-for="Share" class="text-danger"></span>
+                                <span asp-validation-for="Share.Dividend" class="text-danger"></span>
+                                <span asp-validation-for="Share.Divisor" class="text-danger"></span>
+                            }
 
                         </div>
 
@@ -260,7 +266,7 @@
                             }
                         }
                     </datalist>
-                    @if (Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson)
                     {
                         <span asp-validation-for="Rooms" class="text-danger"></span>
                         <span asp-validation-for="RoomId" class="text-danger"></span>
@@ -286,6 +292,12 @@
                             <input type="number" step="1" class="form-control" asp-for="Share.Dividend" />
                             <span class="input-group-text">/</span>
                             <input type="number" step="1" class="form-control" asp-for="Share.Divisor" />
+                            @if (!Model.IsNaturalPerson)
+                            {
+                                <span asp-validation-for="Share" class="text-danger"></span>
+                                <span asp-validation-for="Share.Dividend" class="text-danger"></span>
+                                <span asp-validation-for="Share.Divisor" class="text-danger"></span>
+                            }
 
                         </div>
 
@@ -301,7 +313,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
-                        @if (Model.IsNaturalPerson)
+                        @if (!Model.IsNaturalPerson)
                         {
                             <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
                         }
@@ -312,7 +324,7 @@
 
                         <label asp-for="PropertyDate.DateOfTaking"></label>
                         <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
-                        @if (Model.IsNaturalPerson)
+                        @if (!Model.IsNaturalPerson)
                         {
                             <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
                         }
@@ -333,7 +345,7 @@
 
                     <label asp-for="StateRegistration.Type"></label>
                     <input class="form-control" asp-for="StateRegistration.Type" />
-                    @if (Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson)
                     {
                         <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
                     }
@@ -344,7 +356,7 @@
 
                     <label asp-for="StateRegistration.Number"></label>
                     <input class="form-control" asp-for="StateRegistration.Number" />
-                    @if (Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson)
                     {
                         <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
                     }
@@ -355,7 +367,7 @@
 
                     <label asp-for="StateRegistration.ByWhomIssued"></label>
                     <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
-                    @if (Model.IsNaturalPerson)
+                    @if (!Model.IsNaturalPerson)
                     {
                         <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
                     }
