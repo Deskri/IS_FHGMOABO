@@ -21,39 +21,57 @@
 
         <hr>
 
-        <form>
+        <form method="post" asp-controller="Properties" asp-action="AddSharedProperty">
+
+            <input type="checkbox" asp-for="IsNaturalPerson" checked hidden />
 
             <div class="row">
 
                 <div class="col-12">
 
-                    <h4>Cобственник</h4>
+                    <h4><label asp-for="NaturalPerson"></label></h4>
 
                     <div class="form-group mb-3">
 
-                        <label>Имя</label>
-                        <input class="form-control" />
+                        <label asp-for="NaturalPerson.FirstName"></label>
+                        <input class="form-control" asp-for="NaturalPerson.FirstName" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="NaturalPerson.FirstName" class="text-danger"></span>
+                        }
 
                     </div>
 
                     <div class="form-group mb-3">
 
-                        <label>Фамилия</label>
-                        <input class="form-control" />
+                        <label asp-for="NaturalPerson.LastName"></label>
+                        <input class="form-control" asp-for="NaturalPerson.LastName" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="NaturalPerson.LastName" class="text-danger"></span>
+                        }
 
                     </div>
 
                     <div class="form-group mb-3">
 
-                        <label>Отчество</label>
-                        <input class="form-control" />
+                        <label asp-for="NaturalPerson.Patronymic"></label>
+                        <input class="form-control" asp-for="NaturalPerson.Patronymic" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="NaturalPerson.Patronymic" class="text-danger"></span>
+                        }
 
                     </div>
 
                     <div class="form-group mb-3">
 
-                        <label>Дата рождения</label>
-                        <input type="date" class="form-control" />
+                        <label asp-for="NaturalPerson.DateOfBirth"></label>
+                        <input type="date" class="form-control" asp-for="NaturalPerson.DateOfBirth" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="NaturalPerson.DateOfBirth" class="text-danger"></span>
+                        }
 
                     </div>
 
@@ -65,17 +83,26 @@
 
             <div class="row">
 
-                <h4>Адрес</h4>
+                <h4><label asp-for="RoomId"></label></h4>
 
                 <div class="form-group mb-3">
 
                     <label for="roomDataList">Введите, чтобы найти</label>
-                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти">
+                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти" asp-for="RoomId">
                     <datalist id="datalistOptions">
-                        <option value="1" label="ул. Ульяны Громовой, д.4, кв.1"></option>
-                        <option value="2" label="ул. Ульяны Громовой, д.4, кв.2"></option>
-                        <option value="3" label="ул. Ульяны Громовой, д.4, кв.3"></option>
+                        @if (Model.Rooms != null)
+                        {
+                            @foreach (var room in Model.Rooms)
+                            {
+                                <option value="@room.Id" label="@room.House.Type @room.House.Street, д.@room.House.Number, @room.Type @room.Number"></option>
+                            }
+                        }
                     </datalist>
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="Rooms" class="text-danger"></span>
+                        <span asp-validation-for="RoomId" class="text-danger"></span>
+                    }
 
                 </div>
 
@@ -91,33 +118,42 @@
 
                     <div class="form-group mb-3">
 
-                        <label>Доля</label>
+                        <label asp-for="Share"></label>
                         <div class="input-group">
 
-                            <input type="number" class="form-control" />
+                            <input type="number" step="1" class="form-control" asp-for="Share.Dividend" />
                             <span class="input-group-text">/</span>
-                            <input type="number" class="form-control" />
+                            <input type="number" step="1" class="form-control" asp-for="Share.Divisor" />
 
                         </div>
 
                     </div>
+
                 </div>
 
                 <div class="col-6">
 
-                    <h4>Даты</h4>
+                    <h4><label asp-for="PropertyDate"></label></h4>
 
                     <div class="form-group mb-3">
 
-                        <label>Дата вступления в собственность</label>
-                        <input type="date" class="form-control" />
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
+                        }
 
                     </div>
 
                     <div class="form-group mb-3">
 
-                        <label>Дата окончания собственности</label>
-                        <input type="date" class="form-control" />
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
+                        }
 
                     </div>
 
@@ -129,26 +165,38 @@
 
             <div class="row">
 
-                <h4>Документ</h4>
+                <h4><label asp-for="StateRegistration"></label></h4>
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.Type"></label>
+                    <input class="form-control" asp-for="StateRegistration.Type" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
+                    }
 
                 </div>
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.Number"></label>
+                    <input class="form-control" asp-for="StateRegistration.Number" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
+                    }
 
                 </div>
 
                 <div class="form-group mb-3">
 
-                    <label>Кем выдано</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.ByWhomIssued"></label>
+                    <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
+                    }
 
                 </div>
 
@@ -158,7 +206,7 @@
 
             <div class="d-grid gap-2">
 
-                <button type="submit" class="btn btn-warning btn-lg" data-bs-dismiss="modal">Добавить</button>
+                <button type="submit" class="btn btn-warning btn-lg">Добавить</button>
 
             </div>
 
@@ -170,18 +218,22 @@
 
         <hr>
 
-        <form>
+        <form method="post" asp-controller="Properties" asp-action="AddSharedProperty">
 
             <div class="row">
 
                 <div class="col-12">
 
-                    <h4>Cобственник</h4>
+                    <h4><label asp-for="LegalPerson"></label></h4>
 
                     <div class="form-group mb-3">
 
-                        <label>Наименование организации</label>
-                        <input class="form-control" />
+                        <label asp-for="LegalPerson.Name"></label>
+                        <input class="form-control" asp-for="LegalPerson.Name" />
+                        @if (!Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="LegalPerson.Name" class="text-danger"></span>
+                        }
 
                     </div>
 
@@ -193,17 +245,26 @@
 
             <div class="row">
 
-                <h4>Адрес</h4>
+                <h4><label asp-for="RoomId"></label></h4>
 
                 <div class="form-group mb-3">
 
                     <label for="roomDataList">Введите, чтобы найти</label>
-                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти">
+                    <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти" asp-for="RoomId">
                     <datalist id="datalistOptions">
-                        <option value="1" label="ул. Ульяны Громовой, д.4, кв.1"></option>
-                        <option value="2" label="ул. Ульяны Громовой, д.4, кв.2"></option>
-                        <option value="3" label="ул. Ульяны Громовой, д.4, кв.3"></option>
+                        @if (Model.Rooms != null)
+                        {
+                            @foreach (var room in Model.Rooms)
+                            {
+                                <option value="@room.Id" label="@room.House.Type @room.House.Street, д.@room.House.Number, @room.Type @room.Number"></option>
+                            }
+                        }
                     </datalist>
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="Rooms" class="text-danger"></span>
+                        <span asp-validation-for="RoomId" class="text-danger"></span>
+                    }
 
                 </div>
 
@@ -219,33 +280,42 @@
 
                     <div class="form-group mb-3">
 
-                        <label>Доля</label>
+                        <label asp-for="Share"></label>
                         <div class="input-group">
 
-                            <input type="number" class="form-control" />
+                            <input type="number" step="1" class="form-control" asp-for="Share.Dividend" />
                             <span class="input-group-text">/</span>
-                            <input type="number" class="form-control" />
+                            <input type="number" step="1" class="form-control" asp-for="Share.Divisor" />
 
                         </div>
 
                     </div>
+
                 </div>
 
                 <div class="col-6">
 
-                    <h4>Даты</h4>
+                    <h4><label asp-for="PropertyDate"></label></h4>
 
                     <div class="form-group mb-3">
 
-                        <label>Дата вступления в собственность</label>
-                        <input type="date" class="form-control" />
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
+                        }
 
                     </div>
 
                     <div class="form-group mb-3">
 
-                        <label>Дата окончания собственности</label>
-                        <input type="date" class="form-control" />
+                        <label asp-for="PropertyDate.DateOfTaking"></label>
+                        <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
+                        @if (Model.IsNaturalPerson)
+                        {
+                            <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
+                        }
 
                     </div>
 
@@ -257,26 +327,38 @@
 
             <div class="row">
 
-                <h4>Документ</h4>
+                <h4><label asp-for="StateRegistration"></label></h4>
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.Type"></label>
+                    <input class="form-control" asp-for="StateRegistration.Type" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
+                    }
 
                 </div>
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.Number"></label>
+                    <input class="form-control" asp-for="StateRegistration.Number" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
+                    }
 
                 </div>
 
                 <div class="form-group mb-3">
 
-                    <label>Кем выдано</label>
-                    <input class="form-control" />
+                    <label asp-for="StateRegistration.ByWhomIssued"></label>
+                    <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
+                    @if (Model.IsNaturalPerson)
+                    {
+                        <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
+                    }
 
                 </div>
 
@@ -286,7 +368,7 @@
 
             <div class="d-grid gap-2">
 
-                <button type="submit" class="btn btn-warning btn-lg" data-bs-dismiss="modal">Добавить</button>
+                <button type="submit" class="btn btn-warning btn-lg">Добавить</button>
 
             </div>
 

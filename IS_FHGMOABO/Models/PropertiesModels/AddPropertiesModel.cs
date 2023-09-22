@@ -1,4 +1,5 @@
 ﻿using IS_FHGMOABO.DAL;
+using System.ComponentModel.DataAnnotations;
 
 namespace IS_FHGMOABO.Models.PropertiesModels
 {
@@ -42,6 +43,7 @@ namespace IS_FHGMOABO.Models.PropertiesModels
 
     public class AddProperty
     {
+        [Display(Name = "Адрес")]
         public string? RoomId { get; set; }
 
         public PropertyDate? PropertyDate { get; set; }

@@ -83,7 +83,7 @@
 
             <div class="row">
 
-                <h4>Адрес</h4>
+                <h4><label asp-for="RoomId"></label></h4>
 
                 <div class="form-group mb-3">
 
@@ -146,11 +146,11 @@
 
             <div class="row">
 
-                <h4>Документ подтверждающий право собственности</h4>
+                <h4><label asp-for="StateRegistration"></label></h4>
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
+                    <label asp-for="StateRegistration.Type"></label>
                     <input class="form-control" asp-for="StateRegistration.Type" />
                     @if (Model.IsNaturalPerson)
                     {
@@ -161,7 +161,7 @@
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
+                    <label asp-for="StateRegistration.Number"></label>
                     <input class="form-control" asp-for="StateRegistration.Number" />
                     @if (Model.IsNaturalPerson)
                     {
@@ -172,7 +172,7 @@
 
                 <div class="form-group mb-3">
 
-                    <label>Кем выдано</label>
+                    <label asp-for="StateRegistration.ByWhomIssued"></label>
                     <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
                     @if (Model.IsNaturalPerson)
                     {

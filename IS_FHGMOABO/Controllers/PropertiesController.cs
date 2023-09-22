@@ -22,16 +22,24 @@ namespace IS_FHGMOABO.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new IndexPropertiesModel();
+
             model.AddProperties = new AddPropertiesModel();
 
             model.AddProperties.AddFullProperty = new AddFullPropertyModel();
-            model.AddProperties.AddFullProperty.Rooms = await _applicationDBContext.Rooms.Where(x => x.Deleted == null).ToListAsync();
+            model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
+            model.AddProperties.AddJointProperty = new AddJointPropertyModel();
 
-            foreach (var room in model.AddProperties.AddFullProperty.Rooms)
+            var rooms = await _applicationDBContext.Rooms.Where(x => x.Deleted == null).ToListAsync();
+
+            foreach (var room in rooms)
             {
                 room.House = await _applicationDBContext.Houses.FirstOrDefaultAsync(x => x.Id == room.HouseId);
                 room.House.Rooms = null;
             }
+
+            model.AddProperties.AddFullProperty.Rooms = rooms;
+            model.AddProperties.AddSharedProperty.Rooms = rooms;
+            model.AddProperties.AddJointProperty.Rooms = rooms;
 
             var serializedModel = JsonConvert.SerializeObject(model);
             TempData["IndexPropertiesModel"] = serializedModel;
@@ -181,9 +189,16 @@ namespace IS_FHGMOABO.Controllers
             {
                 var serializedModel = TempData["IndexPropertiesModel"] as string;
                 var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
+
                 var rooms = model.AddProperties.AddFullProperty.Rooms;
+
                 model.AddProperties.AddFullProperty = _add;
+                model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
+                model.AddProperties.AddJointProperty = new AddJointPropertyModel();
+
                 model.AddProperties.AddFullProperty.Rooms = rooms;
+                model.AddProperties.AddSharedProperty.Rooms = rooms;
+                model.AddProperties.AddJointProperty.Rooms = rooms;
 
                 serializedModel = JsonConvert.SerializeObject(model);
                 TempData["IndexPropertiesModel"] = serializedModel;
