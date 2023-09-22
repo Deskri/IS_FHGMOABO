@@ -41,6 +41,25 @@ namespace IS_FHGMOABO.Controllers
             model.AddProperties.AddSharedProperty.Rooms = rooms;
             model.AddProperties.AddJointProperty.Rooms = rooms;
 
+            var properties = await _applicationDBContext.Properties.ToListAsync();
+
+            foreach (var property in properties)
+            {
+                property.Room = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == property.RoomId);
+                property.Room.House = await _applicationDBContext.Houses.FirstOrDefaultAsync(x => x.Id == property.Room.HouseId);
+                property.Room.Properties = null;
+
+/*                var naturalPersonProperty = await _applicationDBContext.NaturalPersonProperty.*/
+
+                if (property.LegalPersonId != null)
+                {
+                    property.LegalPerson = await _applicationDBContext.LegalPersons.FirstOrDefaultAsync(x => x.Id == property.LegalPersonId);
+                    property.LegalPerson.Properties = null;
+                }
+            }
+
+            model.Properties = properties;
+
             var serializedModel = JsonConvert.SerializeObject(model);
             TempData["IndexPropertiesModel"] = serializedModel;
 

@@ -30,7 +30,7 @@ namespace IS_FHGMOABO.DAL
         /// Внешний ключ для связи с юридическим лицом
         /// </summary>
         [ForeignKey("LegalPerson")]
-        public int? LeagalPersonId { get; set; }
+        public int? LegalPersonId { get; set; }
 
         /// <summary>
         /// Навигационное свойство для связи с юридическим лицом
