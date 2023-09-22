@@ -40,13 +40,7 @@
 
                         @await Html.PartialAsync("AddSharedProperty", Model.AddSharedProperty)
 
-                        <div id="formJointProperty" hidden>
-
-                            <hr>
-
-                            @await Html.PartialAsync("AddJointProperty", Model.AddJointProperty)
-
-                        </div>
+                        @await Html.PartialAsync("AddJointProperty", Model.AddJointProperty)
 
                     </div>
                 </div>

@@ -34,9 +34,9 @@ namespace IS_FHGMOABO.Models.PropertiesModels
 
     public class AddJointPropertyModel : AddProperty
     {
-        public LegalPerson? FirstPerson { get; set; }
+        public NaturalPerson? FirstPerson { get; set; }
 
-        public LegalPerson? SecondPerson { get; set; }
+        public NaturalPerson? SecondPerson { get; set; }
 
         public Share? Share { get; set; }
     }
