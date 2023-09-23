@@ -29,11 +29,14 @@ namespace IS_FHGMOABO.Controllers
             model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
             model.AddProperties.AddJointProperty = new AddJointPropertyModel();
 
-            var rooms = await _applicationDBContext.Rooms.Where(x => x.Deleted == null).ToListAsync();
+            var rooms = await _applicationDBContext.Rooms
+                                            .Where(x => x.Deleted == null)
+                                            .Include(x => x.House)
+                                            .ToListAsync();
 
+            // Необходимо для сериализации, чтобы избавиться от зациклености
             foreach (var room in rooms)
             {
-                room.House = await _applicationDBContext.Houses.FirstOrDefaultAsync(x => x.Id == room.HouseId);
                 room.House.Rooms = null;
             }
 
@@ -41,27 +44,35 @@ namespace IS_FHGMOABO.Controllers
             model.AddProperties.AddSharedProperty.Rooms = rooms;
             model.AddProperties.AddJointProperty.Rooms = rooms;
 
-            var properties = await _applicationDBContext.Properties.ToListAsync();
+            var properties = await _applicationDBContext.Properties
+                                                    .Include(x => x.NaturalPersons)
+                                                    .Include(x => x.LegalPerson)
+                                                    .Include(x => x.Room.House)
+                                                    .ToListAsync();
 
+            // Необходимо для сериализации, чтобы избавиться от зациклености
             foreach (var property in properties)
             {
-                property.Room = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == property.RoomId);
-                property.Room.House = await _applicationDBContext.Houses.FirstOrDefaultAsync(x => x.Id == property.Room.HouseId);
                 property.Room.Properties = null;
 
-/*                var naturalPersonProperty = await _applicationDBContext.NaturalPersonProperty.*/
-
-                if (property.LegalPersonId != null)
+                if (property.LegalPerson != null)
                 {
-                    property.LegalPerson = await _applicationDBContext.LegalPersons.FirstOrDefaultAsync(x => x.Id == property.LegalPersonId);
                     property.LegalPerson.Properties = null;
+                }
+
+                if (property.NaturalPersons != null)
+                {
+                    foreach (var person in property.NaturalPersons)
+                    {
+                        person.Properties = null;
+                    }
                 }
             }
 
             model.Properties = properties;
 
             var serializedModel = JsonConvert.SerializeObject(model);
-            TempData["IndexPropertiesModel"] = serializedModel;
+            HttpContext.Session.SetString("IndexPropertiesModel", serializedModel);
 
             return View("Index", model);
         }
@@ -208,39 +219,25 @@ namespace IS_FHGMOABO.Controllers
                 ModelState.AddModelError("RoomId", "Введите значение.");
             }
 
-            if (TempData.ContainsKey("IndexPropertiesModel"))
-            {
-                _add.IsReturn = true;
-
-                var serializedModel = TempData["IndexPropertiesModel"] as string;
-                var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
-
-                var rooms = model.AddProperties.AddFullProperty.Rooms;
-
-                model.AddProperties.AddFullProperty = _add;
-                model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
-                model.AddProperties.AddJointProperty = new AddJointPropertyModel();
-
-                model.AddProperties.AddFullProperty.Rooms = rooms;
-                model.AddProperties.AddSharedProperty.Rooms = rooms;
-                model.AddProperties.AddJointProperty.Rooms = rooms;
-
-                serializedModel = JsonConvert.SerializeObject(model);
-                TempData["IndexPropertiesModel"] = serializedModel;
-
-                return View("Index", model);
-            }
-
             _add.IsReturn = true;
 
-            return View("Index", new IndexPropertiesModel
-            {
-                AddProperties = new AddPropertiesModel
-                {
-                    AddFullProperty = _add
-                }
+            var serializedModel = HttpContext.Session.GetString("IndexPropertiesModel");
+            var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
 
-            });
+            var indexRooms = model.AddProperties.AddFullProperty.Rooms;
+
+            model.AddProperties.AddFullProperty = _add;
+            model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
+            model.AddProperties.AddJointProperty = new AddJointPropertyModel();
+
+            model.AddProperties.AddFullProperty.Rooms = indexRooms;
+            model.AddProperties.AddSharedProperty.Rooms = indexRooms;
+            model.AddProperties.AddJointProperty.Rooms = indexRooms;
+
+            serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexPropertiesModel", serializedModel);
+
+            return View("Index", model);
         }
 
         [Authorize]
@@ -414,39 +411,26 @@ namespace IS_FHGMOABO.Controllers
                 ModelState.AddModelError("RoomId", "Введите значение.");
             }
 
-            if (TempData.ContainsKey("IndexPropertiesModel"))
-            {
-                _add.IsReturn = true;
-
-                var serializedModel = TempData["IndexPropertiesModel"] as string;
-                var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
-
-                var rooms = model.AddProperties.AddFullProperty.Rooms;
-
-                model.AddProperties.AddFullProperty = new AddFullPropertyModel();
-                model.AddProperties.AddSharedProperty = _add;
-                model.AddProperties.AddJointProperty = new AddJointPropertyModel();
-
-                model.AddProperties.AddFullProperty.Rooms = rooms;
-                model.AddProperties.AddSharedProperty.Rooms = rooms;
-                model.AddProperties.AddJointProperty.Rooms = rooms;
-
-                serializedModel = JsonConvert.SerializeObject(model);
-                TempData["IndexPropertiesModel"] = serializedModel;
-
-                return View("Index", model);
-            }
-
             _add.IsReturn = true;
 
-            return View("Index", new IndexPropertiesModel
-            {
-                AddProperties = new AddPropertiesModel
-                {
-                    AddSharedProperty = _add
-                }
+            var serializedModel = HttpContext.Session.GetString("IndexPropertiesModel");
+            var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
 
-            });
+            var indexRooms = model.AddProperties.AddFullProperty.Rooms;
+
+            model.AddProperties.AddFullProperty = new AddFullPropertyModel();
+            model.AddProperties.AddSharedProperty = _add;
+            model.AddProperties.AddJointProperty = new AddJointPropertyModel();
+
+            model.AddProperties.AddFullProperty.Rooms = indexRooms;
+            model.AddProperties.AddSharedProperty.Rooms = indexRooms;
+            model.AddProperties.AddJointProperty.Rooms = indexRooms;
+
+            serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexPropertiesModel", serializedModel);
+
+            return View("Index", model);
+
         }
 
         [Authorize]
@@ -600,39 +584,25 @@ namespace IS_FHGMOABO.Controllers
                 ModelState.AddModelError("RoomId", "Введите значение.");
             }
 
-            if (TempData.ContainsKey("IndexPropertiesModel"))
-            {
-                _add.IsReturn = true;
-
-                var serializedModel = TempData["IndexPropertiesModel"] as string;
-                var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
-
-                var rooms = model.AddProperties.AddFullProperty.Rooms;
-
-                model.AddProperties.AddFullProperty = new AddFullPropertyModel();
-                model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
-                model.AddProperties.AddJointProperty = _add;
-
-                model.AddProperties.AddFullProperty.Rooms = rooms;
-                model.AddProperties.AddSharedProperty.Rooms = rooms;
-                model.AddProperties.AddJointProperty.Rooms = rooms;
-
-                serializedModel = JsonConvert.SerializeObject(model);
-                TempData["IndexPropertiesModel"] = serializedModel;
-
-                return View("Index", model);
-            }
-
             _add.IsReturn = true;
 
-            return View("Index", new IndexPropertiesModel
-            {
-                AddProperties = new AddPropertiesModel
-                {
-                    AddJointProperty = _add
-                }
+            var serializedModel = HttpContext.Session.GetString("IndexPropertiesModel");
+            var model = JsonConvert.DeserializeObject<IndexPropertiesModel>(serializedModel);
 
-            });
+            var indexRooms = model.AddProperties.AddFullProperty.Rooms;
+
+            model.AddProperties.AddFullProperty = new AddFullPropertyModel();
+            model.AddProperties.AddSharedProperty = new AddSharedPropertyModel();
+            model.AddProperties.AddJointProperty = _add;
+
+            model.AddProperties.AddFullProperty.Rooms = indexRooms;
+            model.AddProperties.AddSharedProperty.Rooms = indexRooms;
+            model.AddProperties.AddJointProperty.Rooms = indexRooms;
+
+            serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexPropertiesModel", serializedModel);
+
+            return View("Index", model);
         }
     }
 }
