@@ -77,6 +77,31 @@ namespace IS_FHGMOABO.Controllers
             return View("Index", model);
         }
 
+        public async Task<IActionResult> Delete (int id)
+        {
+            var property = await _applicationDBContext.Properties
+                                                    .Include(x => x.NaturalPersons)
+                                                    .Include(x => x.LegalPerson)
+                                                    .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (property.LegalPerson != null)
+            {
+                _applicationDBContext.Remove(property.LegalPerson);
+            }
+
+            if (property.NaturalPersons.Count != 0)
+            {
+                foreach (var person in property.NaturalPersons)
+                {
+                    _applicationDBContext.Remove(person);
+                }
+            }
+            _applicationDBContext.Remove(property);
+            _applicationDBContext.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         [Authorize]
         [HttpGet]
         public IActionResult Add()

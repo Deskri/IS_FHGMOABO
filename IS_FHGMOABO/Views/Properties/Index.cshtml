@@ -121,7 +121,7 @@ else
                     <th>
                         <div class="btn-group mr-2" role="group" aria-label="First group">
                             <a class="btn btn-warning" title="Изменить"><i class="bi bi-pencil"></i></a>
-                            <a class="btn btn-danger" title="Удалить"><i class="bi bi-trash2-fill"></i></a>
+                            <a class="btn btn-danger" title="Удалить" asp-area="" asp-controller="Properties" asp-action="Delete" asp-route-id="@property.Id"><i class="bi bi-trash2-fill"></i></a>
                         </div>
                     </th>
                 </tr>
