@@ -1,179 +1,255 @@
-﻿@{
+﻿@model IS_FHGMOABO.Models.PropertiesModels.AddJointPropertyModel
+
+@{
 }
 
-<form>
+<div id="formJointProperty" hidden>
 
-    <div class="row">
+    <hr>
 
-        <div class="col-6">
+    <form method="post" asp-controller="Properties" asp-action="AddJointProperty">
 
-            <h4>Первый собственник</h4>
+        <div class="row">
 
-            <div class="form-group mb-3">
+            <div class="col-6">
 
-                <label>Имя</label>
-                <input class="form-control" />
+                <h4>Первый собственник</h4>
 
-            </div>
+                <div class="form-group mb-3">
 
-            <div class="form-group mb-3">
+                    <label asp-for="FirstPerson.FirstName"></label>
+                    <input class="form-control" asp-for="FirstPerson.FirstName" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="FirstPerson.FirstName" class="text-danger"></span>
+                    }
 
-                <label>Фамилия</label>
-                <input class="form-control" />
+                </div>
 
-            </div>
+                <div class="form-group mb-3">
 
-            <div class="form-group mb-3">
+                    <label asp-for="FirstPerson.LastName"></label>
+                    <input class="form-control" asp-for="FirstPerson.LastName" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="FirstPerson.LastName" class="text-danger"></span>
+                    }
 
-                <label>Отчество</label>
-                <input class="form-control" />
+                </div>
 
-            </div>
+                <div class="form-group mb-3">
 
-            <div class="form-group mb-3">
+                    <label asp-for="FirstPerson.Patronymic"></label>
+                    <input class="form-control" asp-for="FirstPerson.Patronymic" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="FirstPerson.Patronymic" class="text-danger"></span>
+                    }
 
-                <label>Дата рождения</label>
-                <input type="date" class="form-control" />
+                </div>
 
-            </div>
+                <div class="form-group mb-3">
 
-        </div>
-
-        <div class="col-6">
-
-            <h4>Второй собственник</h4>
-
-            <div class="form-group mb-3">
-
-                <label>Имя</label>
-                <input class="form-control" />
-
-            </div>
-
-            <div class="form-group mb-3">
-
-                <label>Фамилия</label>
-                <input class="form-control" />
-
-            </div>
-
-            <div class="form-group mb-3">
-
-                <label>Отчество</label>
-                <input class="form-control" />
-
-            </div>
-
-            <div class="form-group mb-3">
-
-                <label>Дата рождения</label>
-                <input type="date" class="form-control" />
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <hr />
-
-    <div class="row">
-
-        <h4>Адрес</h4>
-
-        <div class="form-group mb-3">
-
-            <label for="roomDataList">Введите, чтобы найти</label>
-            <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти">
-            <datalist id="datalistOptions">
-                <option value="1" label="ул. Ульяны Громовой, д.4, кв.1"></option>
-                <option value="2" label="ул. Ульяны Громовой, д.4, кв.2"></option>
-                <option value="3" label="ул. Ульяны Громовой, д.4, кв.3"></option>
-            </datalist>
-
-        </div>
-
-    </div>
-
-    <hr />
-
-    <div class="row">
-
-        <div class="col-6">
-
-            <h4>Доля собственности</h4>
-
-            <div class="form-group mb-3">
-
-                <label>Доля</label>
-                <div class="input-group">
-
-                    <input type="number" class="form-control" />
-                    <span class="input-group-text">/</span>
-                    <input type="number" class="form-control" />
+                    <label asp-for="FirstPerson.DateOfBirth"></label>
+                    <input type="date" class="form-control" asp-for="FirstPerson.DateOfBirth" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="FirstPerson.DateOfBirth" class="text-danger"></span>
+                    }
 
                 </div>
 
             </div>
+
+            <div class="col-6">
+
+                <h4>Второй собственник</h4>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="SecondPerson.FirstName"></label>
+                    <input class="form-control" asp-for="SecondPerson.FirstName" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="SecondPerson.FirstName" class="text-danger"></span>
+                    }
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="SecondPerson.LastName"></label>
+                    <input class="form-control" asp-for="SecondPerson.LastName" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="SecondPerson.LastName" class="text-danger"></span>
+                    }
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="SecondPerson.Patronymic"></label>
+                    <input class="form-control" asp-for="SecondPerson.Patronymic" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="SecondPerson.Patronymic" class="text-danger"></span>
+                    }
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="SecondPerson.DateOfBirth"></label>
+                    <input type="date" class="form-control" asp-for="SecondPerson.DateOfBirth" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="SecondPerson.DateOfBirth" class="text-danger"></span>
+                    }
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="col-6">
+        <hr />
 
-            <h4>Даты</h4>
+        <div class="row">
+
+            <h4><label asp-for="RoomId"></label></h4>
 
             <div class="form-group mb-3">
 
-                <label>Дата вступления в собственность</label>
-                <input type="date" class="form-control" />
+                <label for="roomDataList">Введите, чтобы найти</label>
+                <input type="text" class="form-control" list="datalistOptions" id="roomDataList" placeholder="Введите, чтобы найти" asp-for="RoomId">
+                <datalist id="datalistOptions">
+                    @if (Model.Rooms != null)
+                    {
+                        @foreach (var room in Model.Rooms)
+                        {
+                            <option value="@room.Id" label="@room.House.Type @room.House.Street, д.@room.House.Number, @room.Type @room.Number"></option>
+                        }
+                    }
+                </datalist>
+                @if (Model.IsReturn)
+                {
+                    <span asp-validation-for="Rooms" class="text-danger"></span>
+                    <span asp-validation-for="RoomId" class="text-danger"></span>
+                }
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div class="row">
+
+            <div class="col-6">
+
+                <h4>Доля собственности</h4>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="Share"></label>
+                    <div class="input-group">
+
+                        <input type="number" step="1" class="form-control" asp-for="Share.Dividend" />
+                        <span class="input-group-text">/</span>
+                        <input type="number" step="1" class="form-control" asp-for="Share.Divisor" />
+                        @if (Model.IsReturn)
+                        {
+                            <span asp-validation-for="Share" class="text-danger"></span>
+                            <span asp-validation-for="Share.Dividend" class="text-danger"></span>
+                            <span asp-validation-for="Share.Divisor" class="text-danger"></span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-6">
+
+                <h4><label asp-for="PropertyDate"></label></h4>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="PropertyDate.DateOfTaking"></label>
+                    <input type="date" class="form-control" asp-for="PropertyDate.DateOfTaking" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="PropertyDate.DateOfTaking" class="text-danger"></span>
+                    }
+
+                </div>
+
+                <div class="form-group mb-3">
+
+                    <label asp-for="PropertyDate.DateOfTaking"></label>
+                    <input type="date" class="form-control" asp-for="PropertyDate.EndDate" />
+                    @if (Model.IsReturn)
+                    {
+                        <span asp-validation-for="PropertyDate.EndDate" class="text-danger"></span>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr />
+
+        <div class="row">
+
+            <h4><label asp-for="StateRegistration"></label></h4>
+
+            <div class="form-group mb-3">
+
+                <label asp-for="StateRegistration.Type"></label>
+                <input class="form-control" asp-for="StateRegistration.Type" />
+                @if (Model.IsReturn)
+                {
+                    <span asp-validation-for="StateRegistration.Type" class="text-danger"></span>
+                }
 
             </div>
 
             <div class="form-group mb-3">
 
-                <label>Дата окончания собственности</label>
-                <input type="date" class="form-control" />
+                <label asp-for="StateRegistration.Number"></label>
+                <input class="form-control" asp-for="StateRegistration.Number" />
+                @if (Model.IsReturn)
+                {
+                    <span asp-validation-for="StateRegistration.Number" class="text-danger"></span>
+                }
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label asp-for="StateRegistration.ByWhomIssued"></label>
+                <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
+                @if (Model.IsReturn)
+                {
+                    <span asp-validation-for="StateRegistration.ByWhomIssued" class="text-danger"></span>
+                }
 
             </div>
 
         </div>
 
-    </div>
+        <hr />
 
-    <hr />
+        <div class="d-grid gap-2">
 
-    <div class="row">
-
-        <h4>Документ</h4>
-
-        <div class="form-group mb-3">
-
-            <label>Вид государственной регистрации</label>
-            <input class="form-control" />
+            <button type="submit" class="btn btn-warning btn-lg">Добавить</button>
 
         </div>
 
-        <div class="form-group mb-3">
+    </form>
 
-            <label>Вид государственной регистрации</label>
-            <input class="form-control" />
-
-        </div>
-
-        <div class="form-group mb-3">
-
-            <label>Кем выдано</label>
-            <input class="form-control" />
-
-        </div>
-
-    </div>
-
-    <hr />
-
-    <div class="d-grid gap-2">
-
-        <button type="submit" class="btn btn-warning btn-lg" data-bs-dismiss="modal">Добавить</button>
-
-    </div>
-
-</form>
+</div>

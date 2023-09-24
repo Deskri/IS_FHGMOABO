@@ -293,7 +293,7 @@
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
+                    <label asp-for="StateRegistration.Type"></label>
                     <input class="form-control" asp-for="StateRegistration.Type" />
                     @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
@@ -304,7 +304,7 @@
 
                 <div class="form-group mb-3">
 
-                    <label>Вид государственной регистрации</label>
+                    <label asp-for="StateRegistration.Number"></label>
                     <input class="form-control" asp-for="StateRegistration.Number" />
                     @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {
@@ -315,7 +315,7 @@
 
                 <div class="form-group mb-3">
 
-                    <label>Кем выдано</label>
+                    <label asp-for="StateRegistration.ByWhomIssued"></label>
                     <input class="form-control" asp-for="StateRegistration.ByWhomIssued" />
                     @if (!Model.IsNaturalPerson && Model.IsReturn)
                     {

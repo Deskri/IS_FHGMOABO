@@ -39,6 +39,8 @@ builder.Services.AddAuthentication(options =>
     // Настройки обработчика аутентификации для Identity.TwoFactorUserId
 });
 
+builder.Services.AddSession();
+
 // Добавление сервисов Identity
 builder.Services.AddIdentityCore<IdentityUser>(options =>
 options.SignIn.RequireConfirmedAccount = false)
@@ -64,6 +66,8 @@ app.UseRouting();
 // Добавление аутентификации и авторизации
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
