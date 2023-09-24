@@ -104,6 +104,13 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
+        public IActionResult Edit()
+        {
+            return PartialView();
+        }
+
+        [Authorize]
+        [HttpGet]
         public IActionResult Add()
         {
             return PartialView();
