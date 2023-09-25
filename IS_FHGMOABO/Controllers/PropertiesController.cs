@@ -132,6 +132,7 @@ namespace IS_FHGMOABO.Controllers
                                 .ThenBy(x => x.Number)
                                 .ToListAsync();
 
+            // Необходимо для сериализации, чтобы избавиться от зациклености
             foreach (var room in rooms)
             {
                 room.House.Rooms = null;
