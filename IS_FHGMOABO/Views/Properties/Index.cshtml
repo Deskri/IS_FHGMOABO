@@ -121,11 +121,9 @@ else
                     <th>
                         <div class="btn-group mr-2" role="group" aria-label="First group">
 
-                            <button type="button" class="btn btn-warning" title="Изменить" data-bs-toggle="modal" data-bs-target="#editPropertyModal@(property.Id)">
-                                <i class="bi bi-pencil"></i>
-                            </button>
+                            <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Properties" asp-action="Edit" asp-route-id="@(property.Id)"><i class="bi bi-pencil"></i></a>
 
-                            <button type="button" class="btn btn-danger" title="Удалить" data-bs-toggle="modal" data-bs-target="#deletePropertyModal@(property.Id)">
+                            <button type="button" class="btn btn-danger" title="" data-bs-toggle="modal" data-bs-target="#deletePropertyModal@(property.Id)">
                                 <i class="bi bi-trash2-fill"></i>
                             </button>
 
@@ -169,8 +167,6 @@ else
 
             </div>
         </div>
-
-        @await Html.PartialAsync("Edit", property)
     }
 }
 
