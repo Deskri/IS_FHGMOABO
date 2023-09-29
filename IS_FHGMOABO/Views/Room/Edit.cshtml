@@ -1,0 +1,156 @@
+﻿@using static IS_FHGMOABO.Models.RoomModels.EditRoomModel;
+@model IS_FHGMOABO.Models.RoomModels.EditRoomModel;
+
+@{
+}
+
+<form method="post" asp-controller="Room" asp-action="Edit">
+
+    <div class="row">
+        <div class="col-6">
+
+            <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Room" asp-action="Index" asp-route-id="@Model.HouseId"><i class="bi bi-arrow-left-circle-fill"></i> Назад</a>
+
+        </div>
+        <div class="col-6 text-end">
+
+            <button type="submit" class="btn btn-warning btn-lg me-1"><i class="bi bi-box-arrow-down"></i> Сохранить</button>
+
+        </div>
+
+        <hr class="border border-dark border-2">
+
+        <div class="col-12 mb-3">
+
+            <h2> Изменение записи о помещение </h2>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <input type="hidden" asp-for="HouseId" />
+
+        <div class="row">
+
+            <h4>Помещение</h4>
+
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Type"></label>
+                    @Html.DropDownListFor(model => model.Type, new SelectList(Enum.GetValues(typeof(RoomType))), "Выберите", new { @class = "form-control" })
+                    <span asp-validation-for="Type" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Number"></label>
+                    <input asp-for="Number" class="form-control" />
+                    <span asp-validation-for="Number" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <h4>Назначения</h4>
+
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Purpose"></label>
+                    @Html.DropDownListFor(model => model.Purpose, new SelectList(Enum.GetValues(typeof(RoomPurpose))), "Выберите", new { @class = "form-control" })
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="IsPrivatized"></label>
+
+                    <div class="form-switch checkbox btn-lg ps-0">
+
+                        <input class="form-check-input ms-0 ps-5" asp-for="IsPrivatized" />
+                        <span asp-validation-for="IsPrivatized" class="text-danger"></span>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <h4>Площади</h4>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="TotalArea"></label>
+                    <input asp-for="TotalArea" class="form-control" />
+                    <span asp-validation-for="TotalArea" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="LivingArea"></label>
+                    <input asp-for="LivingArea" class="form-control" />
+                    <span asp-validation-for="LivingArea" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="UsableArea"></label>
+                    <input asp-for="UsableArea" class="form-control" />
+                    <span asp-validation-for="UsableArea" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <h4>Паспортная информация</h4>
+
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Floor"></label>
+                    <input type="number" asp-for="Floor" class="form-control" />
+                    <span asp-validation-for="Floor" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Entrance"></label>
+                    <input type="number" asp-for="Entrance" class="form-control" />
+                    <span asp-validation-for="Entrance" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group mb-3">
+
+                    <label asp-for="CadastralNumber"></label>
+                    <input asp-for="CadastralNumber" class="form-control" />
+                    <span asp-validation-for="CadastralNumber" class="text-danger"></span>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>

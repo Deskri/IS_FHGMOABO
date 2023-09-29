@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Reflection.Metadata.Ecma335;
+using static IS_FHGMOABO.Models.RoomModels.EditRoomModel;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -121,6 +122,42 @@ namespace IS_FHGMOABO.Controllers
             return View("Index", model);
         }
 
-        
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var room = await _applicationDBContext.Rooms.FindAsync(id);
+
+            var model = new EditRoomModel()
+            {
+                HouseId = room.HouseId,
+                Number = room.Number,
+                TotalArea = room.TotalArea,
+                LivingArea = room.LivingArea,
+                UsableArea = room.UsableArea,
+                Floor = room.Floor,
+                Entrance = room.Entrance,
+                CadastralNumber = room.CadastralNumber,
+                IsPrivatized = room.IsPrivatized,
+            };
+
+            foreach (RoomType type in Enum.GetValues(typeof(RoomType)))
+            {
+                if (room.Type == type.ToString())
+                {
+                    model.Type = type;
+                }
+            }
+
+            foreach (RoomPurpose purpose in Enum.GetValues(typeof(RoomPurpose)))
+            {
+                if (room.Type == purpose.ToString())
+                {
+                    model.Purpose = purpose;
+                }
+            }
+
+            return View(model);
+        }
     }
 }
