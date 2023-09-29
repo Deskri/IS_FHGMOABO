@@ -47,7 +47,8 @@ namespace IS_FHGMOABO.Controllers
 
             if (room != null)
             {
-
+                _applicationDBContext.Remove(room);
+                _applicationDBContext.SaveChanges();
             }
 
             return RedirectToAction("Index", "Room", new { id = idIndex });
