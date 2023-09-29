@@ -31,7 +31,6 @@ namespace IS_FHGMOABO.Controllers
             model.AddProperties.AddJointProperty = new AddJointPropertyModel();
 
             var rooms = await _applicationDBContext.Rooms
-                                            .Where(x => x.Deleted == null)
                                             .Include(x => x.House)
                                             .OrderBy(x => x.House.Type)
                                             .ThenBy(x => x.House.Street)
@@ -147,7 +146,6 @@ namespace IS_FHGMOABO.Controllers
                                         .FirstOrDefaultAsync(x => x.Id == id);
 
             var rooms = await _applicationDBContext.Rooms
-                                .Where(x => x.Deleted == null)
                                 .Include(x => x.House)
                                 .OrderBy(x => x.House.Type)
                                 .ThenBy(x => x.House.Street)
@@ -221,7 +219,7 @@ namespace IS_FHGMOABO.Controllers
             {
                 var _roomId = Int32.Parse(model.RoomId);
 
-                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId && x.Deleted == null);
+                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId);
 
                 decimal share = 0;
 
@@ -404,7 +402,7 @@ namespace IS_FHGMOABO.Controllers
             {
                 var _roomId = Int32.Parse(_add.RoomId);
 
-                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId && x.Deleted == null);
+                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId);
 
                 if (rooms == null)
                 {
@@ -560,7 +558,7 @@ namespace IS_FHGMOABO.Controllers
             {
                 var _roomId = Int32.Parse(_add.RoomId);
 
-                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId && x.Deleted == null);
+                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId);
 
                 decimal share = 0;
 
@@ -753,7 +751,7 @@ namespace IS_FHGMOABO.Controllers
             {
                 var _roomId = Int32.Parse(_add.RoomId);
 
-                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId && x.Deleted == null);
+                var rooms = await _applicationDBContext.Rooms.FirstOrDefaultAsync(x => x.Id == _roomId);
 
                 decimal share = 0;
 

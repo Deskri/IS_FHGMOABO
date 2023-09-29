@@ -86,17 +86,6 @@ namespace IS_FHGMOABO.DAL
         public bool IsPrivatized { get; set; }
 
         /// <summary>
-        /// Дата добавления или изменения
-        /// </summary>
-        [Required]
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Дата удаление или сохранения старых данных
-        /// </summary>
-        public DateTime? Deleted { get; set; }
-
-        /// <summary>
         /// Навигационное свойство для связи с Property
         /// </summary>
         public ICollection<Property> Properties { get; set; }

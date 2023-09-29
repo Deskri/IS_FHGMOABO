@@ -25,28 +25,7 @@ namespace IS_FHGMOABO.Controllers
             var model = new IndexRoomModel();
 
             model.Rooms = await _applicationDBContext.Rooms
-                        .Where(x => x.HouseId == id && x.Deleted == null)
-                        .OrderBy(x => x.Type)
-                        .ThenBy(x => x.Number)
-                        .ToListAsync();
-
-            model.House = await _applicationDBContext.Houses
-                        .FirstOrDefaultAsync(x => x.Id == id);
-
-            model.AddRoom = new AddRoomModel()
-            {
-                HouseId = id,
-            };
-
-            return View(model);
-        }
-
-        public async Task<IActionResult> Archive(int id)
-        {
-            var model = new IndexRoomModel();
-
-            model.Rooms = await _applicationDBContext.Rooms
-                        .Where(x => x.HouseId == id && x.Deleted != null)
+                        .Where(x => x.HouseId == id)
                         .OrderBy(x => x.Type)
                         .ThenBy(x => x.Number)
                         .ToListAsync();
@@ -68,12 +47,8 @@ namespace IS_FHGMOABO.Controllers
 
             if (room != null)
             {
-                room.Deleted = DateTime.Now;
 
-                await _applicationDBContext.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Room", new { id = idIndex });
-            };
+            }
 
             return RedirectToAction("Index", "Room", new { id = idIndex });
         }
@@ -94,8 +69,7 @@ namespace IS_FHGMOABO.Controllers
             var sameNumber = await _applicationDBContext.Rooms
                                                         .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
                                                                             && x.HouseId == _addRoomModel.HouseId
-                                                                            && x.Type == _addRoomModel.Type.ToString()
-                                                                            && x.Deleted == null);
+                                                                            && x.Type == _addRoomModel.Type.ToString());
 
             if (sameNumber != null)
             {
@@ -124,7 +98,6 @@ namespace IS_FHGMOABO.Controllers
                     Entrance = _addRoomModel.Entrance,
                     CadastralNumber = _addRoomModel.CadastralNumber,
                     IsPrivatized = _addRoomModel.IsPrivatized,
-                    Created = DateTime.Now,
                 };
 
                 await _applicationDBContext.AddAsync(room);
