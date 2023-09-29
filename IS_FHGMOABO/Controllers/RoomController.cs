@@ -92,9 +92,10 @@ namespace IS_FHGMOABO.Controllers
             bool _modelState = ModelState.IsValid;
 
             var sameNumber = await _applicationDBContext.Rooms
-                        .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
-                                            && x.Type == _addRoomModel.Type.ToString()
-                                            && x.Deleted == null);
+                                                        .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
+                                                                            && x.HouseId == _addRoomModel.HouseId
+                                                                            && x.Type == _addRoomModel.Type.ToString()
+                                                                            && x.Deleted == null);
 
             if (sameNumber != null)
             {

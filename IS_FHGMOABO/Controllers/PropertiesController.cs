@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -19,7 +20,7 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(PropertiesFilter filter)
         {
             var model = new IndexPropertiesModel();
 
@@ -53,12 +54,17 @@ namespace IS_FHGMOABO.Controllers
                                                     .Include(x => x.NaturalPersons)
                                                     .Include(x => x.LegalPerson)
                                                     .Include(x => x.Room.House)
-                                                    .OrderBy(x => x.Room.House.Type)
-                                                    .ThenBy(x => x.Room.House.Street)
-                                                    .ThenBy(x => x.Room.House.Number)
-                                                    .ThenBy(x => x.Room.Type)
-                                                    .ThenBy(x => x.Room.Number)
                                                     .ToListAsync();
+            if (properties != null)
+            {
+                properties = properties.OrderBy(x => x.Room.House.Type)
+                                        .ThenBy(x => x.Room.House.Street)
+                                        .ThenBy(x => x.Room.House.Number)
+                                        .ThenBy(x => x.Room.Type)
+                                        .ThenBy(x => int.Parse(Regex.Match(x.Room.Number, @"\d+").Value))
+                                        .ThenBy(x => Regex.Match(x.Room.Number, @"\D+").Value)
+                                        .ToList();
+            }
 
             // Необходимо для сериализации, чтобы избавиться от зациклености
             foreach (var property in properties)
@@ -78,6 +84,24 @@ namespace IS_FHGMOABO.Controllers
                     }
                 }
             }
+
+            if (filter.HouseId != null)
+            {
+                properties = properties.Where(x => x.Room.HouseId == filter.HouseId).ToList();
+            }
+
+            if (filter.Room != null)
+            {
+                properties = properties.Where(x => x.Room.Number == filter.Room).ToList();
+            }
+
+            if (filter.PropertyType != null)
+            {
+                properties = properties.Where(x => x.Type == filter.PropertyType).ToList();
+            }
+
+            model.Filter = new PropertiesFilter();
+            model.Filter.Houses = await _applicationDBContext.Houses.ToListAsync();
 
             model.Properties = properties;
 
@@ -235,7 +259,7 @@ namespace IS_FHGMOABO.Controllers
                     {
                         ModelState.AddModelError("EditShare.Divisor", "Делитель не может быть меньше 0.");
                     }
-                    else if (model.EditShare.Dividend == 0 || model.EditShare.Divisor == 0 || model.EditShare.Dividend / model.EditShare.Divisor > 1 )
+                    else if (model.EditShare.Dividend == 0 || model.EditShare.Divisor == 0 || model.EditShare.Dividend / model.EditShare.Divisor > 1)
                     {
                         ModelState.AddModelError("EditShare", "Делимое не может быть больше делителя или одно из значение не может быть равное 0.");
                     }
@@ -316,7 +340,7 @@ namespace IS_FHGMOABO.Controllers
                     property.TypeOfStateRegistration = model.StateRegistration.Type;
                     property.StateRegistrationNumber = model.StateRegistration.Number;
                     property.ByWhomIssued = model.StateRegistration.ByWhomIssued;
-                    
+
                     if (model.NaturalPerson == null)
                     {
                         property.LegalPerson.Name = model.LegalPerson.Name;
@@ -324,7 +348,7 @@ namespace IS_FHGMOABO.Controllers
                     else if (model.NaturalPerson != null && model.NaturalPerson.Count > 0)
                     {
                         var i = 0;
-                        foreach (var person in property.NaturalPersons) 
+                        foreach (var person in property.NaturalPersons)
                         {
                             person.FirstName = model.NaturalPerson[i].FirstName;
                             person.LastName = model.NaturalPerson[i].LastName;
