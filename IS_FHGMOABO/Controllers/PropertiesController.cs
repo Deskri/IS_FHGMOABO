@@ -20,7 +20,7 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(PropertiesFilter filter)
         {
             var model = new IndexPropertiesModel();
 
@@ -84,6 +84,24 @@ namespace IS_FHGMOABO.Controllers
                     }
                 }
             }
+
+            if (filter.HouseId != null)
+            {
+                properties = properties.Where(x => x.Room.HouseId == filter.HouseId).ToList();
+            }
+
+            if (filter.Room != null)
+            {
+                properties = properties.Where(x => x.Room.Number == filter.Room).ToList();
+            }
+
+            if (filter.PropertyType != null)
+            {
+                properties = properties.Where(x => x.Type == filter.PropertyType).ToList();
+            }
+
+            model.Filter = new PropertiesFilter();
+            model.Filter.Houses = await _applicationDBContext.Houses.ToListAsync();
 
             model.Properties = properties;
 

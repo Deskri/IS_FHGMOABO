@@ -15,11 +15,65 @@
 
     <div class="col text-end mb-3">
 
+        <a class="btn btn-warning btn-lg" data-bs-toggle="collapse" href="#collapseFilter" role="button" aria-expanded="false" aria-controls="collapseFilter">
+            <i class="bi bi-filter"></i> Фильтр
+        </a>
+
         <!-- Button trigger modal -->
         <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
             <i class="bi bi-person-fill-add"></i> Добавить собственность
         </button>
 
+    </div>
+
+    <div class="collapse mb-3" id="collapseFilter">
+        <div class="card card-body">
+            <form>
+
+                <h2>Фильтр</h2>
+
+                <div class="row">
+
+                    <div class="form-group mb-3 col-6">
+
+                        <label asp-for="Filter.HouseId"></label>
+                        <select class="form-select" asp-for="Filter.HouseId">
+                            <option selected value="@null">Выберите</option>
+                            @foreach (var house in Model.Filter.Houses)
+                            {
+                                <option value="@house.Id">@house.Type @house.Street, д. @house.Number</option>
+                            }
+                        </select>
+
+                    </div>
+
+                    <div class="form-group mb-3 col-6">
+
+                        <label asp-for="Filter.Room"></label>
+                        <input type="text" class="form-control" asp-for="Filter.Room" />
+
+                    </div>
+
+                    <div class="form-group mb-3 col-6">
+                        <label asp-for="Filter.PropertyType"></label>
+                        <select class="form-select" asp-for="Filter.PropertyType">
+                            <option selected value="@null">Выберите</option>
+                            <option value="Собственность">Собственность</option>
+                            <option value="Долевая собственность">Долевая собственность</option>
+                            <option value="Совместная собственность">Совместная собственность</option>
+                        </select>
+
+                    </div>
+
+                    <div class="d-grid gap-2">
+
+                        <button type="submit" class="btn btn-warning btn-lg" asp-controller="Properties" asp-action="Index" asp-route-filter="@Model.Filter">Применить</button>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
     </div>
 
     <hr class="border border-dark border-2">
@@ -133,7 +187,7 @@ else
             }
         </tbody>
     </table>
-    
+
     @foreach (var property in Model.Properties)
     {
         <div class="modal fade" id="deletePropertyModal@(property.Id)" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

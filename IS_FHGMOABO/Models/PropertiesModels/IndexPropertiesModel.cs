@@ -1,4 +1,5 @@
 ﻿using IS_FHGMOABO.DAL;
+using System.ComponentModel.DataAnnotations;
 
 namespace IS_FHGMOABO.Models.PropertiesModels
 {
@@ -13,12 +14,15 @@ namespace IS_FHGMOABO.Models.PropertiesModels
 
     public class PropertiesFilter
     {
-        List<House> Houses { get; set; }
+        public List<House>? Houses { get; set; }
 
-        public int HouseId { get; set; }
+        [Display(Name = "Дом")]
+        public int? HouseId { get; set; }
 
-        public string Room { get; set; }
+        [Display(Name = "Помещение")]
+        public string? Room { get; set; }
 
-        public string PropertyType { get; set; }
+        [Display(Name = "Вид собственности")]
+        public string? PropertyType { get; set; }
     }
 }
