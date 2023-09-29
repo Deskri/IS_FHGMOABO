@@ -5,9 +5,19 @@ namespace IS_FHGMOABO.Models.RoomModels
     public class EditRoomModel
     {
         /// <summary>
+        /// Идентификатор собственности
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Внешний ключ для связи с House
         /// </summary>
         public int HouseId { get; set; }
+
+        /// <summary>
+        /// Значение для поиска совпадающих номеров комнат, за исключением этого значения входящего номера
+        /// </summary>
+        public string IncomingNumber { get; set; }
 
         /// <summary>
         /// Тип помещения

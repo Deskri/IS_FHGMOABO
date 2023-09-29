@@ -130,6 +130,7 @@ namespace IS_FHGMOABO.Controllers
 
             var model = new EditRoomModel()
             {
+                Id = room.Id,
                 HouseId = room.HouseId,
                 Number = room.Number,
                 TotalArea = room.TotalArea,
@@ -139,6 +140,7 @@ namespace IS_FHGMOABO.Controllers
                 Entrance = room.Entrance,
                 CadastralNumber = room.CadastralNumber,
                 IsPrivatized = room.IsPrivatized,
+                IncomingNumber = room.Number,
             };
 
             foreach (RoomType type in Enum.GetValues(typeof(RoomType)))
@@ -151,10 +153,55 @@ namespace IS_FHGMOABO.Controllers
 
             foreach (RoomPurpose purpose in Enum.GetValues(typeof(RoomPurpose)))
             {
-                if (room.Type == purpose.ToString())
+                if (room.Purpose == purpose.ToString())
                 {
                     model.Purpose = purpose;
                 }
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditRoomModel model)
+        {
+            var sameNumber = await _applicationDBContext.Rooms
+                                                        .Where(x => x.Number != model.IncomingNumber)
+                                                        .FirstOrDefaultAsync(x => x.Number == model.Number
+                                                                            && x.HouseId == model.HouseId
+                                                                            && x.Type == model.Type.ToString());
+
+            if (sameNumber != null)
+            {
+                ModelState.AddModelError("Number", "Номер помещения не должен повторяться.");
+            }
+
+            if (model.TotalArea == 0)
+            {
+                ModelState.AddModelError("TotalArea", "Общая площадь помещения не должна быть равна 0.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                var room = await _applicationDBContext.Rooms.FindAsync(model.Id);
+
+                room.HouseId = model.HouseId;
+                room.Type = model.Type.ToString();
+                room.Number = model.Number;
+                room.Purpose = model.Purpose.ToString();
+                room.TotalArea = model.TotalArea;
+                room.LivingArea = model.LivingArea;
+                room.UsableArea = model.UsableArea;
+                room.Floor = model.Floor;
+                room.Entrance = model.Entrance;
+                room.CadastralNumber = model.CadastralNumber;
+                room.IsPrivatized = model.IsPrivatized;
+
+
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Room", new { id = model.HouseId });
             }
 
             return View(model);
