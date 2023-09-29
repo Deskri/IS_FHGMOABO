@@ -1,10 +1,12 @@
 ﻿using IS_FHGMOABO.DAL;
 using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.HouseModels;
+using IS_FHGMOABO.Models.PropertiesModels;
 using IS_FHGMOABO.Models.RoomModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Reflection.Metadata.Ecma335;
 
 namespace IS_FHGMOABO.Controllers
@@ -33,10 +35,16 @@ namespace IS_FHGMOABO.Controllers
             model.House = await _applicationDBContext.Houses
                         .FirstOrDefaultAsync(x => x.Id == id);
 
+            // Необходимо для сериализации, чтобы избавиться от зациклености
+            model.House.Rooms = null;
+
             model.AddRoom = new AddRoomModel()
             {
                 HouseId = id,
             };
+
+            var serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexRoomModel", serializedModel);
 
             return View(model);
         }
@@ -107,18 +115,12 @@ namespace IS_FHGMOABO.Controllers
                 return RedirectToAction("Index", "Room", new { id = _addRoomModel.HouseId });
             }
 
-            var model = new IndexRoomModel();
-            model.AddRoom = _addRoomModel;
-            model.Rooms = await _applicationDBContext.Rooms
-                        .Where(x => x.HouseId == _addRoomModel.HouseId)
-                        .OrderBy(x => x.Type)
-                        .ThenBy(x => x.Number)
-                        .ToListAsync();
-
-            model.House = await _applicationDBContext.Houses
-                        .FirstOrDefaultAsync(x => x.Id == _addRoomModel.HouseId);
+            var serializedModel = HttpContext.Session.GetString("IndexRoomModel");
+            var model = JsonConvert.DeserializeObject<IndexRoomModel>(serializedModel);
 
             return View("Index", model);
         }
+
+        
     }
 }
