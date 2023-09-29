@@ -13,8 +13,6 @@
 
     <div class="col-6 text-end">
 
-        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="Room" asp-action="Archive" asp-route-id="@Model.House.Id"><i class="bi bi-archive-fill"></i> Архив помещений</a>
-
         <button id="addButton" class="btn btn-warning btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdd" aria-expanded="false" aria-controls="collapseAdd">
             <i class="bi bi-building-fill-add"></i> Добавить помещение
         </button>
@@ -22,8 +20,8 @@
 
     </div>
 
-    @await Html.PartialAsync("Add", new AddRoomModel() { 
-        HouseId = Model.House.Id,
+    @await Html.PartialAsync("Add", new AddRoomModel() {
+    HouseId = Model.House.Id,
     })
 
     <hr class="border border-dark border-2">
@@ -126,13 +124,58 @@ else
                         </th>
                     }
                     <th class="text-center">
-                        <a class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить" asp-area="" asp-controller="Room" asp-action="Delete" asp-route-id="@room.Id" asp-route-idIndex="@Model.House.Id"><i class="bi bi-trash2-fill"></i></a>
+
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+
+                            <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Room" asp-action="Edit" asp-route-id="@(room.Id)"><i class="bi bi-pencil"></i></a>
+
+                            <button type="button" class="btn btn-danger" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteRoomModal@(room.Id)">
+                                <i class="bi bi-trash2-fill"></i>
+                            </button>
+
+                        </div>
+
                     </th>
 
                 </tr>
             }
         </tbody>
     </table>
+}
+
+@foreach (var room in Model.Rooms)
+{
+    <div class="modal fade" id="deleteRoomModal@(room.Id)" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content rounded-4">
+
+                <div class="modal-header bg-dark rounded-top-4">
+
+                    <h5 class="modal-title text-danger" id="deleteModalLabel">Удаление записи о помещении</h5>
+                    <button type="button" class="btn-close border border-danger btn-outline-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    Вы уверены, что хотите удалить запись?
+
+                </div>
+
+                <div class="modal-footer bg-dark rounded-bottom-4">
+
+                    <a class="btn btn-danger" title="Удалить" asp-area="" asp-controller="Room" asp-action="Delete" asp-route-id="@room.Id" asp-route-idIndex="@Model.House.Id">Удалить</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
 }
 
 <script>
