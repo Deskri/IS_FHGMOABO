@@ -4,6 +4,8 @@ using IS_FHGMOABO.Models.HouseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using static IS_FHGMOABO.Models.HouseModels.EditHouseModel;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -22,44 +24,41 @@ namespace IS_FHGMOABO.Controllers
         {
             var model = new IndexHouseModel();
             model.Houses = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted == null)
-                                .ToListAsync();
+                                                            .Include(x => x.Rooms)
+                                                            .ToListAsync();
 
             foreach (var house in model.Houses)
             {
-                var rooms = await _applicationDBContext.Rooms.Where(x => x.HouseId == house.Id).ToListAsync();
-
-                if (rooms == null || rooms.Count == 0)
+                if (house.Rooms == null || house.Rooms.Count == 0)
                 {
                     house.RoomsCount = 0;
                 }
                 else
                 {
-                    house.RoomsCount = rooms.Count();
+                    house.RoomsCount = house.Rooms.Count();
+                }
+
+                // Необходимо для сериализации, чтобы избавиться от зациклености
+                foreach (var room in house.Rooms)
+                {
+                    room.House = null;
                 }
             }
 
+            var serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexHouseModel", serializedModel);
+
             return View(model);
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Archive()
+        public IActionResult Details()
         {
-            var model = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted != null)
-                                .ToListAsync();
-            return View(model);
-        }
-
-        public IActionResult Details () 
-        { 
-            return PartialView("Details", new House()); 
+            return PartialView("Details", new House());
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
             return PartialView("Add", new AddHouseModel());
         }
@@ -86,7 +85,6 @@ namespace IS_FHGMOABO.Controllers
                     PlotPassportedFloorArea = _addHouseModel.PlotPassportedFloorArea,
                     ResidentialPremisesPassportedArea = _addHouseModel.ResidentialPremisesPassportedArea,
                     NonResidentialPremisesPassportedArea = _addHouseModel.NonResidentialPremisesPassportedArea,
-                    Created = DateTime.Now,
                 };
 
                 await _applicationDBContext.AddAsync(house);
@@ -95,13 +93,96 @@ namespace IS_FHGMOABO.Controllers
                 return RedirectToAction("Index", "House");
             }
 
-            var model = new IndexHouseModel();
+            var serializedModel = HttpContext.Session.GetString("IndexHouseModel");
+            var model = JsonConvert.DeserializeObject<IndexHouseModel>(serializedModel);
+
             model.AddHouse = _addHouseModel;
-            model.Houses = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted == null)
-                                .ToListAsync();
+
+            serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexHouseModel", serializedModel);
 
             return View("Index", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var house = await _applicationDBContext.Houses.FindAsync(id);
+
+            if (house != null)
+            {
+                _applicationDBContext.Remove(house);
+                _applicationDBContext.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "House");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var house = await _applicationDBContext.Houses.FindAsync(id);
+
+            var model = new EditHouseModel()
+            {
+                Id = id,
+                Number = house.Number,
+                Street = house.Street,
+                Region = house.Region,
+                InhabitedLocality = house.InhabitedLocality,
+                District = house.District,
+                Subject = house.Subject,
+                Country = house.Country,
+                HouseCadastralNumber = house.HouseCadastralNumber,
+                PlotCadastralNumber = house.PlotCadastralNumber,
+                HousesPassportedFloorArea = house.HousesPassportedFloorArea,
+                PlotPassportedFloorArea = house.PlotPassportedFloorArea,
+                ResidentialPremisesPassportedArea = house.HousesPassportedFloorArea,
+                NonResidentialPremisesPassportedArea = house.NonResidentialPremisesPassportedArea,
+            };
+
+            foreach (StreetType type in Enum.GetValues(typeof(StreetType)))
+            {
+                if (house.Type == type.ToString())
+                {
+                    model.Type = type;
+                }
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditHouseModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var house = await _applicationDBContext.Houses.FindAsync(model.Id);
+
+                house.Number = model.Number;
+                house.Type = model.Type.ToString();
+                house.Street = model.Street;
+                house.Region = model.Region;
+                house.InhabitedLocality = model.InhabitedLocality;
+                house.District = model.District;
+                house.Subject = model.Subject;
+                house.Country = model.Country;
+                house.HouseCadastralNumber = model.HouseCadastralNumber;
+                house.PlotCadastralNumber = model.PlotCadastralNumber;
+                house.HousesPassportedFloorArea = model.HousesPassportedFloorArea;
+                house.PlotPassportedFloorArea = model.PlotPassportedFloorArea;
+                house.ResidentialPremisesPassportedArea = model.ResidentialPremisesPassportedArea;
+                house.NonResidentialPremisesPassportedArea = model.NonResidentialPremisesPassportedArea;
+
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index", "House");
+            }
+
+            return View("Edit", model);
         }
     }
 }

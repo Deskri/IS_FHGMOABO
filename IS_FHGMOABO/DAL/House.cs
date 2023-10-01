@@ -98,17 +98,6 @@ namespace IS_FHGMOABO.DAL
         public decimal NonResidentialPremisesPassportedArea { get; set; }
 
         /// <summary>
-        /// Дата добавления или изменения
-        /// </summary>
-        [Required]
-        public DateTime Created { get; set; }
-
-        /// <summary>
-        /// Дата удаление или сохранения старых данных
-        /// </summary>
-        public DateTime? Deleted { get; set; }
-
-        /// <summary>
         /// Навигационное свойство для связи с Room
         /// </summary>
         public ICollection<Room> Rooms { get; set; }

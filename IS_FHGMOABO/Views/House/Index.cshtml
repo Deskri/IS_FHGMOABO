@@ -12,8 +12,6 @@
     </div>
     <div class="col text-end">
 
-        <a class="btn btn-warning btn-lg me-1" asp-area="" asp-controller="House" asp-action="Archive"><i class="bi bi-archive-fill"></i> Архив МКД</a>
-
         <!-- Button trigger modal -->
         <button id="addButton" type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#addModal">
             <i class="bi bi-building-fill-add"></i> Добавить МКД
@@ -43,7 +41,7 @@
                                 <h5>@house.Type @house.Street, дом @house.Number </h5>
                             </div>
                             <div class="col text-end">
-                                <a href="#" class="text-warning"><i class="bi bi-pencil"></i></a>
+                                <a class="text-warning" asp-controller="House" asp-action="Edit" asp-route-id="@house.Id"><i class="bi bi-pencil"></i></a>
                             </div>
                         </div>
 
@@ -70,13 +68,16 @@
                         <button id="detailsButton_@house.Id" type="button" class="btn btn-warning mt-1 mb-1 ms-1 me-1" data-bs-toggle="modal" data-bs-target="#detailsModal_@house.Id">
                             <i class="bi bi-search"></i> Подробнее
                         </button>
-                        <a class="btn btn-danger mt-1 mb-1 ms-1"><i class="bi bi-trash2-fill"></i> Удалить</a>
+                        <button class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteHouseModal@(house.Id)">
+                            <i class="bi bi-trash2-fill"></i> Удалить
+                        </button>
 
                     </div>
                 </div>
             </div>
 
             @await Html.PartialAsync("Details", house)
+            @await Html.PartialAsync("Delete", house.Id)
         }
     }
 

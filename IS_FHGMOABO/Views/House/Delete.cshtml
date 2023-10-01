@@ -1,0 +1,38 @@
+﻿@model int
+
+@{
+}
+
+<div class="modal fade" id="deleteHouseModal@(Model)" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header bg-dark rounded-top-4">
+
+                <h5 class="modal-title text-danger" id="deleteModalLabel">Удаление записи о МКД</h5>
+                <button type="button" class="btn-close border border-danger btn-outline-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+
+            <div class="modal-body">
+
+                Вы уверены, что хотите удалить запись?
+
+            </div>
+
+            <div class="modal-footer bg-dark rounded-bottom-4">
+
+                <form method="post" asp-controller="House" asp-action="Delete">
+                    <button type="submit" class="btn btn-danger" title="Удалить" asp-area="" asp-controller="House" asp-action="Delete" asp-route-id="@Model">Удалить</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
