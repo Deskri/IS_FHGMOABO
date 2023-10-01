@@ -17,5 +17,10 @@ namespace IS_FHGMOABO.DBConection
         public DbSet<LegalPerson> LegalPersons { get; set; }
         public DbSet<NaturalPerson> NaturalPersons { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<Chairperson> Chairpersons { get; set; }
+        public DbSet<CountingCommitteeMember> CountingCommitteeMembers { get; set; }
+        public DbSet<Question> Questions { get; set; }
+
     }
 }
