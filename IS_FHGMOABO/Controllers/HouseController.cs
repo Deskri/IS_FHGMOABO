@@ -4,6 +4,7 @@ using IS_FHGMOABO.Models.HouseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -21,21 +22,30 @@ namespace IS_FHGMOABO.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new IndexHouseModel();
-            model.Houses = await _applicationDBContext.Houses.ToListAsync();
+            model.Houses = await _applicationDBContext.Houses
+                                                            .Include(x => x.Rooms)
+                                                            .ToListAsync();
 
             foreach (var house in model.Houses)
             {
-                var rooms = await _applicationDBContext.Rooms.Where(x => x.HouseId == house.Id).ToListAsync();
-
-                if (rooms == null || rooms.Count == 0)
+                if (house.Rooms == null || house.Rooms.Count == 0)
                 {
                     house.RoomsCount = 0;
                 }
                 else
                 {
-                    house.RoomsCount = rooms.Count();
+                    house.RoomsCount = house.Rooms.Count();
+                }
+
+                // Необходимо для сериализации, чтобы избавиться от зациклености
+                foreach (var room in house.Rooms)
+                {
+                    room.House = null;
                 }
             }
+
+            var serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexHouseModel", serializedModel);
 
             return View(model);
         }
