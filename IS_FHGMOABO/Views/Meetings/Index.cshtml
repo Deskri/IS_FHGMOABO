@@ -1,0 +1,35 @@
+﻿@model List<IS_FHGMOABO.DAL.Meeting>
+
+@{
+}
+
+<div class="row">
+
+    <div class="col mb-3">
+
+        <h2>Собрания собственников</h2>
+
+    </div>
+
+    <div class="col text-end mb-3">
+
+        <a class="btn btn-warning btn-lg" asp-controller="Meetings" asp-action="Add">
+            <i class="bi bi-clipboard2-plus"></i> Создать собрание
+        </a>
+
+    </div>
+
+    <hr class="border border-dark border-2">
+
+</div>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="alert alert-warning text-center">
+        <h1 class="mt-3">В системе отсутсутствует информация о собраниях собственниках.</h1>
+    </div>
+}
+else
+{
+    
+}
