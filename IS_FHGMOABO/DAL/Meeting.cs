@@ -26,10 +26,10 @@ namespace IS_FHGMOABO.DAL
         public House? House { get; set; }
 
         /// <summary>
-        /// Дата создания собрания
+        /// Дата начала проведения собрания
         /// </summary>
         [Required]
-        public DateTime Created { get; set; }
+        public DateTime StartDate { get; set; }
 
         /// <summary>
         /// Формат собрания

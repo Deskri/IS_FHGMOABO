@@ -19,5 +19,12 @@ namespace IS_FHGMOABO.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
     }
 }

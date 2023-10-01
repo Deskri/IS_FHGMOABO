@@ -60,6 +60,6 @@ namespace IS_FHGMOABO.DAL
         /// <summary>
         /// Приложение
         /// </summary>
-        public string Attachment { get; set; }
+        public string? Attachment { get; set; }
     }
 }
