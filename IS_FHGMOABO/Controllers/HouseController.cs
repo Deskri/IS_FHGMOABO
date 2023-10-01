@@ -57,7 +57,7 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public IActionResult Add()
         {
             return PartialView("Add", new AddHouseModel());
         }
@@ -92,9 +92,13 @@ namespace IS_FHGMOABO.Controllers
                 return RedirectToAction("Index", "House");
             }
 
-            var model = new IndexHouseModel();
+            var serializedModel = HttpContext.Session.GetString("IndexHouseModel");
+            var model = JsonConvert.DeserializeObject<IndexHouseModel>(serializedModel);
+
             model.AddHouse = _addHouseModel;
-            model.Houses = await _applicationDBContext.Houses.ToListAsync();
+
+            serializedModel = JsonConvert.SerializeObject(model);
+            HttpContext.Session.SetString("IndexHouseModel", serializedModel);
 
             return View("Index", model);
         }
