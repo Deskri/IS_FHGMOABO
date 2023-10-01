@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using static IS_FHGMOABO.Models.HouseModels.EditHouseModel;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -50,9 +51,9 @@ namespace IS_FHGMOABO.Controllers
             return View(model);
         }
 
-        public IActionResult Details () 
-        { 
-            return PartialView("Details", new House()); 
+        public IActionResult Details()
+        {
+            return PartialView("Details", new House());
         }
 
         [Authorize]
@@ -116,6 +117,70 @@ namespace IS_FHGMOABO.Controllers
             }
 
             return RedirectToAction("Index", "House");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var house = await _applicationDBContext.Houses.FindAsync(id);
+
+            var model = new EditHouseModel()
+            {
+                Id = id,
+                Number = house.Number,
+                Street = house.Street,
+                Region = house.Region,
+                InhabitedLocality = house.InhabitedLocality,
+                District = house.District,
+                Subject = house.Subject,
+                Country = house.Country,
+                HouseCadastralNumber = house.HouseCadastralNumber,
+                PlotCadastralNumber = house.PlotCadastralNumber,
+                HousesPassportedFloorArea = house.HousesPassportedFloorArea,
+                PlotPassportedFloorArea = house.PlotPassportedFloorArea,
+                ResidentialPremisesPassportedArea = house.HousesPassportedFloorArea,
+                NonResidentialPremisesPassportedArea = house.NonResidentialPremisesPassportedArea,
+            };
+
+            foreach (StreetType type in Enum.GetValues(typeof(StreetType)))
+            {
+                if (house.Type == type.ToString())
+                {
+                    model.Type = type;
+                }
+            }
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditHouseModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var house = await _applicationDBContext.Houses.FindAsync(model.Id);
+
+                house.Number = model.Number;
+                house.Type = model.Type.ToString();
+                house.Street = model.Street;
+                house.Region = model.Region;
+                house.InhabitedLocality = model.InhabitedLocality;
+                house.District = model.District;
+                house.Subject = model.Subject;
+                house.Country = model.Country;
+                house.HouseCadastralNumber = model.HouseCadastralNumber;
+                house.PlotCadastralNumber = model.PlotCadastralNumber;
+                house.HousesPassportedFloorArea = model.HousesPassportedFloorArea;
+                house.PlotPassportedFloorArea = model.PlotPassportedFloorArea;
+                house.ResidentialPremisesPassportedArea = model.ResidentialPremisesPassportedArea;
+                house.NonResidentialPremisesPassportedArea = model.NonResidentialPremisesPassportedArea;
+
+                _applicationDBContext.SaveChanges();
+            }
+
+            return View("Index", model);
         }
     }
 }
