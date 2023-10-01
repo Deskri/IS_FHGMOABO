@@ -21,9 +21,7 @@ namespace IS_FHGMOABO.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new IndexHouseModel();
-            model.Houses = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted == null)
-                                .ToListAsync();
+            model.Houses = await _applicationDBContext.Houses.ToListAsync();
 
             foreach (var house in model.Houses)
             {
@@ -39,16 +37,6 @@ namespace IS_FHGMOABO.Controllers
                 }
             }
 
-            return View(model);
-        }
-
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Archive()
-        {
-            var model = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted != null)
-                                .ToListAsync();
             return View(model);
         }
 
@@ -86,7 +74,6 @@ namespace IS_FHGMOABO.Controllers
                     PlotPassportedFloorArea = _addHouseModel.PlotPassportedFloorArea,
                     ResidentialPremisesPassportedArea = _addHouseModel.ResidentialPremisesPassportedArea,
                     NonResidentialPremisesPassportedArea = _addHouseModel.NonResidentialPremisesPassportedArea,
-                    Created = DateTime.Now,
                 };
 
                 await _applicationDBContext.AddAsync(house);
@@ -97,9 +84,7 @@ namespace IS_FHGMOABO.Controllers
 
             var model = new IndexHouseModel();
             model.AddHouse = _addHouseModel;
-            model.Houses = await _applicationDBContext.Houses
-                                .Where(x => x.Deleted == null)
-                                .ToListAsync();
+            model.Houses = await _applicationDBContext.Houses.ToListAsync();
 
             return View("Index", model);
         }
