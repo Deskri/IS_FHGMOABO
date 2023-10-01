@@ -74,8 +74,6 @@ namespace IS_FHGMOABO.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddRoomModel _addRoomModel)
         {
-            bool _modelState = ModelState.IsValid;
-
             var sameNumber = await _applicationDBContext.Rooms
                                                         .FirstOrDefaultAsync(x => x.Number == _addRoomModel.Number
                                                                             && x.HouseId == _addRoomModel.HouseId
@@ -84,16 +82,14 @@ namespace IS_FHGMOABO.Controllers
             if (sameNumber != null)
             {
                 ModelState.AddModelError("Number", "Номер помещения не должен повторяться.");
-                _modelState = false;
             }
 
             if (_addRoomModel.TotalArea == 0)
             {
                 ModelState.AddModelError("TotalArea", "Общая площадь помещения не должна быть равна 0.");
-                _modelState = false;
             }
 
-            if (_modelState)
+            if (ModelState.IsValid)
             {
                 var room = new Room()
                 {
