@@ -115,7 +115,7 @@ namespace IS_FHGMOABO.Controllers
                 _applicationDBContext.SaveChanges();
             }
 
-            return View("Index", "House");
+            return RedirectToAction("Index", "House");
         }
     }
 }

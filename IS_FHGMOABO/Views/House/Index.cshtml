@@ -68,13 +68,16 @@
                         <button id="detailsButton_@house.Id" type="button" class="btn btn-warning mt-1 mb-1 ms-1 me-1" data-bs-toggle="modal" data-bs-target="#detailsModal_@house.Id">
                             <i class="bi bi-search"></i> Подробнее
                         </button>
-                        <a class="btn btn-danger mt-1 mb-1 ms-1"><i class="bi bi-trash2-fill"></i> Удалить</a>
+                        <button class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteHouseModal@(house.Id)">
+                            <i class="bi bi-trash2-fill"></i> Удалить
+                        </button>
 
                     </div>
                 </div>
             </div>
 
             @await Html.PartialAsync("Details", house)
+            @await Html.PartialAsync("Delete", house.Id)
         }
     }
 
