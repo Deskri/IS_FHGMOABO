@@ -177,10 +177,12 @@ namespace IS_FHGMOABO.Controllers
                 house.ResidentialPremisesPassportedArea = model.ResidentialPremisesPassportedArea;
                 house.NonResidentialPremisesPassportedArea = model.NonResidentialPremisesPassportedArea;
 
-                _applicationDBContext.SaveChanges();
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index", "House");
             }
 
-            return View("Index", model);
+            return View("Edit", model);
         }
     }
 }

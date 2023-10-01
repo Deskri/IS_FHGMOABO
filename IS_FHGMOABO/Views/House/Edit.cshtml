@@ -1,0 +1,223 @@
+﻿@using IS_FHGMOABO.Models.HouseModels;
+@model IS_FHGMOABO.Models.HouseModels.EditHouseModel
+
+@{
+}
+
+<form method="post" asp-controller="House" asp-action="Edit">
+
+    <div class="row">
+        <div class="col-6">
+
+            <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="House" asp-action="Index">
+                <i class="bi bi-arrow-left-circle-fill"></i> Назад
+            </a>
+
+        </div>
+        <div class="col-6 text-end">
+
+            <button type="submit" class="btn btn-warning btn-lg me-1">
+                <i class="bi bi-box-arrow-down"></i> Сохранить
+            </button>
+
+        </div>
+
+        <hr class="border border-dark border-2">
+
+        <div class="col-12 mb-3">
+
+            <h2> Изменение записи о МКД </h2>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <input type="hidden" asp-for="Id" />
+
+        <h4 class="mt-3 mb-3">Адрес</h4>
+
+        <hr />
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Type"></label>
+                    @Html.DropDownListFor(model => model.Type, new SelectList(Enum.GetValues(typeof(EditHouseModel.StreetType))), "Выберите тип", new { @class = "form-control" })
+                    <span asp-validation-for="Type" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Street"></label>
+                    <input asp-for="Street" class="form-control" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Number"></label>
+                    <input asp-for="Number" class="form-control" />
+                    <span asp-validation-for="Number" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="InhabitedLocality"></label>
+                    <input asp-for="InhabitedLocality" class="form-control" />
+                    <span asp-validation-for="InhabitedLocality" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Region"></label>
+                    <input asp-for="Region" class="form-control" />
+                    <span asp-validation-for="Region" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="District"></label>
+                    <input asp-for="District" class="form-control" />
+                    <span asp-validation-for="District" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Subject"></label>
+                    <input asp-for="Subject" class="form-control" />
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group mb-3">
+
+            <label asp-for="Country"></label>
+            <input asp-for="Country" class="form-control" value="Российская Федерация" readonly />
+            <span asp-validation-for="Country" class="text-danger"></span>
+
+        </div>
+
+        <hr />
+
+        <h4 class="mt-3 mb-3">Кадастровые номера</h4>
+
+        <hr />
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="HouseCadastralNumber"></label>
+                        <input asp-for="HouseCadastralNumber" class="form-control" />
+                        <span asp-validation-for="HouseCadastralNumber" class="text-danger"></span>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="PlotCadastralNumber"></label>
+                    <input asp-for="PlotCadastralNumber" class="form-control" />
+                    <span asp-validation-for="PlotCadastralNumber" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <hr />
+
+        <h4 class="mt-3 mb-3">Площади</h4>
+
+        <hr />
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="HousesPassportedFloorArea"></label>
+                    <input asp-for="HousesPassportedFloorArea" class="form-control" />
+                    <span asp-validation-for="HousesPassportedFloorArea" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="PlotPassportedFloorArea"></label>
+                    <input asp-for="PlotPassportedFloorArea" class="form-control" />
+                    <span asp-validation-for="PlotPassportedFloorArea" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="ResidentialPremisesPassportedArea"></label>
+                    <input asp-for="ResidentialPremisesPassportedArea" class="form-control" />
+                    <span asp-validation-for="ResidentialPremisesPassportedArea" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-group mb-3">
+
+                    <label asp-for="NonResidentialPremisesPassportedArea"></label>
+                    <input asp-for="NonResidentialPremisesPassportedArea" class="form-control" />
+                    <span asp-validation-for="NonResidentialPremisesPassportedArea" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>

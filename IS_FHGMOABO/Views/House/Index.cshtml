@@ -41,7 +41,7 @@
                                 <h5>@house.Type @house.Street, дом @house.Number </h5>
                             </div>
                             <div class="col text-end">
-                                <a href="#" class="text-warning"><i class="bi bi-pencil"></i></a>
+                                <a class="text-warning" asp-controller="House" asp-action="Edit" asp-route-id="@house.Id"><i class="bi bi-pencil"></i></a>
                             </div>
                         </div>
 
