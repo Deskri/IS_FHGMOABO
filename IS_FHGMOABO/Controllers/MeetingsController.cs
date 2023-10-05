@@ -1,6 +1,9 @@
 ﻿using IS_FHGMOABO.DBConection;
+using IS_FHGMOABO.Models.MeetingsModels;
+using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -22,9 +25,116 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            return View();
+            var model = new AddMeetingModel() 
+            {
+                Houses = await _applicationDBContext.Houses.ToListAsync(),
+            };
+
+            MeetingsHelpers.SerializeHouses(model, HttpContext);
+
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult Add(AddMeetingModel model)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddChairperson(AddMeetingModel model)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            if (model.Meeting.Chairpersons == null)
+            {
+                model.Meeting.Chairpersons = new List<AddChairperson>();
+            }
+
+            model.Meeting.Chairpersons.Add(new AddChairperson());
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteChairperson(AddMeetingModel model, int index)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            model.Meeting.Chairpersons.RemoveAt(index);
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddCountingCommitteeMember(AddMeetingModel model)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            if (model.Meeting.CountingCommitteeMembers == null)
+            {
+                model.Meeting.CountingCommitteeMembers = new List<AddCountingCommitteeMember>();
+            }
+
+            model.Meeting.CountingCommitteeMembers.Add(new AddCountingCommitteeMember());
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteCountingCommitteeMember(AddMeetingModel model, int index)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            model.Meeting.CountingCommitteeMembers.RemoveAt(index);
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AddQuestion(AddMeetingModel model)
+        {
+            if (model.Meeting.Questions == null)
+            {
+                model.Meeting.Questions = new List<AddQuestion>();
+            }
+
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            model.Meeting.Questions.Add(new AddQuestion());
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteQuestion(AddMeetingModel model, int index)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            model.Meeting.Questions.RemoveAt(index);
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
         }
     }
 }
