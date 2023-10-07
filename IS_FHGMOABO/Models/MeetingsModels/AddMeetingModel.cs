@@ -42,27 +42,15 @@ namespace IS_FHGMOABO.Models.MeetingsModels
         [Display(Name = "Формат проведения собрания")]
         public FormatMeeting Format { get; set; }
         /// <summary>
-        /// Фамилия секретаря собрания
+        /// Секретарь
         /// </summary>
-        [Required(ErrorMessage = "Требуется внести фамилию секретаря собрания")]
-        [Display(Name = "Фамилия")]
-        public string LastNameSecretary { get; set; }
+        [Display(Name = "Секретарь")]
+        public AddSecretary Secretary { get; set; }
         /// <summary>
-        /// Имя секретаря собрания
+        /// Председатель
         /// </summary>
-        [Required(ErrorMessage = "Требуется внести имя секретаря собрания")]
-        [Display(Name = "Имя")]
-        public string FirstNameSecretary { get; set; }
-        /// <summary>
-        /// Отчество секретаря собрания
-        /// </summary>
-        [Display(Name = "Отчество")]
-        public string? PatronymicSecretary { get; set; }
-        /// <summary>
-        /// Лист председателей
-        /// </summary>
-        [Display(Name = "Председатели")]
-        public List<AddChairperson> Chairpersons { get; set; }
+        [Display(Name = "Председатель")]
+        public AddChairperson Chairperson { get; set; }
         /// <summary>
         /// Лист членов счетной комиссии
         /// </summary>
@@ -98,24 +86,44 @@ namespace IS_FHGMOABO.Models.MeetingsModels
             return attribute != null ? attribute.Description : value.ToString();
         }
     }
+    public class AddSecretary
+    {
+        /// <summary>
+        /// Фамилия секретаря собрания
+        /// </summary>
+        [Required(ErrorMessage = "Требуется внести фамилию секретаря собрания")]
+        [Display(Name = "Фамилия")]
+        public string LastName { get; set; }
+        /// <summary>
+        /// Имя секретаря собрания
+        /// </summary>
+        [Required(ErrorMessage = "Требуется внести имя секретаря собрания")]
+        [Display(Name = "Имя")]
+        public string FirstName { get; set; }
+        /// <summary>
+        /// Отчество секретаря собрания
+        /// </summary>
+        [Display(Name = "Отчество")]
+        public string? Patronymic { get; set; }
+    }
     public class AddChairperson
     {
         /// <summary>
         /// Фамилия председателя собрания
         /// </summary>
         [Required(ErrorMessage = "Требуется внести фамилию председателя собрания")]
-        [Display(Name = "Фамилия председателя собрания")]
+        [Display(Name = "Фамилия")]
         public string LastName { get; set; }
         /// <summary>
         /// Имя председателя собрания
         /// </summary>
         [Required(ErrorMessage = "Требуется внести имя председателя собрания")]
-        [Display(Name = "Имя председателя собрания")]
+        [Display(Name = "Имя")]
         public string FirstName { get; set; }
         /// <summary>
         /// Отчество председателя собрания
         /// </summary>
-        [Display(Name = "Отчество председателя собрания")]
+        [Display(Name = "Отчество")]
         public string? Patronymic { get; set; }
     }
     public class AddCountingCommitteeMember
@@ -167,8 +175,14 @@ namespace IS_FHGMOABO.Models.MeetingsModels
         [Display(Name = "Приложение")]
         public IFormFile? Attachment { get; set; }
 
+        /// <summary>
+        /// Название файла приложения при сохранения в модель
+        /// </summary>
         public string AttachmentName { get; set; }
 
+        /// <summary>
+        /// Файл приложения конвертированный в строку
+        /// </summary>
         public string AttachmentString { get; set; }
     }
 }

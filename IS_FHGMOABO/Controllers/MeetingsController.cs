@@ -46,37 +46,6 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AddChairperson(AddMeetingModel model)
-        {
-            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
-
-            if (model.Meeting.Chairpersons == null)
-            {
-                model.Meeting.Chairpersons = new List<AddChairperson>();
-            }
-
-            model.Meeting.Chairpersons.Add(new AddChairperson());
-
-            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
-
-            return View("Add", model);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult DeleteChairperson(AddMeetingModel model, int index)
-        {
-            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
-
-            model.Meeting.Chairpersons.RemoveAt(index);
-
-            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
-
-            return View("Add", model);
-        }
-
-        [Authorize]
-        [HttpPost]
         public IActionResult AddCountingCommitteeMember(AddMeetingModel model)
         {
             MeetingsHelpers.AddMeetingAttachment(model, ModelState);
@@ -131,6 +100,20 @@ namespace IS_FHGMOABO.Controllers
             MeetingsHelpers.AddMeetingAttachment(model, ModelState);
 
             model.Meeting.Questions.RemoveAt(index);
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult RemoveAttachment(AddMeetingModel model, int index)
+        {
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            model.Meeting.Questions[index].AttachmentString = null;
+            model.Meeting.Questions[index].AttachmentName = null;
 
             model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
 

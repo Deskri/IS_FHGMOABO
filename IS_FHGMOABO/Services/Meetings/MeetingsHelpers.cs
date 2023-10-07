@@ -3,13 +3,16 @@ using IS_FHGMOABO.Models.MeetingsModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using Xceed.Words.NET;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 
 namespace IS_FHGMOABO.Services.Meetings
 {
     public class MeetingsHelpers
     {
+        /// <summary>
+        /// Обработка файлов для сохранения их в модели и проверка правильности расширения
+        /// </summary>
+        /// <param name="model">Модель добавления собрания</param>
+        /// <param name="ModelState">Состояние модели данных</param>
         public static void AddMeetingAttachment(AddMeetingModel model, ModelStateDictionary ModelState)
         {
             if (model.Meeting.Questions != null)
@@ -40,6 +43,11 @@ namespace IS_FHGMOABO.Services.Meetings
             }
         }
 
+        /// <summary>
+        /// Десерелизация списка домов для случаев, при которых модель повторно возвращается
+        /// </summary>
+        /// <param name="httpContext">Текущий контекст для получения сессии</param>
+        /// <returns>Список домов</returns>
         public static List<House>? DedeserializeHouses(HttpContext httpContext)
         {
             var serializedModel = httpContext.Session.GetString("AddHouses");
@@ -48,6 +56,11 @@ namespace IS_FHGMOABO.Services.Meetings
             return deserializeModel;
         }
 
+        /// <summary>
+        /// Серелизация списка домов для случаев, при которых модель повторно возвращается
+        /// </summary>
+        /// <param name="model">Текущая модель добавления</param>
+        /// <param name="httpContext">Текущий контекст для получения сессии</param>
         public static void SerializeHouses(AddMeetingModel model, HttpContext httpContext)
         {
             var serializedModel = JsonConvert.SerializeObject(model.Houses);

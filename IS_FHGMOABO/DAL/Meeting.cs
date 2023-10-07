@@ -50,9 +50,10 @@ namespace IS_FHGMOABO.DAL
         public string Secretary { get; set; }
 
         /// <summary>
-        /// Навигационное свойство для связи с Chairperson
+        /// Председатель собрания
         /// </summary>
-        public ICollection<Chairperson>? Chairpersons { get; set; }
+        [Required]
+        public string Chairperson { get; set; }
 
         /// <summary>
         /// Навигационное свойство для связи с Chairperson
