@@ -190,5 +190,19 @@ namespace IS_FHGMOABO.Controllers
 
             return View("Add", model);
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await _applicationDBContext.Meetings
+                                                   .Where(x => x.Id == id)
+                                                   .Include(x => x.Questions)
+                                                   .Include(x => x.CountingCommitteeMembers)
+                                                   .Include(x => x.House)
+                                                   .FirstOrDefaultAsync();
+
+            return View("Details", model);
+        }
     }
 }
