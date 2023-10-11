@@ -5,7 +5,6 @@ using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Mail;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -20,9 +19,13 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _applicationDBContext.Meetings
+                                                   .Include(x => x.House)
+                                                   .ToListAsync();
+
+            return View(model);
         }
 
         [Authorize]
