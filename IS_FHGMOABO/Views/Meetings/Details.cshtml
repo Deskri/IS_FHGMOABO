@@ -95,7 +95,8 @@
                                 @if (question.AttachmentNumber != null && question.Attachment != null)
                                 {
                                     <p>Приложение №@question.AttachmentNumber</p>
-                                    <a class="btn btn-dark btn-lg" asp-controller="Meeting" asp-action="DownloadAttachment" asp-route="@question.Id"><i class="bi bi-filetype-docx"></i> Скачать приложение</a>
+                                    <a href="/Meetings/DownloadAttachment?id=@question.Id" target="_blank" class="btn btn-dark btn-lg"><i class="bi bi-filetype-docx"></i> Скачать приложение</a>
+                                    @* <a class="btn btn-dark btn-lg" asp-controller="Meeting" asp-action="DownloadAttachment" asp-route-id="@question.Id"><i class="bi bi-filetype-docx"></i> Скачать приложение</a> *@
                                 }
                                 <hr class="border border-dark border-2">
                             }

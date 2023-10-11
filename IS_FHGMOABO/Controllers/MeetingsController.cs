@@ -5,6 +5,7 @@ using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Xceed.Words.NET;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -203,6 +204,21 @@ namespace IS_FHGMOABO.Controllers
                                                    .FirstOrDefaultAsync();
 
             return View("Details", model);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> DownloadAttachment(int id)
+        {
+            var question = await _applicationDBContext.Questions
+                                                      .Include(x => x.Meeting)
+                                                      .Where(x => x.Id == id)
+                                                      .FirstOrDefaultAsync();
+
+            byte[] byteArray = Convert.FromBase64String(question.Attachment);
+            MemoryStream memoryStream = new MemoryStream(byteArray);
+
+            return File(memoryStream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Приложение №{question.AttachmentNumber} ОCС от {question.Meeting.StartDate.ToString("dd.MM.yyyy")}.docx");
         }
     }
 }
