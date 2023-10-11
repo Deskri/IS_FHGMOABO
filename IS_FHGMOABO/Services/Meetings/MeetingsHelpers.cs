@@ -66,5 +66,43 @@ namespace IS_FHGMOABO.Services.Meetings
             var serializedModel = JsonConvert.SerializeObject(model.Houses);
             httpContext.Session.SetString("AddHouses", serializedModel);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model">Модель добавления собрания</param>
+        /// <param name="ModelState">Состояние модели данных</param>
+        public static void ValidationAddMeeting(AddMeetingModel model, ModelStateDictionary ModelState)
+        {
+            if (model.Meeting.StartDate < DateTime.Now.AddDays(10))
+            {
+                ModelState.AddModelError("Meeting.StartDate", "Дата начала проведения должна быть больше 10 дней от текущего времени.");
+            }
+
+            if (model.Meeting.CountingCommitteeMembers == null || model.Meeting.CountingCommitteeMembers.Count == 0)
+            {
+                ModelState.AddModelError("Meeting.CountingCommitteeMembers", "Должен присутствовать хотя бы один член счетной комиссии.");
+            }
+
+            if (model.Meeting.Questions == null || model.Meeting.Questions.Count == 0)
+            {
+                ModelState.AddModelError("Meeting.Questions", "Должен присутствовать хотя бы один вопрос собрания.");
+            }
+            else
+            {
+                for (int i = 0; i < model.Meeting.Questions.Count; i++)
+                {
+                    if (model.Meeting.Questions[i].Percentage <= 0)
+                    {
+                        ModelState.AddModelError($"Meeting.Questions[{i}].Percentage", "Процент не должен быть меньше или равен 0.");
+                    }
+
+                    if (model.Meeting.Questions[i].Percentage > 100)
+                    {
+                        ModelState.AddModelError($"Meeting.Questions[{i}].Percentage", "Процент не должен быть больше 100.");
+                    }
+                }
+            }
+        }
     }
 }

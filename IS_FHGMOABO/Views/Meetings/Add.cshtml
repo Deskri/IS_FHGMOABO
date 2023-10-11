@@ -150,6 +150,7 @@
 
             <div class="col-6 mt-3 mb-2">
                 <h4><label asp-for="Meeting.CountingCommitteeMembers"></label></h4>
+                <span asp-validation-for="Meeting.CountingCommitteeMembers" class="text-danger"></span>
             </div>
 
             <div class="col-6 mt-3 mb-2 text-end">
@@ -204,6 +205,7 @@
 
             <div class="col-6 mt-3 mb-2">
                 <h4><label asp-for="Meeting.Questions"></label></h4>
+                <span asp-validation-for="Meeting.Questions" class="text-danger"></span>
             </div>
 
             <div class="col-6 mt-3 mb-2 text-end">
@@ -246,7 +248,7 @@
                         <div class="col-6 form-group mb-3">
 
                             <label asp-for="Meeting.Questions[i].Percentage"></label>
-                            <input type="number" min="0" max="100" step="0.1" asp-for="Meeting.Questions[i].Percentage" value="@Model.Meeting.Questions[i].Percentage" class="form-control" />
+                            <input min="0" max="100" step="0.1" asp-for="Meeting.Questions[i].Percentage" value="@Model.Meeting.Questions[i].Percentage" class="form-control" />
                             <span asp-validation-for="Meeting.Questions[i].Percentage" class="text-danger"></span>
 
                         </div>

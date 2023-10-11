@@ -1,9 +1,11 @@
-﻿using IS_FHGMOABO.DBConection;
+﻿using IS_FHGMOABO.DAL;
+using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.MeetingsModels;
 using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -39,9 +41,75 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult Add(AddMeetingModel model)
+        public async Task<IActionResult> Add(AddMeetingModel model)
         {
-            return RedirectToAction("Index");
+            MeetingsHelpers.AddMeetingAttachment(model, ModelState);
+
+            MeetingsHelpers.ValidationAddMeeting(model, ModelState);
+
+            if (ModelState.IsValid)
+            {
+                var meeting = new Meeting()
+                {
+                    HouseId = model.Meeting.HouseId,
+                    StartDate = model.Meeting.StartDate,
+                    Format = AddMeeting.GetEnumDescription(model.Meeting.Format),
+                    Status = "Создано",
+                    Secretary = $"{model.Meeting.Secretary.LastName} {model.Meeting.Secretary.FirstName} {model.Meeting.Secretary.Patronymic}",
+                    Chairperson = $"{model.Meeting.Chairperson.LastName} {model.Meeting.Chairperson.FirstName} {model.Meeting.Chairperson.Patronymic}",
+                };
+
+                meeting.CountingCommitteeMembers = new List<CountingCommitteeMember>();
+
+                foreach (var countingCommitteeMember in model.Meeting.CountingCommitteeMembers)
+                {
+                    meeting.CountingCommitteeMembers.Add(new CountingCommitteeMember()
+                    {
+                        FullName = $"{countingCommitteeMember.LastName} {countingCommitteeMember.FirstName} {countingCommitteeMember.Patronymic}",
+                    });
+                }
+
+                meeting.Questions = new List<Question>();
+
+                int attachmentNumber = 1;
+
+                for (int i = 0; i < model.Meeting.Questions.Count; i++)
+                {
+                    if (model.Meeting.Questions[i].AttachmentString == null)
+                    {
+                        meeting.Questions.Add(new Question()
+                        {
+                            Number = i + 1,
+                            Agenda = model.Meeting.Questions[i].Agenda,
+                            Proposed = model.Meeting.Questions[i].Proposed,
+                            Percentage = model.Meeting.Questions[i].Percentage,
+                        });
+                    }
+                    else
+                    {
+                        meeting.Questions.Add(new Question()
+                        {
+                            Number = i + 1,
+                            Agenda = model.Meeting.Questions[i].Agenda,
+                            Proposed = model.Meeting.Questions[i].Proposed,
+                            Percentage = model.Meeting.Questions[i].Percentage,
+                            Attachment = model.Meeting.Questions[i].AttachmentString,
+                            AttachmentNumber = attachmentNumber,
+                        });
+
+                        attachmentNumber++;
+                    }
+                }
+
+                await _applicationDBContext.AddAsync(meeting);
+                await _applicationDBContext.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+
+            model.Houses = MeetingsHelpers.DedeserializeHouses(HttpContext);
+
+            return View("Add", model);
         }
 
         [Authorize]

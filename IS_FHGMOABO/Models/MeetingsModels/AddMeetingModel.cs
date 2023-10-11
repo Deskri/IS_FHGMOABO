@@ -178,11 +178,11 @@ namespace IS_FHGMOABO.Models.MeetingsModels
         /// <summary>
         /// Название файла приложения при сохранения в модель
         /// </summary>
-        public string AttachmentName { get; set; }
+        public string? AttachmentName { get; set; }
 
         /// <summary>
         /// Файл приложения конвертированный в строку
         /// </summary>
-        public string AttachmentString { get; set; }
+        public string? AttachmentString { get; set; }
     }
 }
