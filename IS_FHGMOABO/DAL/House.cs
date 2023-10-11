@@ -103,6 +103,11 @@ namespace IS_FHGMOABO.DAL
         public ICollection<Room> Rooms { get; set; }
 
         /// <summary>
+        /// Навигационное свойство для связи с Chairperson
+        /// </summary>
+        public ICollection<Meeting>? Meetings { get; set; }
+
+        /// <summary>
         /// Колличество помещений в МКД
         /// </summary>
         [NotMapped]

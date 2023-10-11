@@ -1,0 +1,285 @@
+﻿@using IS_FHGMOABO.Models.MeetingsModels;
+@using static IS_FHGMOABO.Models.MeetingsModels.AddMeeting;
+@model IS_FHGMOABO.Models.MeetingsModels.AddMeetingModel
+
+@{
+}
+
+<form method="post" asp-controller="Meetings" asp-action="Add" enctype="multipart/form-data">
+    <!--Верхние кнопки-->
+    <div class="row">
+        <div class="col-6">
+
+            <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Index">
+                <i class="bi bi-arrow-left-circle-fill"></i> Назад
+            </a>
+
+        </div>
+        <div class="col-6 text-end">
+
+            <button type="submit" class="btn btn-warning btn-lg me-1" asp-controller="Meetings" asp-action="Add">
+                <i class="bi bi-box-arrow-down"></i> Сохранить
+            </button>
+
+        </div>
+
+        <hr class="border border-dark border-2">
+
+    </div>
+
+    <div class="row ms-3">
+        <!--Основные аспекты собрания-->
+        <div class="row">
+            <div class="col-12 mb-3">
+                <h2> Добавление нового собрания собственников </h2>
+            </div>
+
+            <div class="col-6 form-group mb-3">
+
+                <label asp-for="Meeting.StartDate"></label>
+                <input type="date" asp-for="Meeting.StartDate" class="form-control" />
+                <span asp-validation-for="Meeting.StartDate" class="text-danger"></span>
+
+            </div>
+
+            <div class="col-6 form-group mb-3">
+
+                <label asp-for="Meeting.Format"></label>
+                <select class="form-select" asp-for="Meeting.Format">
+                    <option selected>Выберите формат</option>
+                    @foreach (FormatMeeting format in Enum.GetValues(typeof(FormatMeeting)))
+                    {
+                        <option value="@format">@GetEnumDescription(format)</option>
+                    }
+                </select>
+                <span asp-validation-for="Meeting.Format" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group mb-3">
+
+                <label asp-for="Meeting.HouseId"></label>
+                <select class="form-select" asp-for="Meeting.HouseId">
+                    <option selected>Выберите дом</option>
+                    @if (Model.Houses != null)
+                    {
+                        @foreach (var house in Model.Houses)
+                        {
+                            <option value="@house.Id">@(house.Type + " " + house.Street + ", д." + house.Number)</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="Meeting.HouseId" class="text-danger"></span>
+
+            </div>
+        </div>
+        <!--Секретарь-->
+        <div class="row mt-4">
+
+            <h4><label asp-for="Meeting.Secretary"></label></h4>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Secretary.LastName"></label>
+                    <input type="text" asp-for="Meeting.Secretary.LastName" class="form-control" />
+                    <span asp-validation-for="Meeting.Secretary.LastName" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Secretary.FirstName"></label>
+                    <input type="text" asp-for="Meeting.Secretary.FirstName" class="form-control" />
+                    <span asp-validation-for="Meeting.Secretary.FirstName" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Secretary.Patronymic"></label>
+                    <input type="text" asp-for="Meeting.Secretary.Patronymic" class="form-control" />
+                    <span asp-validation-for="Meeting.Secretary.Patronymic" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+        <!--Председатель-->
+        <div class="row mt-4">
+
+            <h4><label asp-for="Meeting.Chairperson"></label></h4>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Chairperson.LastName"></label>
+                    <input type="text" asp-for="Meeting.Chairperson.LastName" class="form-control" />
+                    <span asp-validation-for="Meeting.Chairperson.LastName" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Chairperson.FirstName"></label>
+                    <input type="text" asp-for="Meeting.Chairperson.FirstName" class="form-control" />
+                    <span asp-validation-for="Meeting.Chairperson.FirstName" class="text-danger"></span>
+
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group mb-3">
+
+                    <label asp-for="Meeting.Chairperson.Patronymic"></label>
+                    <input type="text" asp-for="Meeting.Chairperson.Patronymic" class="form-control" />
+                    <span asp-validation-for="Meeting.Chairperson.Patronymic" class="text-danger"></span>
+
+                </div>
+            </div>
+
+        </div>
+        <!--Члены счетной комиссии-->
+        <div class="row mt-4">
+
+            <div class="col-6 mt-3 mb-2">
+                <h4><label asp-for="Meeting.CountingCommitteeMembers"></label></h4>
+                <span asp-validation-for="Meeting.CountingCommitteeMembers" class="text-danger"></span>
+            </div>
+
+            <div class="col-6 mt-3 mb-2 text-end">
+                <button type="submit" class="btn btn-success" title="Добавить" asp-controller="Meetings" asp-action="AddCountingCommitteeMember">
+                    <i class="bi bi-plus"></i> Добавить члена счётной комиссии
+                </button>
+            </div>
+            @if (Model.Meeting != null && Model.Meeting.CountingCommitteeMembers != null && Model.Meeting.CountingCommitteeMembers.Count != 0)
+            {
+                <div class="col bg-white rounded-4 ms-3 mb-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Фамилия</th>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Отчество</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Meeting.CountingCommitteeMembers.Count; i++)
+                            {
+                                <tr>
+                                    <th>
+                                        <input type="text" asp-for="Meeting.CountingCommitteeMembers[i].FirstName" value="@Model.Meeting.CountingCommitteeMembers[i].FirstName" class="form-control" />
+                                        <span asp-validation-for="Meeting.CountingCommitteeMembers[i].FirstName" class="text-danger"></span>
+                                    </th>
+                                    <th>
+                                        <input type="text" asp-for="Meeting.CountingCommitteeMembers[i].LastName" value="@Model.Meeting.CountingCommitteeMembers[i].LastName" class="form-control" />
+                                        <span asp-validation-for="Meeting.CountingCommitteeMembers[i].LastName" class="text-danger"></span>
+                                    </th>
+                                    <th>
+                                        <input type="text" asp-for="Meeting.CountingCommitteeMembers[i].Patronymic" value="@Model.Meeting.CountingCommitteeMembers[i].Patronymic" class="form-control" />
+                                    </th>
+                                    <th>
+                                        <div class="col-12 text-end">
+                                            <button type="submit" class="btn btn-danger" title="Удалить" asp-controller="Meetings" asp-action="DeleteCountingCommitteeMember" asp-route-index="@i">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                        </div>
+                                    </th>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+        <!--Вопросы-->
+        <div class="row mt-4 mb-4">
+
+            <div class="col-6 mt-3 mb-2">
+                <h4><label asp-for="Meeting.Questions"></label></h4>
+                <span asp-validation-for="Meeting.Questions" class="text-danger"></span>
+            </div>
+
+            <div class="col-6 mt-3 mb-2 text-end">
+                <button type="submit" class="btn btn-success" title="Добавить" asp-controller="Meetings" asp-action="AddQuestion">
+                    <i class="bi bi-plus"></i> Добавить вопрос
+                </button>
+            </div>
+
+            @if (Model.Meeting != null && Model.Meeting.Questions != null && Model.Meeting.Questions.Count != 0)
+            {
+                @for (int i = 0; i < Model.Meeting.Questions.Count; i++)
+                {
+                    <div class="row bg-white rounded-4 mt-3 mb-3">
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <h4>Вопрос @(i + 1)</h4>
+                            </div>
+                            <div class="col-6 text-end">
+                                <button type="submit" class="btn btn-danger" title="Удалить" asp-controller="Meetings" asp-action="DeleteQuestion" asp-route-index="@i">
+                                    <i class="bi bi-dash"></i> Удалить вопрос
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 form-group mb-3">
+
+                            <label asp-for="Meeting.Questions[i].Agenda"></label>
+                            <textarea asp-for="Meeting.Questions[i].Agenda" value="@Model.Meeting.Questions[i].Agenda" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Meeting.Questions[i].Agenda" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-12 form-group mb-3">
+
+                            <label asp-for="Meeting.Questions[i].Proposed"></label>
+                            <textarea asp-for="Meeting.Questions[i].Proposed" value="@Model.Meeting.Questions[i].Proposed" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Meeting.Questions[i].Proposed" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-6 form-group mb-3">
+
+                            <label asp-for="Meeting.Questions[i].Percentage"></label>
+                            <input min="0" max="100" step="0.1" asp-for="Meeting.Questions[i].Percentage" value="@Model.Meeting.Questions[i].Percentage" class="form-control" />
+                            <span asp-validation-for="Meeting.Questions[i].Percentage" class="text-danger"></span>
+
+                        </div>
+                        <div class="col-6 form-group mb-3">
+
+                            <label asp-for="Meeting.Questions[i].Attachment"></label>
+
+                            @if (Model.Meeting.Questions[i].AttachmentString != null && Model.Meeting.Questions[i].AttachmentName != null)
+                            {
+                                <div class="col-12 text-center">
+                                    <div class="col-12">
+                                        <i class="bi bi-filetype-docx" style="font-size: 4em"></i>
+                                    </div>
+                                    @Model.Meeting.Questions[i].AttachmentName
+                                    <button type="submit" class="btn btn-sm btn-danger" asp-controller="Meetings" asp-action="RemoveAttachment" asp-route-index="@i">Убрать</button>
+
+                                    <input hidden asp-for="Meeting.Questions[i].AttachmentName" />
+                                    <input hidden asp-for="Meeting.Questions[i].AttachmentString" />
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="file" class="form-control" asp-for="Meeting.Questions[i].Attachment" />
+                                <span asp-validation-for="Meeting.Questions[i].Attachment" class="text-danger"></span>
+
+
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</form>

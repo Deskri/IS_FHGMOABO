@@ -4,6 +4,7 @@ using IS_FHGMOABO.DBConection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IS_FHGMOABO.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231001173930_Make-Attachment-Questions-Nullable")]
+    partial class MakeAttachmentQuestionsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,28 @@ namespace IS_FHGMOABO.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("IS_FHGMOABO.DAL.Chairperson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("Chairpersons");
+                });
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.CountingCommitteeMember", b =>
                 {
@@ -130,10 +155,6 @@ namespace IS_FHGMOABO.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Chairperson")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Format")
                         .IsRequired()
@@ -535,6 +556,17 @@ namespace IS_FHGMOABO.Migrations
                     b.ToTable("NaturalPersonProperty");
                 });
 
+            modelBuilder.Entity("IS_FHGMOABO.DAL.Chairperson", b =>
+                {
+                    b.HasOne("IS_FHGMOABO.DAL.Meeting", "Meeting")
+                        .WithMany("Chairpersons")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+                });
+
             modelBuilder.Entity("IS_FHGMOABO.DAL.CountingCommitteeMember", b =>
                 {
                     b.HasOne("IS_FHGMOABO.DAL.Meeting", "Meeting")
@@ -674,6 +706,8 @@ namespace IS_FHGMOABO.Migrations
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.Meeting", b =>
                 {
+                    b.Navigation("Chairpersons");
+
                     b.Navigation("CountingCommitteeMembers");
 
                     b.Navigation("Questions");
