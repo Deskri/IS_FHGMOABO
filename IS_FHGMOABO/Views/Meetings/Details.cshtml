@@ -67,7 +67,7 @@
 
                 <div class="col-4 text-end">
                     <div class="btn-group-vertical">
-                        <a class="btn btn-outline-dark">Сформировать повестку дня</a>
+                        <a href="/Meetings/CreateNotification?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
                         <a class="btn btn-outline-dark">Сформировать реестр голосования</a>
                         <a class="btn btn-outline-dark">Сформировать бюллетени</a>
                         <a class="btn btn-outline-dark">Перейти к подсчетку голосов</a>
@@ -96,7 +96,6 @@
                                 {
                                     <p>Приложение №@question.AttachmentNumber</p>
                                     <a href="/Meetings/DownloadAttachment?id=@question.Id" target="_blank" class="btn btn-dark btn-lg"><i class="bi bi-filetype-docx"></i> Скачать приложение</a>
-                                    @* <a class="btn btn-dark btn-lg" asp-controller="Meeting" asp-action="DownloadAttachment" asp-route-id="@question.Id"><i class="bi bi-filetype-docx"></i> Скачать приложение</a> *@
                                 }
                                 <hr class="border border-dark border-2">
                             }
