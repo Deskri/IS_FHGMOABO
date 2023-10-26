@@ -294,5 +294,65 @@ namespace IS_FHGMOABO.Controllers
 
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Реестр голосования собственников помещений.docx");
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CreateBulletins(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings
+                             .Where(x => x.Id == id)
+                             .Include(x => x.House)
+                             .Include(x => x.Bulletins)
+                             .FirstOrDefaultAsync();
+
+            meeting.House.Rooms = await _applicationDBContext.Rooms
+                                                             .Where(x => x.HouseId == meeting.HouseId)
+                                                             .Include(x => x.Properties)
+                                                             .ToListAsync();
+
+            if (meeting.Bulletins == null || meeting.Bulletins.Count == 0)
+            {
+                foreach (var room in meeting.House.Rooms)
+                {
+                    if (!room.IsPrivatized)
+                    {
+                        meeting.Bulletins.Add(new Bulletin()
+                        {
+                            RoomId = room.Id,
+                        });
+                    }
+                    else
+                    {
+                        foreach (var property in room.Properties)
+                        {
+                            if (property.EndDate == null)
+                            {
+                                meeting.Bulletins.Add(new Bulletin()
+                                {
+                                    RoomId = room.Id,
+                                    PropertyId = property.Id,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            await _applicationDBContext.SaveChangesAsync();
+
+            var bulletins = await _applicationDBContext.Bulletins
+                                                       .Where(x => x.MeetingId == id)
+                                                       .Include(x => x.Meeting)
+                                                       .Include(x => x.Meeting.Questions)
+                                                       .Include(x => x.Property)
+                                                       .Include(x => x.Property.LegalPerson)
+                                                       .Include(x => x.Property.NaturalPersons)
+                                                       .Include(x => x.Room)
+                                                       .Include(x => x.Room.House)
+                                                       .ToListAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingBulletins(bulletins);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания.docx");
+        }
     }
 }
