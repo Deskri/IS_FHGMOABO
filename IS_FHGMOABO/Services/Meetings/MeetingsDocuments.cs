@@ -1,6 +1,8 @@
 ﻿using Xceed.Document.NET;
 using Xceed.Words.NET;
 using IS_FHGMOABO.DAL;
+using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Http;
 
 namespace IS_FHGMOABO.Services.Meetings
 {
@@ -173,6 +175,145 @@ namespace IS_FHGMOABO.Services.Meetings
                     }
 
                     document.InsertTable(table);
+                    document.Save();
+
+                    return memoryStream;
+                }
+            }
+        }
+        public static MemoryStream MeetingBulletins(List<Bulletin> bulletins)
+        {
+
+        }
+        public static MemoryStream MeetingBulletin(Bulletin bulletin)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (DocX document = DocX.Create(memoryStream))
+                {
+                    document.SetDefaultFont(new Font("Times New Roman"), 11);
+
+                    document.MarginLeft = 36;
+                    document.MarginRight = 36;
+                    document.MarginTop = 36;
+                    document.MarginBottom = 36;
+
+                    Paragraph header = document.InsertParagraph();
+
+                    switch (bulletin.Meeting.Format)
+                    {
+                        case "Заочное":
+                            header.Append("БЮЛЛЕТЕНЬ ЗАОЧНОГО ГОЛОСОВАНИЯ\n").Bold();
+                            break;
+                        case "Очно-заочное":
+                            header.Append("БЮЛЛЕТЕНЬ ОЧНО-ЗАОЧНОГО ГОЛОСОВАНИЯ\n").Bold();
+                            break;
+                    }
+                    header.Append($"на общем собрании собственников в многоквартирном доме №{bulletin.Room.House.Number} по {bulletin.Room.House.Type} {bulletin.Room.House.Street} в {bulletin.Room.House.InhabitedLocality}\n").Bold();
+                    header.Alignment = Alignment.center;
+
+                    Table table = document.AddTable(1, 2);
+
+                    table.Rows[0].Cells[0].Paragraphs.First().Append($"{bulletin.Room.House.InhabitedLocality}");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append($"{bulletin.Meeting.StartDate.Day}.{bulletin.Meeting.StartDate.Month}.{bulletin.Meeting.StartDate.Year}г.");
+
+                    document.InsertTable(table);
+
+                    Paragraph ownerInformation = document.InsertParagraph();
+
+                    ownerInformation.Append("\nСведения о собственнике (представителя собственника):\n").Bold();
+                    if (bulletin.Property == null)
+                    {
+                        ownerInformation.Append("Ф.И.О.:\n");
+                        ownerInformation.Append("Муниципалитет.\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    }
+                    else if (bulletin.Property.LegalPerson != null)
+                    {
+                        ownerInformation.Append("Ф.И.О.:\n");
+                        ownerInformation.Append($"{bulletin.Property.LegalPerson.Name}.\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    }
+                    else if (bulletin.Property.NaturalPersons != null)
+                    {
+                        ownerInformation.Append("Ф.И.О.:\n");
+                        foreach (var person in bulletin.Property.NaturalPersons)
+                        {
+                            ownerInformation.Append($"{person.LastName} {person.FirstName} {person.Patronymic} ").UnderlineStyle(UnderlineStyle.singleLine);
+                        }
+                        ownerInformation.Append(".\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    }
+                    ownerInformation.Append("Сведения о документе на право собственности:\n").Bold();
+                    ownerInformation.Append("Документ, подтверждающий право собственности на помещение\n");
+                    if (bulletin.Property != null && bulletin.Property.TypeOfStateRegistration != null && bulletin.Property.StateRegistrationNumber != null)
+                    {
+                        ownerInformation.Append($"{bulletin.Property.TypeOfStateRegistration} {bulletin.Property.StateRegistrationNumber} от {bulletin.Property.DateOfTaking.ToString("dd.MM.yyyy")}\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    }
+                    ownerInformation.Append("Кем выдано:\n");
+                    if (bulletin.Property != null && bulletin.Property.TypeOfStateRegistration != null && bulletin.Property.StateRegistrationNumber != null)
+                    {
+                        ownerInformation.Append($"{bulletin.Property.ByWhomIssued}.\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    }
+                    ownerInformation.Append($"Сведения о помещении: квартира/помещение №{bulletin.Room.Number}, общая площадь {bulletin.Room.TotalArea}м2, доля собственника в жилом помещении: ");
+                    if (bulletin.Property != null)
+                    {
+                        ownerInformation.Append($"{Math.Round(bulletin.Room.TotalArea * bulletin.Property.Share * 100, 2)}%");
+                    }
+                    else
+                    {
+                        ownerInformation.Append("___");
+                    }
+
+                    Paragraph agenda = document.InsertParagraph();
+
+                    agenda.Append("Повестка дня:\n");
+                    foreach (var question in bulletin.Meeting.Questions)
+                    {
+                        agenda.Append($"{question.Number}. {question.Agenda}\n");
+                    }
+
+                    Paragraph warning = document.InsertParagraph();
+
+                    warning.Append("ВАЖНО! ").Bold();
+                    warning.Append("При голосовании ставить только один из возможных вариантов ответа!\n").UnderlineStyle(UnderlineStyle.singleLine);
+
+                    Paragraph votingResults = document.InsertParagraph();
+
+                    votingResults.Append("РЕЗУЛЬТАТЫ ГОЛОСОВАНИЯ\n").Bold();
+
+                    Table tableVotingResult = document.AddTable(2, 3);
+
+                    tableVotingResult.Rows[0].Cells[0].Paragraphs.First().Append("за");
+                    tableVotingResult.Rows[0].Cells[1].Paragraphs.First().Append("против");
+                    tableVotingResult.Rows[0].Cells[2].Paragraphs.First().Append("воздержался");
+
+                    foreach (var question in bulletin.Meeting.Questions)
+                    {
+                        votingResults.Append($"\n{question.Number}. {question.Agenda}\n");
+                        votingResults.Append($"Предложено: {question.Proposed}\n");
+                        document.InsertTable(tableVotingResult);
+                    }
+
+                    Paragraph sign = document.InsertParagraph();
+
+                    sign.Append("\nСобственник:_________________/___________________________________");
+
+                    if (bulletin.Meeting.Questions != null)
+                    {
+                        foreach (var question in bulletin.Meeting.Questions)
+                        {
+                            if (question.Attachment != null)
+                            {
+                                byte[] byteArray = Convert.FromBase64String(question.Attachment);
+                                MemoryStream attachment = new MemoryStream(byteArray);
+
+                                document.InsertSectionPageBreak();
+                                using (DocX attachmentDocument = DocX.Load(attachment))
+                                {
+                                    document.InsertDocument(attachmentDocument);
+                                }
+                            }
+                        }
+                    }
+
                     document.Save();
 
                     return memoryStream;
