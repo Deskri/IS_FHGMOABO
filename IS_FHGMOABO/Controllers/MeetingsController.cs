@@ -5,8 +5,6 @@ using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Xceed.Document.NET;
-using Xceed.Words.NET;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -232,91 +230,69 @@ namespace IS_FHGMOABO.Controllers
                                                      .Include(x => x.Questions)
                                                      .FirstOrDefaultAsync();
 
-            /*            using (MemoryStream memoryStream = new MemoryStream())
-                        {
-                            using (DocX document = DocX.Create(memoryStream))
-                            {
-                                document.SetDefaultFont(new Font("Times New Roman"), 11);
-
-                                document.MarginLeft = 36;
-                                document.MarginRight = 36;
-                                document.MarginTop = 36;
-                                document.MarginBottom = 36;
-
-                                Paragraph header = document.InsertParagraph();
-                                header.AppendLine("УВЕДОМЛЕНИЕ").Bold();
-                                header.AppendLine("О ПРОВЕДЕНИИ ОЧЕРЕДНОГО");
-                                header.AppendLine("ОБЩЕГО СОБРАНИЯ СОБСТВЕННИКОВ ПОМЕЩЕНИЙ");
-                                if (meeting.Format == "Очное")
-                                {
-                                    header.AppendLine("В ФОРМЕ ОЧНОГО ГОЛОСОВАНИЯ");
-                                }
-                                else if (meeting.Format == "Заочное")
-                                {
-                                    header.AppendLine("В ФОРМЕ ЗАОЧНОГО ГОЛОСОВАНИЯ");
-                                }
-                                else if (meeting.Format == "Очно-заочное")
-                                {
-                                    header.AppendLine("В ФОРМЕ ОЧНО-ЗАОЧНОГО ГОЛОСОВАНИЯ");
-                                }
-                                header.AppendLine("В МНОГОКВАРТИРНОМ ДОМЕ ПО АДРЕСУ:");
-                                header.AppendLine($"{meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}").Bold();
-                                header.Alignment = Alignment.center;
-
-                                Paragraph welcome = document.InsertParagraph();
-                                welcome.AppendLine("Уважаемые собственники помещений!").Bold();
-                                welcome.Alignment = Alignment.center;
-
-                                Paragraph date = document.InsertParagraph();
-                                date.AppendLine($"{meeting.StartDate.Day}.{meeting.StartDate.Month}.{meeting.StartDate.Year}г.").Bold();
-                                date.Alignment = Alignment.right;
-
-                                Paragraph mainInfo = document.InsertParagraph();
-                                if (meeting.Format == "Очное")
-                                {
-                                    mainInfo.AppendLine($"\tПросим Вас принять участие в очередном общем собрании собственников помещений в форме очного голосования по вопросам, представленным ниже в повестке дня, в соответствии с Жилищным кодексом РФ по адресу: {meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}. ");
-                                }
-                                else if (meeting.Format == "Заочное")
-                                {
-                                    mainInfo.AppendLine($"\tПросим Вас принять участие в очередном общем собрании собственников помещений в форме заочного голосования по вопросам, представленным ниже в повестке дня, в соответствии с Жилищным кодексом РФ по адресу: {meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}. ");
-                                }
-                                else if (meeting.Format == "Очно-заочное")
-                                {
-                                    mainInfo.AppendLine($"\tПросим Вас принять участие в очередном общем собрании собственников помещений в форме очно-заочного голосования по вопросам, представленным ниже в повестке дня, в соответствии с Жилищным кодексом РФ по адресу: {meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}. ");
-                                }
-                                if (meeting.Format == "Очное" || meeting.Format == "Очно-заочное")
-                                {
-                                    mainInfo.AppendLine($"\tНачало вышеуказанного общего собрания: ___ часов ___ минут «___» _________ ____ года по адресу: {meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}. Просим собственников принять личное участие. ");
-                                }
-                                if (meeting.Format == "Заочное" || meeting.Format == "Очно-заочное")
-                                {
-                                    mainInfo.AppendLine($"\tОкончание вышеуказанного общего собрания и приема решений (бюллетеней) собственников помещений: ____ часов ___ минут  «___» ___________ ____ года по адресу: {meeting.House.InhabitedLocality}, {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}. ");
-                                    mainInfo.AppendLine($"\tБюллетени для заполнения будут разосланы в почтовые ящики. ");
-                                    mainInfo.AppendLine($"\tСдать заполненные бюллетени можно в ________________________________. ");
-                                }
-                                mainInfo.AppendLine($"\tРешения, принятые общим собранием, и итоги голосования будут объявлены в течение десяти календарных дней с даты окончания вышеуказанного собрания (в соответствии с частью 3 статьи 46 Жилищного кодекса Российской Федерации). ");
-                                mainInfo.Alignment = Alignment.both;
-
-                                Paragraph agenda = document.InsertParagraph();
-                                agenda.AppendLine("\tПовестка дня: ").Bold();
-                                foreach (var question in meeting.Questions)
-                                {
-                                    agenda.AppendLine($"\t{question.Number}. {question.Agenda} ").Bold();
-                                    agenda.AppendLine($"\t{question.Proposed} ");
-                                }
-                                agenda.Alignment = Alignment.both;
-
-                                Paragraph signature = document.InsertParagraph();
-                                signature.AppendLine("\tИнициатор _____________________________________/__________________________");
-
-                                document.Save();
-                            }*/
-
             var memoryStream = MeetingsDocuments.MeetingNotification(meeting);
 
-/*            memoryStream.Position = 0;*/
-
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Уведомление о проведении ОСС.docx");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CreateVotingRegister(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings
+                             .Where(x => x.Id == id)
+                             .Include(x => x.House)
+                             .Include(x => x.Bulletins)
+                             .FirstOrDefaultAsync();
+
+            meeting.House.Rooms = await _applicationDBContext.Rooms
+                                                             .Where(x => x.HouseId == meeting.HouseId)
+                                                             .Include(x => x.Properties)
+                                                             .ToListAsync();
+
+            if (meeting.Bulletins == null || meeting.Bulletins.Count == 0)
+            {
+                foreach (var room in meeting.House.Rooms)
+                {
+                    if (!room.IsPrivatized)
+                    {
+                        meeting.Bulletins.Add(new Bulletin()
+                        {
+                            RoomId = room.Id,
+                        });
+                    }
+                    else
+                    {
+                        foreach (var property in room.Properties)
+                        {
+                            if (property.EndDate == null)
+                            {
+                                meeting.Bulletins.Add(new Bulletin()
+                                {
+                                    RoomId = room.Id,
+                                    PropertyId = property.Id,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            await _applicationDBContext.SaveChangesAsync();
+
+            var bulletins = await _applicationDBContext.Bulletins
+                                                       .Where(x => x.MeetingId == id)
+                                                       .Include(x => x.Meeting)
+                                                       .Include(x => x.Meeting.Questions)
+                                                       .Include(x => x.Property)
+                                                       .Include(x => x.Property.LegalPerson)
+                                                       .Include(x => x.Property.NaturalPersons)
+                                                       .Include(x => x.Room)
+                                                       .Include(x => x.Room.House)
+                                                       .ToListAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingVotingRegister(bulletins);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Реестр голосования собственников помещений.docx");
         }
     }
 }

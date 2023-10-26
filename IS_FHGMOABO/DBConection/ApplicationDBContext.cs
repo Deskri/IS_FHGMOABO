@@ -20,6 +20,7 @@ namespace IS_FHGMOABO.DBConection
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<CountingCommitteeMember> CountingCommitteeMembers { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<Bulletin> Bulletins { get; set; }
 
     }
 }

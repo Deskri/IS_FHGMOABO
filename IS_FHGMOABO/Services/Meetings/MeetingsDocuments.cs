@@ -24,7 +24,6 @@ namespace IS_FHGMOABO.Services.Meetings
                     Paragraph date = document.InsertParagraph();
                     Paragraph mainInfo = document.InsertParagraph();
                     Paragraph agenda = document.InsertParagraph();
-                    Paragraph signature = document.InsertParagraph();
 
                     header.AppendLine("УВЕДОМЛЕНИЕ").Bold();
                     header.AppendLine("О ПРОВЕДЕНИИ ОЧЕРЕДНОГО");
@@ -86,6 +85,7 @@ namespace IS_FHGMOABO.Services.Meetings
                     }
                     agenda.Alignment = Alignment.both;
 
+                    Paragraph signature = document.InsertParagraph();
                     signature.AppendLine("\tИнициатор _____________________________________/__________________________");
 
                     if (meeting.Questions != null)
@@ -106,6 +106,73 @@ namespace IS_FHGMOABO.Services.Meetings
                         }
                     }
 
+                    document.Save();
+
+                    return memoryStream;
+                }
+            }
+        }
+        public static MemoryStream MeetingVotingRegister(List<Bulletin> bulletins)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (DocX document = DocX.Create(memoryStream))
+                {
+                    document.SetDefaultFont(new Font("Times New Roman"), 11);
+
+                    document.MarginLeft = 36;
+                    document.MarginRight = 36;
+                    document.MarginTop = 36;
+                    document.MarginBottom = 36;
+
+                    document.PageLayout.Orientation = Orientation.Landscape;
+
+                    Paragraph header = document.InsertParagraph();
+
+                    int col = 5 + bulletins[0].Meeting.Questions.Count;
+                    int row = 1 + bulletins.Count;
+
+                    Table table = document.AddTable(row, col);
+
+                    header.AppendLine($"РЕЕСТР ГОЛОСОВАНИЯ собственников помещений в многоквартирном доме, по адресу: {bulletins[0].Room.House.Type} {bulletins[0].Room.House.Street}, дом {bulletins[0].Room.House.Number}.").Bold();
+
+                    table.Rows[0].Cells[0].Paragraphs.First().Append("№ квартиры/помещения");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append("ФИО (наименование юр.лица)");
+                    table.Rows[0].Cells[2].Paragraphs.First().Append("Площадь, принадлежащая собственнику на основании правоустанавливающего документа");
+                    table.Rows[0].Cells[3].Paragraphs.First().Append("Сведения о документе, подтверждающем право собственности лица, участвующего в голосовании на помещение в МКД");
+
+                    int questionСounter = 1;
+
+                    foreach (var question in bulletins[0].Meeting.Questions)
+                    {
+                        table.Rows[0].Cells[3 + questionСounter].Paragraphs.First().Append($"Вопрос {question.Number}");
+                        questionСounter++;
+                    }
+                    table.Rows[0].Cells[3 + questionСounter].Paragraphs.First().Append("Подпись");
+
+                    for (var i = 0; i < bulletins.Count; i++)
+                    {
+                        table.Rows[i + 1].Cells[0].Paragraphs.First().Append($"{bulletins[i].Room.Number}");
+                        if (bulletins[i].Property == null)
+                        {
+                            table.Rows[i + 1].Cells[1].Paragraphs.First().Append("Муниципалитет");
+                        }
+                        if (bulletins[i].Property.LegalPerson != null)
+                        {
+                            table.Rows[i + 1].Cells[1].Paragraphs.First().Append($"{bulletins[i].Property.LegalPerson.Name}");
+                        }
+                        if (bulletins[i].Property.NaturalPersons != null)
+                        {
+                            foreach (var person in bulletins[i].Property.NaturalPersons)
+                            {
+                                table.Rows[i + 1].Cells[1].Paragraphs.First().Append($"{person.LastName} {person.FirstName} {person.Patronymic} ");
+                            }
+                        }
+                        table.Rows[i + 1].Cells[2].Paragraphs.First().Append($"{Math.Round(bulletins[i].Room.TotalArea * bulletins[i].Property.Share, 2)}");
+                        table.Rows[i + 1].Cells[3].Paragraphs.First().Append($"{bulletins[i].Property.TypeOfStateRegistration} {bulletins[i].Property.StateRegistrationNumber}");
+                    }
+
+                    document.InsertTable(table);
                     document.Save();
 
                     return memoryStream;

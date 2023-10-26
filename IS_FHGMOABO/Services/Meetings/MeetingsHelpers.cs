@@ -1,6 +1,8 @@
 ﻿using IS_FHGMOABO.DAL;
+using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.MeetingsModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Xceed.Words.NET;
 
@@ -8,6 +10,13 @@ namespace IS_FHGMOABO.Services.Meetings
 {
     public class MeetingsHelpers
     {
+        private readonly ApplicationDBContext _applicationDBContext;
+
+        public MeetingsHelpers(ApplicationDBContext applicationDBContext)
+        {
+            _applicationDBContext = applicationDBContext;
+        }
+
         /// <summary>
         /// Обработка файлов для сохранения их в модели и проверка правильности расширения
         /// </summary>
