@@ -3,6 +3,7 @@ using Xceed.Words.NET;
 using IS_FHGMOABO.DAL;
 using Microsoft.VisualBasic;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
 
 namespace IS_FHGMOABO.Services.Meetings
 {
@@ -183,7 +184,27 @@ namespace IS_FHGMOABO.Services.Meetings
         }
         public static MemoryStream MeetingBulletins(List<Bulletin> bulletins)
         {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (DocX document = DocX.Create(memoryStream))
+                {
+                    for (int i = 0; i < bulletins.Count; i++)
+                    {
+                        if (i != 0)
+                        {
+                            document.InsertSectionPageBreak();
+                        }
+                        using (DocX bulletin = DocX.Load(MeetingBulletin(bulletins[i])))
+                        {
+                            document.InsertDocument(bulletin);
+                        }
 
+                    }
+                    document.Save();
+
+                    return memoryStream;
+                }
+            }
         }
         public static MemoryStream MeetingBulletin(Bulletin bulletin)
         {
