@@ -306,20 +306,7 @@ namespace IS_FHGMOABO.Controllers
             }
             await _applicationDBContext.SaveChangesAsync();
 
-            var bulletins = await _applicationDBContext.Bulletins
-                                                       .Where(x => x.MeetingId == id)
-                                                       .Include(x => x.Meeting)
-                                                       .Include(x => x.Meeting.Questions)
-                                                       .Include(x => x.Property)
-                                                       .Include(x => x.Property.LegalPerson)
-                                                       .Include(x => x.Property.NaturalPersons)
-                                                       .Include(x => x.Room)
-                                                       .Include(x => x.Room.House)
-                                                       .ToListAsync();
-
-            var memoryStream = MeetingsDocuments.MeetingVotingRegister(bulletins);
-
-            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Реестр голосования собственников помещений.docx");
+            return RedirectToAction("Details", new {id = id});
         }
 
         [Authorize]
@@ -366,20 +353,7 @@ namespace IS_FHGMOABO.Controllers
             }
             await _applicationDBContext.SaveChangesAsync();
 
-            var bulletins = await _applicationDBContext.Bulletins
-                                                       .Where(x => x.MeetingId == id)
-                                                       .Include(x => x.Meeting)
-                                                       .Include(x => x.Meeting.Questions)
-                                                       .Include(x => x.Property)
-                                                       .Include(x => x.Property.LegalPerson)
-                                                       .Include(x => x.Property.NaturalPersons)
-                                                       .Include(x => x.Room)
-                                                       .Include(x => x.Room.House)
-                                                       .ToListAsync();
-
-            var memoryStream = MeetingsDocuments.MeetingBulletins(bulletins);
-
-            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания.docx");
+            return RedirectToAction("Details", new { id = id });
         }
 
         [Authorize]

@@ -68,8 +68,8 @@
                 <div class="col-4 text-end">
                     <div class="btn-group-vertical">
                         <a href="/Meetings/CreateNotification?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
-                        <a href="/Meetings/CreateVotingRegister?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать реестр голосования</a>
-                        <a href="/Meetings/CreateBulletins?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать бюллетени</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Id">Сформировать реестр голосования</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Id">Сформировать бюллетени</a>
                         <a class="btn btn-outline-dark">Перейти к подсчетку голосов</a>
                         <a class="btn btn-outline-dark">Закончить собрание</a>
                         <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Id">Перейти к бюллетеням</a>
