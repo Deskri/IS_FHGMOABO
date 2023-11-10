@@ -207,6 +207,33 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
+        public async Task<IActionResult> Bulletins(int id)
+        {
+            var model = await _applicationDBContext.Bulletins
+                                                       .Where(x => x.MeetingId == id)
+                                                       .Include(x => x.Meeting)
+                                                       .Include(x => x.Meeting.Questions)
+                                                       .Include(x => x.Property)
+                                                       .Include(x => x.Property.LegalPerson)
+                                                       .Include(x => x.Property.NaturalPersons)
+                                                       .Include(x => x.Room)
+                                                       .Include(x => x.Room.House)
+                                                       .ToListAsync();
+
+            var meeting = await _applicationDBContext.Meetings
+                                                     .Where(x => x.Id == id)
+                                                     .Include(x => x.House)
+                                                     .Include(x => x.Questions)
+                                                     .FirstOrDefaultAsync();
+
+            ViewData["MeetingId"] = id;
+            ViewData["HeaderPage"] = $"Бюллетени общего собрания собственников от {meeting.StartDate.ToString("dd.MM.yyyy")} по адресу: {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}";
+
+            return View("Bulletins", model);
+        }
+
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> DownloadAttachment(int id)
         {
             var question = await _applicationDBContext.Questions
@@ -353,6 +380,81 @@ namespace IS_FHGMOABO.Controllers
             var memoryStream = MeetingsDocuments.MeetingBulletins(bulletins);
 
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания.docx");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintBulletins(int id)
+        {
+            var bulletins = await _applicationDBContext.Bulletins
+                                           .Where(x => x.MeetingId == id)
+                                           .Include(x => x.Meeting)
+                                           .Include(x => x.Meeting.Questions)
+                                           .Include(x => x.Property)
+                                           .Include(x => x.Property.LegalPerson)
+                                           .Include(x => x.Property.NaturalPersons)
+                                           .Include(x => x.Room)
+                                           .Include(x => x.Room.House)
+                                           .ToListAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingBulletins(bulletins);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания от {bulletins[0].Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletins[0].Room.House.Type} {bulletins[0].Room.House.Street}, дом {bulletins[0].Room.House.Number}.docx");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintVotingRegister(int id)
+        {
+            var bulletins = await _applicationDBContext.Bulletins
+                                                       .Where(x => x.MeetingId == id)
+                                                       .Include(x => x.Meeting)
+                                                       .Include(x => x.Meeting.Questions)
+                                                       .Include(x => x.Property)
+                                                       .Include(x => x.Property.LegalPerson)
+                                                       .Include(x => x.Property.NaturalPersons)
+                                                       .Include(x => x.Room)
+                                                       .Include(x => x.Room.House)
+                                                       .ToListAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingVotingRegister(bulletins);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Реестр голосования собственников помещений от {bulletins[0].Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletins[0].Room.House.Type} {bulletins[0].Room.House.Street}, дом {bulletins[0].Room.House.Number}.docx");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintEmptyBulletin(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings
+                                                     .Where(x => x.Id == id)
+                                                     .Include(x => x.House)
+                                                     .Include(x => x.Questions)
+                                                     .FirstOrDefaultAsync();
+
+            var memoryStream = MeetingsDocuments.EmptyMeetingBulletin(meeting);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Пустой бюллетень общего собрания от {meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}.docx");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintBulletin(int id)
+        {
+            var bulletin = await _applicationDBContext.Bulletins
+                                           .Where(x => x.Id == id)
+                                           .Include(x => x.Meeting)
+                                           .Include(x => x.Meeting.Questions)
+                                           .Include(x => x.Property)
+                                           .Include(x => x.Property.LegalPerson)
+                                           .Include(x => x.Property.NaturalPersons)
+                                           .Include(x => x.Room)
+                                           .Include(x => x.Room.House)
+                                           .FirstOrDefaultAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingBulletin(bulletin);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетенm общего собрания от {bulletin.Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletin.Room.House.Type} {bulletin.Room.House.Street}, дом {bulletin.Room.House.Number} {bulletin.Room.Type} {bulletin.Room.Number}.docx");
         }
     }
 }

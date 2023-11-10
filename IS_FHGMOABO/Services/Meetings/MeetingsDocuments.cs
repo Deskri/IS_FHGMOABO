@@ -291,7 +291,7 @@ namespace IS_FHGMOABO.Services.Meetings
                     }
                     else
                     {
-                        ownerInformation.Append("___");
+                        ownerInformation.Append("100,00% ");
                     }
 
                     Paragraph agendaHeader = document.InsertParagraph();
@@ -327,7 +327,7 @@ namespace IS_FHGMOABO.Services.Meetings
 
                         votingResults.Append($"\n{question.Number}. {question.Agenda}\n").Bold();
                         votingResults.Append($"Предложено: {question.Proposed}");
-                        if(question.Attachment != null && question.AttachmentNumber != null)
+                        if (question.Attachment != null && question.AttachmentNumber != null)
                         {
                             votingResults.Append($" (Приложение {question.AttachmentNumber}).");
                         }
@@ -337,12 +337,128 @@ namespace IS_FHGMOABO.Services.Meetings
 
                     Paragraph sign = document.InsertParagraph();
 
-                    sign.Append("\nСобственник:_______________________________/____________________________________________________\n");
+                    sign.Append("\nСобственник:_______________________________/___________________________________________________\n");
                     sign.Append("                                                 (подпись)                                                                             (Ф.И.О.)");
 
                     if (bulletin.Meeting.Questions != null)
                     {
                         foreach (var question in bulletin.Meeting.Questions)
+                        {
+                            if (question.Attachment != null)
+                            {
+                                byte[] byteArray = Convert.FromBase64String(question.Attachment);
+                                MemoryStream attachment = new MemoryStream(byteArray);
+
+                                document.InsertSectionPageBreak();
+                                using (DocX attachmentDocument = DocX.Load(attachment))
+                                {
+                                    document.InsertDocument(attachmentDocument);
+                                }
+                            }
+                        }
+                    }
+
+                    document.Save();
+
+                    return memoryStream;
+                }
+            }
+        }
+        public static MemoryStream EmptyMeetingBulletin(Meeting meeting)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (DocX document = DocX.Create(memoryStream))
+                {
+                    document.SetDefaultFont(new Font("Times New Roman"), 11);
+
+                    document.MarginLeft = 36;
+                    document.MarginRight = 36;
+                    document.MarginTop = 36;
+                    document.MarginBottom = 36;
+
+                    Paragraph header = document.InsertParagraph();
+
+                    switch (meeting.Format)
+                    {
+                        case "Заочное":
+                            header.Append("БЮЛЛЕТЕНЬ ЗАОЧНОГО ГОЛОСОВАНИЯ\n").Bold();
+                            break;
+                        case "Очно-заочное":
+                            header.Append("БЮЛЛЕТЕНЬ ОЧНО-ЗАОЧНОГО ГОЛОСОВАНИЯ\n").Bold();
+                            break;
+                    }
+                    header.Append($"на общем собрании собственников в многоквартирном доме №{meeting.House.Number} по {meeting.House.Type} {meeting.House.Street} в {meeting.House.InhabitedLocality}\n").Bold();
+                    header.Alignment = Alignment.center;
+
+                    Table table = document.AddTable(1, 2);
+                    table.Design = TableDesign.None;
+
+                    table.Rows[0].Cells[0].Paragraphs.First().Append($"{meeting.House.InhabitedLocality}");
+                    table.Rows[0].Cells[1].Paragraphs.First().Append($"{meeting.StartDate.Day}.{meeting.StartDate.Month}.{meeting.StartDate.Year}г.").Alignment = Alignment.right;
+
+                    document.InsertTable(table);
+
+                    Paragraph ownerInformation = document.InsertParagraph();
+
+                    ownerInformation.Append("\nСведения о собственнике (представителя собственника):\n").Bold();
+                    ownerInformation.Append("_______________________________________________________________________________________________\n");
+                    ownerInformation.Append("Сведения о документе на право собственности:\n").Bold();
+                    ownerInformation.Append("Документ, подтверждающий право собственности на помещение:\n");
+                    ownerInformation.Append("_______________________________________________________________________________________________\n");
+                    ownerInformation.Append("Кем выдано:\n");
+                    ownerInformation.Append("_______________________________________________________________________________________________\n");
+                    ownerInformation.Append($"Сведения о помещении: квартира/помещение № ____, общая площадь ____ м2, доля собственника в жилом помещении: ___");
+
+                    Paragraph agendaHeader = document.InsertParagraph();
+
+                    agendaHeader.Append("\nПовестка дня:\n").Bold();
+                    agendaHeader.Alignment = Alignment.center;
+
+                    Paragraph agenda = document.InsertParagraph();
+                    foreach (var question in meeting.Questions)
+                    {
+                        agenda.Append($"{question.Number}. {question.Agenda}\n");
+                    }
+
+                    Paragraph warning = document.InsertParagraph();
+
+                    warning.Append("ВАЖНО! ").Bold();
+                    warning.Append("При голосовании ставить только один из возможных вариантов ответа!\n").UnderlineStyle(UnderlineStyle.singleLine);
+                    warning.Alignment = Alignment.center;
+
+                    Paragraph votingResultsHeader = document.InsertParagraph();
+
+                    votingResultsHeader.Append("РЕЗУЛЬТАТЫ ГОЛОСОВАНИЯ").Bold();
+                    votingResultsHeader.Alignment = Alignment.center;
+
+                    foreach (var question in meeting.Questions)
+                    {
+                        Paragraph votingResults = document.InsertParagraph();
+                        Table tableVotingResult = document.AddTable(2, 3);
+
+                        tableVotingResult.Rows[0].Cells[0].Paragraphs.First().Append("за").Alignment = Alignment.center;
+                        tableVotingResult.Rows[0].Cells[1].Paragraphs.First().Append("против").Alignment = Alignment.center;
+                        tableVotingResult.Rows[0].Cells[2].Paragraphs.First().Append("воздержался").Alignment = Alignment.center;
+
+                        votingResults.Append($"\n{question.Number}. {question.Agenda}\n").Bold();
+                        votingResults.Append($"Предложено: {question.Proposed}");
+                        if (question.Attachment != null && question.AttachmentNumber != null)
+                        {
+                            votingResults.Append($" (Приложение {question.AttachmentNumber}).");
+                        }
+                        votingResults.Append("\n");
+                        document.InsertTable(tableVotingResult);
+                    }
+
+                    Paragraph sign = document.InsertParagraph();
+
+                    sign.Append("\nСобственник:_______________________________/___________________________________________________\n");
+                    sign.Append("                                                 (подпись)                                                                             (Ф.И.О.)");
+
+                    if (meeting.Questions != null)
+                    {
+                        foreach (var question in meeting.Questions)
                         {
                             if (question.Attachment != null)
                             {

@@ -1,0 +1,102 @@
+﻿@model List<IS_FHGMOABO.DAL.Bulletin>
+
+@{
+}
+
+<div class="row">
+    <div class="col-12">
+
+        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Details" asp-route-id="@ViewData["MeetingId"]">
+            <i class="bi bi-arrow-left-circle-fill"></i> Назад
+        </a>
+
+    </div>
+
+    <hr class="border border-dark border-2">
+
+    <div class="row">
+
+        <div class="col mb-3">
+
+            <h2>@ViewData["HeaderPage"]</h2>
+
+        </div>
+
+        <div class="col text-end mb-3">
+
+            <a href="/Meetings/PrintBulletins?id=@ViewData["MeetingId"]" target="_blank" class="btn btn-warning btn-lg mt-1 mb-1">
+                Распечатать все бюллетени
+            </a>
+
+            <a href="/Meetings/PrintEmptyBulletin?id=@ViewData["MeetingId"]" target="_blank" class="btn btn-warning btn-lg mt-1 mb-1">
+                Распечатать пустой бюллетень
+            </a>
+
+        </div>
+
+        <hr class="border border-dark border-2">
+
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Квартира/помещение</th>
+            <th>Собственник</th>
+            <th>Право</th>
+            <th>Доля</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bulletin in Model)
+        {
+            <tr>
+                <th>@bulletin.Room.Number</th>
+                <th>
+                    @if (bulletin.Room.IsPrivatized == false)
+                    {
+                        @("Муниципалитет")
+                    }
+                    else if (bulletin.Property.LegalPerson != null)
+                    {
+                        @($"{bulletin.Property.LegalPerson.Name}")
+                    }
+                    else if (bulletin.Property.NaturalPersons != null)
+                    {
+                        foreach (var person in bulletin.Property.NaturalPersons)
+                        {
+                            @($"{person.LastName} {person.FirstName} {person.Patronymic} ")
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
+                </th>
+                <th>
+                    @if (bulletin.Property != null && bulletin.Property.TypeOfStateRegistration != null && bulletin.Property.StateRegistrationNumber != null)
+                    {
+                        @($"{bulletin.Property.TypeOfStateRegistration} {bulletin.Property.StateRegistrationNumber} от {bulletin.Property.DateOfTaking.ToString("dd.MM.yyyy")}")
+                    }
+                </th>
+                <th>
+                    @if (bulletin.Property != null)
+                    {
+                        @(Math.Round(bulletin.Property.Share * 100, 2))
+                    }
+                    else
+                    {
+                        @("100,00%")
+                    }
+                </th>
+                <th>
+                    <a href="/Meetings/PrintBulletin?id=@bulletin.Id" target="_blank" class="btn btn-dark">
+                        Распечатать бюллетень
+                    </a>
+                </th>
+            </tr>
+        }
+    </tbody>
+</table>

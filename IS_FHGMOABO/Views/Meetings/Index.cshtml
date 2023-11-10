@@ -48,7 +48,7 @@ else
                         <h4 class="d-inline text-nowrap">
                             @if (meeting.Status == "Создано" && meeting.StartDate.AddDays(-10) > DateTime.Now)
                             {
-                                <span class="badge rounded-pill bg-primary">Заплпнировано</span>
+                                <span class="badge rounded-pill bg-primary">Запланировано</span>
                             }
                             else if (meeting.Status == "Создано" && meeting.StartDate.AddDays(-10) <= DateTime.Now)
                             {
