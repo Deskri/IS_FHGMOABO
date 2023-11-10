@@ -16,7 +16,7 @@ namespace IS_FHGMOABO.DAL
         /// <summary>
         /// Внешний ключ для связи с Question
         /// </summary>
-        [ForeignKey("Meeting")]
+        [ForeignKey("Question")]
         public int QuestionId { get; set; }
 
         /// <summary>
