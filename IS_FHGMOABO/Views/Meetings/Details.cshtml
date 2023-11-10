@@ -1,0 +1,110 @@
+﻿@model IS_FHGMOABO.DAL.Meeting
+
+@{
+
+}
+
+<div class="row">
+    <div class="col-12">
+
+        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Index">
+            <i class="bi bi-arrow-left-circle-fill"></i> Назад
+        </a>
+
+    </div>
+
+    <hr class="border border-dark border-2">
+
+    <div class="row">
+        <div class="card p-4 m-2 rounded-4">
+            <div class="row">
+                <div class="col-8">
+                    <h2 class="mb-3">
+                        Собрание собственников
+                    </h2>
+                    <h5 class="mb-2">
+                        Статус: @Model.Status
+                    </h5>
+                    <h5 class="mb-2">
+                        Адрес: @Model.House.Type @Model.House.Street, д.@Model.House.Number
+                    </h5>
+                    <h5 class="mb-2">
+                        Дата проведения: @Model.StartDate.ToString("dd.MM.yyyy")
+                    </h5>
+                    <h5 class="mb-2">
+                        Формат проведения: @Model.Format
+                    </h5>
+                    <h5 class="mb-2">
+                        Председатель: @Model.Chairperson
+                    </h5>
+                    <h5 class="mb-2">
+                        Секретарь: @Model.Secretary
+                    </h5>
+                    <h5 class="mb-2">
+                        Счетная комиссия:
+                    </h5>
+                    <table class="table table-hover table-bordered border-dark">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ФИО
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var member in Model.CountingCommitteeMembers)
+                            {
+                                <tr>
+                                    <th>
+                                        @member.FullName
+                                    </th>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-4 text-end">
+                    <div class="btn-group-vertical">
+                        <a href="/Meetings/CreateNotification?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
+                        <a href="/Meetings/CreateVotingRegister?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать реестр голосования</a>
+                        <a href="/Meetings/CreateBulletins?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать бюллетени</a>
+                        <a class="btn btn-outline-dark">Перейти к подсчетку голосов</a>
+                        <a class="btn btn-outline-dark">Закончить собрание</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Id">Перейти к бюллетеням</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-2 rounded-4">
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                            Вопросы голосования
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            @foreach (var question in Model.Questions)
+                            {
+                                <h5>Вопрос @(question.Number). @question.Agenda</h5>
+                                <p>Предложено: @question.Proposed</p>
+                                <p>Процент, необходимый для принятия решения: @question.Percentage %</p>
+                                @if (question.AttachmentNumber != null && question.Attachment != null)
+                                {
+                                    <p>Приложение №@question.AttachmentNumber</p>
+                                    <a href="/Meetings/DownloadAttachment?id=@question.Id" target="_blank" class="btn btn-dark btn-lg"><i class="bi bi-filetype-docx"></i> Скачать приложение</a>
+                                }
+                                <hr class="border border-dark border-2">
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

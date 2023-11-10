@@ -56,13 +56,18 @@ namespace IS_FHGMOABO.DAL
         public string Chairperson { get; set; }
 
         /// <summary>
-        /// Навигационное свойство для связи с Chairperson
+        /// Навигационное свойство для связи с CountingCommitteeMember
         /// </summary>
         public ICollection<CountingCommitteeMember>? CountingCommitteeMembers { get; set; }
 
         /// <summary>
-        /// Навигационное свойство для связи с Chairperson
+        /// Навигационное свойство для связи с Question
         /// </summary>
         public ICollection<Question>? Questions { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство для связи с Bulletin
+        /// </summary>
+        public ICollection<Bulletin>? Bulletins { get; set; }
     }
 }

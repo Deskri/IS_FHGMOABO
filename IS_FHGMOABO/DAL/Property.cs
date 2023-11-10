@@ -44,6 +44,11 @@ namespace IS_FHGMOABO.DAL
         public ICollection<NaturalPerson>? NaturalPersons { get; set; }
 
         /// <summary>
+        /// Навигационное свойство для связи с Bulletin
+        /// </summary>
+        public ICollection<Bulletin>? Bulletins { get; set; }
+
+        /// <summary>
         /// Вид собственности
         /// </summary>
         [Required]
