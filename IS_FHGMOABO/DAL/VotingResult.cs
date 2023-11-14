@@ -26,13 +26,13 @@ namespace IS_FHGMOABO.DAL
         public Question? Question { get; set; }
 
         /// <summary>
-        /// Внешний ключ для связи с Question
+        /// Внешний ключ для связи с Bulletin
         /// </summary>
         [ForeignKey("Bulletin")]
         public int BulletinId { get; set; }
 
         /// <summary>
-        /// Навигационное свойство для связи с Question
+        /// Навигационное свойство для связи с Bulletin
         /// </summary>
         [InverseProperty("VotingResults")]
         public Bulletin? Bulletin { get; set; }

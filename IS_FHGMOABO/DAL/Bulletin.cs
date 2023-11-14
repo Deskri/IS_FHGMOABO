@@ -48,5 +48,10 @@ namespace IS_FHGMOABO.DAL
         /// </summary>
         [InverseProperty("Bulletins")]
         public Property? Property { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство для связи с VotingResult
+        /// </summary>
+        public ICollection<VotingResult>? VotingResults { get; set; }
     }
 }
