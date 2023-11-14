@@ -358,6 +358,33 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
+        public async Task<IActionResult> CreateVotingResults(int id)
+        {
+            var bulletins = await _applicationDBContext.Bulletins.Where(x => x.MeetingId == id)
+                                                                 .Include(x => x.Meeting.Questions)
+                                                                 .ToListAsync();
+
+            var results = new List<VotingResult>();
+
+            foreach (var bulletin in bulletins) 
+            {
+                foreach (var question in bulletin.Meeting.Questions)
+                {
+                    results.Add(new VotingResult()
+                    {
+                        BulletinId = bulletin.Id, 
+                        QuestionId = question.Id,
+                    });
+                }
+            }
+            await _applicationDBContext.AddAsync(results);
+            await _applicationDBContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> PrintBulletins(int id)
         {
             var bulletins = await _applicationDBContext.Bulletins
