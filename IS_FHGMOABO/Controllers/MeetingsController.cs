@@ -3,6 +3,7 @@ using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.MeetingsModels;
 using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -364,20 +365,20 @@ namespace IS_FHGMOABO.Controllers
                                                                  .Include(x => x.Meeting.Questions)
                                                                  .ToListAsync();
 
-            var results = new List<VotingResult>();
-
             foreach (var bulletin in bulletins) 
             {
                 foreach (var question in bulletin.Meeting.Questions)
                 {
-                    results.Add(new VotingResult()
+                    var result = new VotingResult()
                     {
                         BulletinId = bulletin.Id, 
                         QuestionId = question.Id,
-                    });
+                    };
+
+                    await _applicationDBContext.AddAsync(result);
                 }
             }
-            await _applicationDBContext.AddAsync(results);
+
             await _applicationDBContext.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = id });

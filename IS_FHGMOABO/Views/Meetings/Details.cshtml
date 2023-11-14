@@ -70,7 +70,7 @@
                         <a href="/Meetings/CreateNotification?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
                         <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Id">Сформировать реестр голосования</a>
                         <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Id">Сформировать бюллетени</a>
-                        <a class="btn btn-outline-dark">Перейти к подсчетку голосов</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingResults" asp-route-id="@Model.Id">Сформировать подсчет голосов</a>
                         <a class="btn btn-outline-dark">Закончить собрание</a>
                         <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Id">Перейти к бюллетеням</a>
                         <a href="/Meetings/PrintVotingRegister?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
