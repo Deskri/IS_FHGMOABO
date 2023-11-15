@@ -3,37 +3,41 @@
 @{
 }
 
-<div class="row">
-    <div class="col-12">
+<form method="post" asp-controller="Meetings" asp-action="VotingResults">
 
-        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Details" asp-route-id="@ViewData["MeetingId"]">
-            <i class="bi bi-arrow-left-circle-fill"></i> Назад
-        </a>
-
-    </div>
-
-    <hr class="border border-dark border-2">
+    <input asp-for="MeetingID" hidden>
 
     <div class="row">
+        <div class="col-12">
 
-        <div class="col mb-3">
-
-            <h2>@ViewData["HeaderPage"]</h2>
-
-        </div>
-
-        <div class="col text-end mb-3">
-
-            <a class="btn btn-warning btn-lg mt-1 mb-1">
-                Сохранить
+            <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Details" asp-route-id="@Model.MeetingID">
+                <i class="bi bi-arrow-left-circle-fill"></i> Назад
             </a>
 
         </div>
 
-    </div>
-</div>
+        <hr class="border border-dark border-2">
 
-<form method="post" asp-controller="Meetings" asp-action="VotingResult">
+        <div class="row">
+
+            <div class="col mb-3">
+
+                <h2>@ViewData["HeaderPage"]</h2>
+
+            </div>
+
+            <div class="col text-end mb-3">
+
+                <button type="submit" class="btn btn-warning btn-lg mt-1 mb-1">
+                    Сохранить
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+
     <table class="table">
         <thead>
             <tr>
@@ -81,11 +85,11 @@
                             @("100,00%")
                         }
                     </th>
-                    @for (int y = 0; y < Model.Bulletins[i].VotingResults.Count; y++)
+                    @for (int y = 0; y < Model.Bulletins[i].UpdateVotingResults.Count; y++)
                     {
                         <th>
-                            <input asp-for="Bulletins[i].VotingResults.ToList()[y].Id" hidden>
-                            <select class="form-select" asp-for="Bulletins[i].VotingResults.ToList()[y].Result">
+                            <input asp-for="Bulletins[i].UpdateVotingResults[y].Id" hidden>
+                            <select class="form-select" asp-for="Bulletins[i].UpdateVotingResults[y].Result">
                                 <option selected></option>
                                 <option value="0">Против</option>
                                 <option value="1">За</option>

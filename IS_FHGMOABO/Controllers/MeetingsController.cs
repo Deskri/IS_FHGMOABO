@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static IS_FHGMOABO.Models.MeetingsModels.VotingResultsModel;
 
 namespace IS_FHGMOABO.Controllers
 {
@@ -239,9 +240,8 @@ namespace IS_FHGMOABO.Controllers
         {
             var model = new VotingResultsModel();
 
-            model.Bulletins = await _applicationDBContext.Bulletins
+            var bulletins = await _applicationDBContext.Bulletins
                                                    .Where(x => x.MeetingId == id)
-                                                   .Include(x => x.VotingResults)
                                                    .Include(x => x.Property)
                                                    .Include(x => x.Property.LegalPerson)
                                                    .Include(x => x.Property.NaturalPersons)
@@ -255,7 +255,7 @@ namespace IS_FHGMOABO.Controllers
                                          .Include(x => x.Questions)
                                          .FirstOrDefaultAsync();
 
-            ViewData["MeetingId"] = id;
+            model.MeetingID = id;
             ViewData["HeaderPage"] = $"Подсчет голосов общего собрания собственников от {meeting.StartDate.ToString("dd.MM.yyyy")} по адресу: {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}";
 
             foreach (var question in meeting.Questions)
@@ -263,7 +263,47 @@ namespace IS_FHGMOABO.Controllers
                 model.TableTitles.Add($"Вопрос {question.Number}");
             }
 
+            model.Bulletins = new List<UpdateBulletin>();
+
+            foreach (var bulletin in bulletins)
+            {
+                var results = await _applicationDBContext.VotingResults.Where(x => x.BulletinId == bulletin.Id).ToListAsync();
+
+                model.Bulletins.Add(new UpdateBulletin()
+                {
+                    Id = bulletin.Id,
+                    MeetingId = bulletin.MeetingId,
+                    RoomId = bulletin.RoomId,
+                    PropertyId = bulletin.PropertyId,
+                    Meeting = bulletin.Meeting,
+                    Room = bulletin.Room,
+                    Property = bulletin.Property,
+                    UpdateVotingResults = results,
+                });
+            }
+
             return View("VotingResults", model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> VotingResults(VotingResultsModel model)
+        {
+            foreach (var bulletin in model.Bulletins)
+            {
+                foreach(var updateVotingResult in bulletin.UpdateVotingResults)
+                {
+                    var _votingResults = await _applicationDBContext.VotingResults
+                                                                    .Where(x=> x.Id == updateVotingResult.Id)
+                                                                    .FirstOrDefaultAsync();
+
+                    _votingResults.Result = updateVotingResult.Result;
+
+                    await _applicationDBContext.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("Details", new { id = model.MeetingID});
         }
 
         [Authorize]
