@@ -235,6 +235,39 @@ namespace IS_FHGMOABO.Controllers
 
         [Authorize]
         [HttpGet]
+        public async Task<IActionResult> VotingResults(int id)
+        {
+            var model = new VotingResultsModel();
+
+            model.Bulletins = await _applicationDBContext.Bulletins
+                                                   .Where(x => x.MeetingId == id)
+                                                   .Include(x => x.VotingResults)
+                                                   .Include(x => x.Property)
+                                                   .Include(x => x.Property.LegalPerson)
+                                                   .Include(x => x.Property.NaturalPersons)
+                                                   .Include(x => x.Room)
+                                                   .Include(x => x.Room.House)
+                                                   .ToListAsync();
+
+            var meeting = await _applicationDBContext.Meetings
+                                         .Where(x => x.Id == id)
+                                         .Include(x => x.House)
+                                         .Include(x => x.Questions)
+                                         .FirstOrDefaultAsync();
+
+            ViewData["MeetingId"] = id;
+            ViewData["HeaderPage"] = $"Подсчет голосов общего собрания собственников от {meeting.StartDate.ToString("dd.MM.yyyy")} по адресу: {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}";
+
+            foreach (var question in meeting.Questions)
+            {
+                model.TableTitles.Add($"Вопрос {question.Number}");
+            }
+
+            return View("VotingResults", model);
+        }
+
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> DownloadAttachment(int id)
         {
             var question = await _applicationDBContext.Questions
@@ -307,7 +340,7 @@ namespace IS_FHGMOABO.Controllers
             }
             await _applicationDBContext.SaveChangesAsync();
 
-            return RedirectToAction("Details", new {id = id});
+            return RedirectToAction("Details", new { id = id });
         }
 
         [Authorize]
@@ -365,13 +398,13 @@ namespace IS_FHGMOABO.Controllers
                                                                  .Include(x => x.Meeting.Questions)
                                                                  .ToListAsync();
 
-            foreach (var bulletin in bulletins) 
+            foreach (var bulletin in bulletins)
             {
                 foreach (var question in bulletin.Meeting.Questions)
                 {
                     var result = new VotingResult()
                     {
-                        BulletinId = bulletin.Id, 
+                        BulletinId = bulletin.Id,
                         QuestionId = question.Id,
                     };
 

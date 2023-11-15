@@ -1,0 +1,100 @@
+﻿@model IS_FHGMOABO.Models.MeetingsModels.VotingResultsModel
+
+@{
+}
+
+<div class="row">
+    <div class="col-12">
+
+        <a class="btn btn-warning btn-lg mb-3 me-1" asp-area="" asp-controller="Meetings" asp-action="Details" asp-route-id="@ViewData["MeetingId"]">
+            <i class="bi bi-arrow-left-circle-fill"></i> Назад
+        </a>
+
+    </div>
+
+    <hr class="border border-dark border-2">
+
+    <div class="row">
+
+        <div class="col mb-3">
+
+            <h2>@ViewData["HeaderPage"]</h2>
+
+        </div>
+
+        <div class="col text-end mb-3">
+
+            <a class="btn btn-warning btn-lg mt-1 mb-1">
+                Сохранить
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+<form method="post" asp-controller="Meetings" asp-action="VotingResult">
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var itemTitle in Model.TableTitles)
+                {
+                    <th>
+                        @itemTitle
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Bulletins.Count; i++)
+            {
+                <tr>
+                    <th>@Model.Bulletins[i].Room.Number</th>
+                    <th>
+                        @if (Model.Bulletins[i].Room.IsPrivatized == false)
+                        {
+                            @("Муниципалитет")
+                        }
+                        else if (Model.Bulletins[i].Property.LegalPerson != null)
+                        {
+                            @($"{Model.Bulletins[i].Property.LegalPerson.Name}")
+                        }
+                        else if (Model.Bulletins[i].Property.NaturalPersons != null)
+                        {
+                            foreach (var person in Model.Bulletins[i].Property.NaturalPersons)
+                            {
+                                @($"{person.LastName} {person.FirstName} {person.Patronymic} ")
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    </th>
+                    <th>
+                        @if (Model.Bulletins[i].Property != null)
+                        {
+                            @(Math.Round(Model.Bulletins[i].Property.Room.TotalArea * Model.Bulletins[i].Property.Share, 2))
+                        }
+                        else
+                        {
+                            @("100,00%")
+                        }
+                    </th>
+                    @for (int y = 0; y < Model.Bulletins[i].VotingResults.Count; y++)
+                    {
+                        <th>
+                            <input asp-for="Bulletins[i].VotingResults.ToList()[y].Id" hidden>
+                            <select class="form-select" asp-for="Bulletins[i].VotingResults.ToList()[y].Result">
+                                <option selected></option>
+                                <option value="0">Против</option>
+                                <option value="1">За</option>
+                                <option value="2">Воздержался</option>
+                            </select>
+                        </th>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
