@@ -1,4 +1,4 @@
-﻿@model IS_FHGMOABO.DAL.Meeting
+﻿@model IS_FHGMOABO.Models.MeetingsModels.DetailsMeetingModel
 
 @{
 
@@ -23,22 +23,22 @@
                         Собрание собственников
                     </h2>
                     <h5 class="mb-2">
-                        Статус: @Model.Status
+                        Статус: @Model.Meeting.Status
                     </h5>
                     <h5 class="mb-2">
-                        Адрес: @Model.House.Type @Model.House.Street, д.@Model.House.Number
+                        Адрес: @Model.Meeting.House.Type @Model.Meeting.House.Street, д.@Model.Meeting.House.Number
                     </h5>
                     <h5 class="mb-2">
-                        Дата проведения: @Model.StartDate.ToString("dd.MM.yyyy")
+                        Дата проведения: @Model.Meeting.StartDate.ToString("dd.MM.yyyy")
                     </h5>
                     <h5 class="mb-2">
-                        Формат проведения: @Model.Format
+                        Формат проведения: @Model.Meeting.Format
                     </h5>
                     <h5 class="mb-2">
-                        Председатель: @Model.Chairperson
+                        Председатель: @Model.Meeting.Chairperson
                     </h5>
                     <h5 class="mb-2">
-                        Секретарь: @Model.Secretary
+                        Секретарь: @Model.Meeting.Secretary
                     </h5>
                     <h5 class="mb-2">
                         Счетная комиссия:
@@ -52,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var member in Model.CountingCommitteeMembers)
+                            @foreach (var member in Model.Meeting.CountingCommitteeMembers)
                             {
                                 <tr>
                                     <th>
@@ -67,14 +67,14 @@
 
                 <div class="col-4 text-end">
                     <div class="btn-group-vertical">
-                        <a href="/Meetings/CreateNotification?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Id">Сформировать реестр голосования</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Id">Сформировать бюллетени</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingResults" asp-route-id="@Model.Id">Сформировать подсчет голосов</a>
+                        <a href="/Meetings/CreateNotification?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Meeting.Id">Сформировать реестр голосования</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Meeting.Id">Сформировать бюллетени</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingResults" asp-route-id="@Model.Meeting.Id">Сформировать подсчет голосов</a>
                         <a class="btn btn-outline-dark">Закончить собрание</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Id">Перейти к бюллетеням</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="VotingResults" asp-route-id="@Model.Id">Перейти к подсчету голосов</a>
-                        <a href="/Meetings/PrintVotingRegister?id=@Model.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Meeting.Id">Перейти к бюллетеням</a>
+                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="VotingResults" asp-route-id="@Model.Meeting.Id">Перейти к подсчету голосов</a>
+                        <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     </h2>
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
-                            @foreach (var question in Model.Questions)
+                            @foreach (var question in Model.Meeting.Questions)
                             {
                                 <h5>Вопрос @(question.Number). @question.Agenda</h5>
                                 <p>Предложено: @question.Proposed</p>
@@ -107,6 +107,44 @@
                 </div>
             </div>
         </div>
+
+        <div class="card m-2 rounded-4">
+            @foreach (var qr in Model.QuestionResults)
+            {
+                <h4 class="mt-4 text-center">Вопрос @qr.Number</h4>
+                <p class="text-center">@qr.Agenda</p>
+                <div class="row mt-1">
+                    <div class="col-4 text-center border border-2 rounded-4">
+                        <h5 class="mt-2">За</h5>
+
+                        <div class="border border-2 rounded-4">
+                            <div class="pie animate" style="--p:@(Math.Round(qr.For.Percentage, 0));--c:lightgreen"> @(Math.Round(qr.For.Percentage, 2))%</div>
+                        </div>
+
+                        <p>Проголосовало @(Math.Round(qr.For.Area)) м².</p>
+                    </div>
+                    <div class="col-4 text-center border border-2 rounded-4">
+                        <h5 class="mt-2">Против</h5>
+
+                        <div class="border border-2 rounded-4">
+                            <div class="pie animate" style="--p:@(Math.Round(qr.Against.Percentage, 0));--c:LightCoral"> @(Math.Round(qr.Against.Percentage, 2))%</div>
+                        </div>
+
+                        <p>Проголосовало @(Math.Round(qr.Against.Area)) м².</p>
+                    </div>
+                    <div class="col-4 text-center border border-2 rounded-4">
+                        <h5 class="mt-2">Воздержались</h5>
+
+                        <div class="border border-2 rounded-4">
+                            <div class="pie animate" style="--p:@(Math.Round(qr.Abstained.Percentage, 0));--c:Khaki"> @(Math.Round(qr.Abstained.Percentage, 2))%</div>
+                        </div>
+
+                        <p>Проголосовало @(Math.Round(qr.Abstained.Area, 2)) м².</p>
+                    </div>
+                </div>
+            }
+        </div>
+
     </div>
 
 </div>

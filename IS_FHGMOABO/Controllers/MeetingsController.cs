@@ -3,9 +3,9 @@ using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.MeetingsModels;
 using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static IS_FHGMOABO.Models.MeetingsModels.DetailsMeetingModel;
 using static IS_FHGMOABO.Models.MeetingsModels.VotingResultsModel;
 
 namespace IS_FHGMOABO.Controllers
@@ -197,12 +197,61 @@ namespace IS_FHGMOABO.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await _applicationDBContext.Meetings
+            var model = new DetailsMeetingModel();
+
+            model.Meeting = await _applicationDBContext.Meetings
                                                    .Where(x => x.Id == id)
                                                    .Include(x => x.Questions)
                                                    .Include(x => x.CountingCommitteeMembers)
                                                    .Include(x => x.House)
                                                    .FirstOrDefaultAsync();
+
+            var totalAreaHouse = model.Meeting.House.ResidentialPremisesPassportedArea + model.Meeting.House.NonResidentialPremisesPassportedArea;
+
+            foreach (var question in model.Meeting.Questions)
+            {
+                var resultsFor = await _applicationDBContext.VotingResults
+                                                         .Where(x => x.QuestionId == question.Id && x.Result == 1)
+                                                         .Include(x => x.Bulletin.Room)
+                                                         .ToListAsync();
+                var areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
+                var percentageFor = areaFor / totalAreaHouse * 100;
+
+                var resultsAgainst = await _applicationDBContext.VotingResults
+                                                         .Where(x => x.QuestionId == question.Id && x.Result == 0)
+                                                         .Include(x => x.Bulletin.Room)
+                                                         .ToListAsync();
+                var areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
+                var percentageAgainst = areaAgainst / totalAreaHouse * 100;
+
+                var resultsAbstained = await _applicationDBContext.VotingResults
+                                                         .Where(x => x.QuestionId == question.Id && x.Result == 2)
+                                                         .Include(x => x.Bulletin.Room)
+                                                         .ToListAsync();
+                var areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
+                var percentageAbstained = areaAbstained / totalAreaHouse * 100;
+
+                model.QuestionResults.Add(new QuestionResult()
+                {
+                    Number = question.Number,
+                    Agenda = question.Agenda,
+                    For = new Responses()
+                    {
+                        Area = areaFor,
+                        Percentage = percentageFor,
+                    },
+                    Against = new Responses()
+                    {
+                        Area = areaAgainst,
+                        Percentage = percentageAgainst,
+                    },
+                    Abstained = new Responses()
+                    {
+                        Area = areaAbstained,
+                        Percentage = percentageAbstained,
+                    },
+                });
+            }
 
             return View("Details", model);
         }
@@ -291,10 +340,10 @@ namespace IS_FHGMOABO.Controllers
         {
             foreach (var bulletin in model.Bulletins)
             {
-                foreach(var updateVotingResult in bulletin.UpdateVotingResults)
+                foreach (var updateVotingResult in bulletin.UpdateVotingResults)
                 {
                     var _votingResults = await _applicationDBContext.VotingResults
-                                                                    .Where(x=> x.Id == updateVotingResult.Id)
+                                                                    .Where(x => x.Id == updateVotingResult.Id)
                                                                     .FirstOrDefaultAsync();
 
                     _votingResults.Result = updateVotingResult.Result;
@@ -303,7 +352,7 @@ namespace IS_FHGMOABO.Controllers
                 }
             }
 
-            return RedirectToAction("Details", new { id = model.MeetingID});
+            return RedirectToAction("Details", new { id = model.MeetingID });
         }
 
         [Authorize]
@@ -341,10 +390,10 @@ namespace IS_FHGMOABO.Controllers
         public async Task<IActionResult> CreateVotingRegister(int id)
         {
             var meeting = await _applicationDBContext.Meetings
-                             .Where(x => x.Id == id)
-                             .Include(x => x.House)
-                             .Include(x => x.Bulletins)
-                             .FirstOrDefaultAsync();
+                                                     .Where(x => x.Id == id)
+                                                     .Include(x => x.House)
+                                                     .Include(x => x.Bulletins)
+                                                     .FirstOrDefaultAsync();
 
             meeting.House.Rooms = await _applicationDBContext.Rooms
                                                              .Where(x => x.HouseId == meeting.HouseId)
@@ -388,10 +437,10 @@ namespace IS_FHGMOABO.Controllers
         public async Task<IActionResult> CreateBulletins(int id)
         {
             var meeting = await _applicationDBContext.Meetings
-                             .Where(x => x.Id == id)
-                             .Include(x => x.House)
-                             .Include(x => x.Bulletins)
-                             .FirstOrDefaultAsync();
+                                                     .Where(x => x.Id == id)
+                                                     .Include(x => x.House)
+                                                     .Include(x => x.Bulletins)
+                                                     .FirstOrDefaultAsync();
 
             meeting.House.Rooms = await _applicationDBContext.Rooms
                                                              .Where(x => x.HouseId == meeting.HouseId)
