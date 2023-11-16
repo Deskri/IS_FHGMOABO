@@ -4,6 +4,7 @@ using IS_FHGMOABO.DBConection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IS_FHGMOABO.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231114061956_Add voting results")]
+    partial class Addvotingresults
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -361,17 +364,12 @@ namespace IS_FHGMOABO.Migrations
                     b.Property<int>("BulletinId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Result")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BulletinId");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("VotingResults");
                 });
@@ -681,15 +679,7 @@ namespace IS_FHGMOABO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IS_FHGMOABO.DAL.Question", "Question")
-                        .WithMany("VotingResults")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Bulletin");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -787,11 +777,6 @@ namespace IS_FHGMOABO.Migrations
             modelBuilder.Entity("IS_FHGMOABO.DAL.Property", b =>
                 {
                     b.Navigation("Bulletins");
-                });
-
-            modelBuilder.Entity("IS_FHGMOABO.DAL.Question", b =>
-                {
-                    b.Navigation("VotingResults");
                 });
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.Room", b =>

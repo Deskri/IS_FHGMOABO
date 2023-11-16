@@ -61,5 +61,10 @@ namespace IS_FHGMOABO.DAL
         /// Приложение
         /// </summary>
         public string? Attachment { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство для связи с VotingResult
+        /// </summary>
+        public ICollection<VotingResult>? VotingResults { get; set; }
     }
 }
