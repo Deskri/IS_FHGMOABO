@@ -163,11 +163,11 @@ namespace IS_FHGMOABO.Models.MeetingsModels
         public string Proposed { get; set; }
 
         /// <summary>
-        /// Процент для принятия вопроса
+        /// Тип вопроса для принятия решения
         /// </summary>
-        [Required(ErrorMessage = "Требуется внести процент для принятия вопроса")]
-        [Display(Name = "Процент для принятия вопроса")]
-        public decimal Percentage { get; set; }
+        [Required(ErrorMessage = "Требуется внести тип вопроса для принятия решения")]
+        [Display(Name = "Тип вопроса для принятия решения")]
+        public short DecisionType { get; set; }
 
         /// <summary>
         /// Приложение

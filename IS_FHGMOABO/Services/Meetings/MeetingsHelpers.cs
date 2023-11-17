@@ -97,21 +97,6 @@ namespace IS_FHGMOABO.Services.Meetings
             {
                 ModelState.AddModelError("Meeting.Questions", "Должен присутствовать хотя бы один вопрос собрания.");
             }
-            else
-            {
-                for (int i = 0; i < model.Meeting.Questions.Count; i++)
-                {
-                    if (model.Meeting.Questions[i].Percentage <= 0)
-                    {
-                        ModelState.AddModelError($"Meeting.Questions[{i}].Percentage", "Процент не должен быть меньше или равен 0.");
-                    }
-
-                    if (model.Meeting.Questions[i].Percentage > 100)
-                    {
-                        ModelState.AddModelError($"Meeting.Questions[{i}].Percentage", "Процент не должен быть больше 100.");
-                    }
-                }
-            }
         }
     }
 }

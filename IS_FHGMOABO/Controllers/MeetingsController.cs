@@ -87,7 +87,7 @@ namespace IS_FHGMOABO.Controllers
                             Number = i + 1,
                             Agenda = model.Meeting.Questions[i].Agenda,
                             Proposed = model.Meeting.Questions[i].Proposed,
-                            Percentage = model.Meeting.Questions[i].Percentage,
+                            DecisionType = model.Meeting.Questions[i].DecisionType,
                         });
                     }
                     else
@@ -97,7 +97,7 @@ namespace IS_FHGMOABO.Controllers
                             Number = i + 1,
                             Agenda = model.Meeting.Questions[i].Agenda,
                             Proposed = model.Meeting.Questions[i].Proposed,
-                            Percentage = model.Meeting.Questions[i].Percentage,
+                            DecisionType = model.Meeting.Questions[i].DecisionType,
                             Attachment = model.Meeting.Questions[i].AttachmentString,
                             AttachmentNumber = attachmentNumber,
                         });
