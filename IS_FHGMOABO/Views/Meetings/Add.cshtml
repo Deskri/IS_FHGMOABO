@@ -247,9 +247,14 @@
                         </div>
                         <div class="col-6 form-group mb-3">
 
-                            <label asp-for="Meeting.Questions[i].Percentage"></label>
-                            <input min="0" max="100" step="0.1" asp-for="Meeting.Questions[i].Percentage" value="@Model.Meeting.Questions[i].Percentage" class="form-control" />
-                            <span asp-validation-for="Meeting.Questions[i].Percentage" class="text-danger"></span>
+                            <label asp-for="Meeting.Questions[i].DecisionType"></label>
+                            <select class="form-select" asp-for="Meeting.Questions[i].DecisionType">
+                                <option value="0">большинством от общего числа голосов собственников в доме, участвующих в собрании</option>
+                                <option value="1">50%+1 голос от общего числа голосов всех собственников помещений в многоквартирном доме</option>
+                                <option value="2">не менее ⅔ голосов от общего числа голосов собственников помещений в многоквартирном доме</option>
+                                <option value="3">100%, то есть все собственники в доме должны проголосовать «за»</option>
+                            </select>
+                            <span asp-validation-for="Meeting.Questions[i].DecisionType" class="text-danger"></span>
 
                         </div>
                         <div class="col-6 form-group mb-3">

@@ -46,11 +46,10 @@ namespace IS_FHGMOABO.DAL
         public string Proposed { get; set; }
 
         /// <summary>
-        /// Необходимый процент для принятия вопроса
+        /// Тип вопроса для принятия вопроса
         /// </summary>
         [Required]
-        [Column(TypeName = "decimal(5, 2)")]
-        public decimal Percentage { get; set; }
+        public short DecisionType { get; set; }
 
         /// <summary>
         /// Номер приложения

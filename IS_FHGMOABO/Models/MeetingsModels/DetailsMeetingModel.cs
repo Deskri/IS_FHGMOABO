@@ -11,6 +11,9 @@ namespace IS_FHGMOABO.Models.MeetingsModels
         {
             public int Number { get; set; }
             public string? Agenda { get; set; }
+            public bool IsThereQuorum { get; set; }
+            public bool IsQuestionAccepted { get; set; }
+            public short DecisionType { get; set; }
             public Responses For { get; set; } = new Responses();
             public Responses Against { get; set; } = new Responses();
             public Responses Abstained { get; set; } = new Responses();
