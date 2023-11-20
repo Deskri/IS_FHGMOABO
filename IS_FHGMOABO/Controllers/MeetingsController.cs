@@ -206,51 +206,16 @@ namespace IS_FHGMOABO.Controllers
                                                    .Include(x => x.House)
                                                    .FirstOrDefaultAsync();
 
-            var totalAreaHouse = model.Meeting.House.ResidentialPremisesPassportedArea + model.Meeting.House.NonResidentialPremisesPassportedArea;
+            var totalHouseArea = model.Meeting.House.ResidentialPremisesPassportedArea + model.Meeting.House.NonResidentialPremisesPassportedArea;
 
             foreach (var question in model.Meeting.Questions)
             {
-                var resultsFor = await _applicationDBContext.VotingResults
-                                                         .Where(x => x.QuestionId == question.Id && x.Result == 1)
+                var results = await _applicationDBContext.VotingResults
+                                                         .Where(x => x.QuestionId == question.Id && (x.Result == 0 || x.Result == 1 || x.Result == 2))
                                                          .Include(x => x.Bulletin.Room)
                                                          .ToListAsync();
-                var areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
-                var percentageFor = areaFor / totalAreaHouse * 100;
 
-                var resultsAgainst = await _applicationDBContext.VotingResults
-                                                         .Where(x => x.QuestionId == question.Id && x.Result == 0)
-                                                         .Include(x => x.Bulletin.Room)
-                                                         .ToListAsync();
-                var areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
-                var percentageAgainst = areaAgainst / totalAreaHouse * 100;
-
-                var resultsAbstained = await _applicationDBContext.VotingResults
-                                                         .Where(x => x.QuestionId == question.Id && x.Result == 2)
-                                                         .Include(x => x.Bulletin.Room)
-                                                         .ToListAsync();
-                var areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
-                var percentageAbstained = areaAbstained / totalAreaHouse * 100;
-
-                model.QuestionResults.Add(new QuestionResult()
-                {
-                    Number = question.Number,
-                    Agenda = question.Agenda,
-                    For = new Responses()
-                    {
-                        Area = areaFor,
-                        Percentage = percentageFor,
-                    },
-                    Against = new Responses()
-                    {
-                        Area = areaAgainst,
-                        Percentage = percentageAgainst,
-                    },
-                    Abstained = new Responses()
-                    {
-                        Area = areaAbstained,
-                        Percentage = percentageAbstained,
-                    },
-                });
+                model.QuestionResults.Add(MeetingsHelpers.ResponseСounter(results, question, totalHouseArea));
             }
 
             return View("Details", model);

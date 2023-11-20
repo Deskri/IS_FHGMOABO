@@ -110,35 +110,77 @@
         <div class="card m-2 rounded-4">
             @foreach (var qr in Model.QuestionResults)
             {
-                <h4 class="mt-4 text-center">Вопрос @qr.Number</h4>
-                <p class="text-center">@qr.Agenda</p>
-                <div class="row mt-1">
-                    <div class="col-4 text-center border border-2 rounded-4">
-                        <h5 class="mt-2">За</h5>
+                <div class="card bg-opacity-10 rounded-4 m-3 @(qr.IsThereQuorum && qr.IsQuestionAccepted?"bg-success":"bg-danger")">
+                    <div class="card-body">
 
-                        <div class="border border-2 rounded-4">
-                            <div class="pie animate" style="--p:@(Math.Round(qr.For.Percentage, 0));--c:lightgreen"> @(Math.Round(qr.For.Percentage, 2))%</div>
+                        <h4 class="mt-1 text-center">Вопрос @qr.Number</h4>
+
+                        @if (qr.IsThereQuorum)
+                        {
+                            <h5 class="text-success text-center">Есть кворум по вопросу</h5>
+                        }
+                        else
+                        {
+                            <h5 class="text-danger text-center">Отсутствует кворум по вопросу</h5>
+                        }
+
+                        @if (qr.IsQuestionAccepted)
+                        {
+                            <h5 class="text-success text-center">Вопрос принят</h5>
+                        }
+                        else
+                        {
+                            <h5 class="text-danger text-center">Вопрос не принят</h5>
+                        }
+
+                        <p class="text-center mb-0">@qr.Agenda</p>
+                        @if (qr.DecisionType == 0)
+                        {
+                            <p class="text-center">Условие принятия вопроса: большинством от общего числа голосов собственников в доме, участвующих в собрании.</p>
+                        }
+                        else if (qr.DecisionType == 1)
+                        {
+                            <p class="text-center">Условие принятия вопроса: 50%+1 голос от общего числа голосов всех собственников помещений в многоквартирном доме.</p>
+                        }
+                        else if (qr.DecisionType == 2)
+                        {
+                            <p class="text-center">Условие принятия вопроса: не менее ⅔ голосов от общего числа голосов собственников помещений в многоквартирном доме.</p>
+                        }
+                        else if (qr.DecisionType == 3)
+                        {
+                            <p class="text-center">Условие принятия вопроса: 100%, то есть все собственники в доме должны проголосовать «за».</p>
+                        }
+
+                        <div class="row m-2">
+                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                <h5 class="mt-2">За</h5>
+
+                                <div class="border border-2 rounded-4">
+                                    <div class="pie animate" style="--p:@(Math.Round(qr.For.Percentage, 0));--c:lightgreen"> @(Math.Round(qr.For.Percentage, 2))%</div>
+                                </div>
+
+                                <p>Проголосовало @(Math.Round(qr.For.Area)) м².</p>
+                            </div>
+                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                <h5 class="mt-2">Против</h5>
+
+                                <div class="border border-2 rounded-4">
+                                    <div class="pie animate" style="--p:@(Math.Round(qr.Against.Percentage, 0));--c:LightCoral"> @(Math.Round(qr.Against.Percentage, 2))%</div>
+                                </div>
+
+                                <p>Проголосовало @(Math.Round(qr.Against.Area)) м².</p>
+                            </div>
+                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                <h5 class="mt-2">Воздержались</h5>
+
+                                <div class="border border-2 rounded-4">
+                                    <div class="pie animate" style="--p:@(Math.Round(qr.Abstained.Percentage, 0));--c:Khaki"> @(Math.Round(qr.Abstained.Percentage, 2))%</div>
+                                </div>
+
+                                <p>Проголосовало @(Math.Round(qr.Abstained.Area, 2)) м².</p>
+                            </div>
                         </div>
 
-                        <p>Проголосовало @(Math.Round(qr.For.Area)) м².</p>
-                    </div>
-                    <div class="col-4 text-center border border-2 rounded-4">
-                        <h5 class="mt-2">Против</h5>
-
-                        <div class="border border-2 rounded-4">
-                            <div class="pie animate" style="--p:@(Math.Round(qr.Against.Percentage, 0));--c:LightCoral"> @(Math.Round(qr.Against.Percentage, 2))%</div>
-                        </div>
-
-                        <p>Проголосовало @(Math.Round(qr.Against.Area)) м².</p>
-                    </div>
-                    <div class="col-4 text-center border border-2 rounded-4">
-                        <h5 class="mt-2">Воздержались</h5>
-
-                        <div class="border border-2 rounded-4">
-                            <div class="pie animate" style="--p:@(Math.Round(qr.Abstained.Percentage, 0));--c:Khaki"> @(Math.Round(qr.Abstained.Percentage, 2))%</div>
-                        </div>
-
-                        <p>Проголосовало @(Math.Round(qr.Abstained.Area, 2)) м².</p>
                     </div>
                 </div>
             }
