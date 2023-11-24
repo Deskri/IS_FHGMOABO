@@ -22,5 +22,6 @@ namespace IS_FHGMOABO.DBConection
         public DbSet<Question> Questions { get; set; }
         public DbSet<Bulletin> Bulletins { get; set; }
         public DbSet<VotingResult> VotingResults { get; set; }
+        public DbSet<MeetingResult> MeetingResults { get; set; }
     }
 }
