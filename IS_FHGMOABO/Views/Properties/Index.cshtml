@@ -88,105 +88,110 @@
 }
 else
 {
-    <table class="table table-striped table-bordered border border-2 border-dark bg-light bg-opacity-75">
-        <thead class="text-center align-middle">
-            <tr>
-                <th rowspan="2">
-                    Адрес
-                </th>
-                <th rowspan="2">
-                    Доля
-                </th>
-                <th rowspan="2">
-                    Тип
-                </th>
-                <th rowspan="2">
-                    Собственник
-                </th>
-                <th colspan="3">
-                    Документ, подтверждающий собственность
-                </th>
-                <th colspan="2">
-                    Даты
-                </th>
-                <th rowspan="2">
-                    Действия
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Тип
-                </th>
-                <th>
-                    Номер
-                </th>
-                <th>
-                    Кем выдан
-                </th>
-                <th>
-                    Дата вступления
-                </th>
-                <th>
-                    Дата окончания
-                </th>
-            </tr>
-        </thead>
-        <tbody class="align-middle">
-            @foreach (var property in Model.Properties)
-            {
-                <tr>
-                    <th>
-                        @property.Room.House.Type @property.Room.House.Street, д.@property.Room.House.Number @property.Room.Type @property.Room.Number
-                    </th>
-                    <th>
-                        @((property.Share * 100m).ToString("0.00"))%
-                    </th>
-                    <th>
-                        @property.Type
-                    </th>
-                    <th>
-                        @if (property.LegalPerson != null || Model.Properties.Count == 0)
-                        {
-                            @property.LegalPerson.Name
-                        }
-                        else
-                        {
-                            @foreach (var person in property.NaturalPersons)
-                            {
-                                @person.LastName @(" ") @person.FirstName @(" ") @(person.Patronymic != null ? person.Patronymic : "") <br>
-                            }
-                        }
-                    </th>
-                    <th>
-                        @property.TypeOfStateRegistration
-                    </th>
-                    <th>
-                        @property.StateRegistrationNumber
-                    </th>
-                    <th>
-                        @property.ByWhomIssued
-                    </th>
-                    <th>
-                        @(property.DateOfTaking.ToString("dd.MM.yyyy"))
-                    </th>
-                    <th>
-                        @(property.EndDate@* .ToString("dd.MM.yyyy") *@)
-                    </th>
-                    <th>
-                        <div class="btn-group mr-2" role="group" aria-label="First group">
+    <div class="card border-dark rounded-4 bg-light bg-opacity-50">
+        <div class="card-body">
+            <table class="table table-striped table-bordered bg-light bg-opacity-50">
+                <thead class="text-center align-middle">
+                    <tr>
+                        <th rowspan="2">
+                            Адрес
+                        </th>
+                        <th rowspan="2">
+                            Доля
+                        </th>
+                        <th rowspan="2">
+                            Тип
+                        </th>
+                        <th rowspan="2">
+                            Собственник
+                        </th>
+                        <th colspan="3">
+                            Документ, подтверждающий собственность
+                        </th>
+                        <th colspan="2">
+                            Даты
+                        </th>
+                        <th rowspan="2">
+                            Действия
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Тип
+                        </th>
+                        <th>
+                            Номер
+                        </th>
+                        <th>
+                            Кем выдан
+                        </th>
+                        <th>
+                            Дата вступления
+                        </th>
+                        <th>
+                            Дата окончания
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach (var property in Model.Properties)
+                    {
+                        <tr>
+                            <th>
+                                @property.Room.House.Type @property.Room.House.Street, д.@property.Room.House.Number @property.Room.Type @property.Room.Number
+                            </th>
+                            <th>
+                                @((property.Share * 100m).ToString("0.00"))%
+                            </th>
+                            <th>
+                                @property.Type
+                            </th>
+                            <th>
+                                @if (property.LegalPerson != null || Model.Properties.Count == 0)
+                                {
+                                    @property.LegalPerson.Name
+                                }
+                                else
+                                {
+                                    @foreach (var person in property.NaturalPersons)
+                                    {
+                                        @person.LastName @(" ") @person.FirstName @(" ") @(person.Patronymic != null ? person.Patronymic : "") <br>
+                                    }
+                                }
+                            </th>
+                            <th>
+                                @property.TypeOfStateRegistration
+                            </th>
+                            <th>
+                                @property.StateRegistrationNumber
+                            </th>
+                            <th>
+                                @property.ByWhomIssued
+                            </th>
+                            <th>
+                                @(property.DateOfTaking.ToString("dd.MM.yyyy"))
+                            </th>
+                            <th>
+                                @(property.EndDate@* .ToString("dd.MM.yyyy") *@)
+                            </th>
+                            <th>
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
 
-                            <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Properties" asp-action="Edit" asp-route-id="@(property.Id)"><i class="bi bi-pencil"></i></a>
+                                    <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Properties" asp-action="Edit" asp-route-id="@(property.Id)"><i class="bi bi-pencil"></i></a>
 
-                            <button type="button" class="btn btn-danger" title="" data-bs-toggle="modal" data-bs-target="#deletePropertyModal@(property.Id)">
-                                <i class="bi bi-trash2-fill"></i>
-                            </button>
+                                    <button type="button" class="btn btn-danger" title="" data-bs-toggle="modal" data-bs-target="#deletePropertyModal@(property.Id)">
+                                        <i class="bi bi-trash2-fill"></i>
+                                    </button>
 
-                        </div>
-                    </th>
-                </tr>
-            }
-        </tbody>
-    </table>
+                                </div>
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 
     @foreach (var property in Model.Properties)
     {
