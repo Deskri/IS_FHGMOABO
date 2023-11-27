@@ -69,5 +69,10 @@ namespace IS_FHGMOABO.DAL
         /// Навигационное свойство для связи с Bulletin
         /// </summary>
         public ICollection<Bulletin>? Bulletins { get; set; }
+
+        /// <summary>
+        /// Навигационное свойство для связи с ArchivalInformationOfMeeting
+        /// </summary>
+        public ArchivalInformationOfMeeting? ArchivalInformationOfMeeting { get; set; }
     }
 }

@@ -5,7 +5,6 @@ using IS_FHGMOABO.Services.Meetings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static IS_FHGMOABO.Models.MeetingsModels.DetailsMeetingModel;
 using static IS_FHGMOABO.Models.MeetingsModels.VotingResultsModel;
 
 namespace IS_FHGMOABO.Controllers
@@ -213,6 +212,7 @@ namespace IS_FHGMOABO.Controllers
                 var results = await _applicationDBContext.VotingResults
                                                          .Where(x => x.QuestionId == question.Id && (x.Result == 0 || x.Result == 1 || x.Result == 2))
                                                          .Include(x => x.Bulletin.Room)
+                                                         .Include(x => x.Bulletin.Property)
                                                          .ToListAsync();
 
                 model.QuestionResults.Add(MeetingsHelpers.ResponseСounter(results, question, totalHouseArea));
@@ -463,6 +463,94 @@ namespace IS_FHGMOABO.Controllers
                     };
 
                     await _applicationDBContext.AddAsync(result);
+                }
+            }
+
+            await _applicationDBContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CreateMeetingClosing(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings.Where(x => x.Id == id)
+                                                              .Include(x => x.House)
+                                                              .Include(x => x.House.Rooms)
+                                                              .Include(x => x.ArchivalInformationOfMeeting)
+                                                              .Include(x => x.Questions)
+                                                              .FirstOrDefaultAsync();
+
+            var bulletins = await _applicationDBContext.Bulletins.Where(x => x.MeetingId == id)
+                                                                 .Include(x => x.VotingResults)
+                                                                 .Include(x => x.Room)
+                                                                 .Include(x => x.Property)
+                                                                 .ToListAsync();
+
+            decimal NonOwnershipArea = 0;
+
+            foreach (var room in meeting.House.Rooms)
+            {
+                if (!room.IsPrivatized)
+                {
+                    NonOwnershipArea += room.TotalArea;
+                }
+            }
+
+            int _ownersParticipated = 0;
+            decimal _participatingArea = 0;
+
+            foreach (var bulletin in bulletins)
+            {
+                for (int i = 0; i < bulletin.VotingResults.Count; i++)
+                {
+                    if (bulletin.VotingResults.ToList()[i].Result != null)
+                    {
+                        _ownersParticipated++;
+                        _participatingArea += bulletin.Room.TotalArea * bulletin.Property.Share;
+                        i = bulletin.VotingResults.Count;
+                    }
+                }
+            }
+
+            meeting.ArchivalInformationOfMeeting = new ArchivalInformationOfMeeting()
+            {
+                MeetingId = id,
+                TotalAreaHouse = meeting.House.NonResidentialPremisesPassportedArea + meeting.House.ResidentialPremisesPassportedArea,
+                ResidentialAreaInOwnership = meeting.House.ResidentialPremisesPassportedArea - NonOwnershipArea,
+                ResidentialAreaInNonOwnership = NonOwnershipArea,
+                NonresidentialArea = meeting.House.NonResidentialPremisesPassportedArea,
+                OwnersParticipated = _ownersParticipated,
+                ParticipatingArea = _participatingArea,
+            };
+
+            foreach (var question in meeting.Questions)
+            {
+                question.MeetingResult = new MeetingResult()
+                {
+                    AreaFor = 0,
+                    AreaAgainst = 0,
+                    AreaAbstained = 0,
+                };
+
+                foreach (var bulletin in bulletins)
+                {
+                    var _votingResult = bulletin.VotingResults.Where(x => x.QuestionId == question.Id).FirstOrDefault();
+                    switch (_votingResult.Result)
+                    {
+                        case 1:
+                            question.MeetingResult.AreaFor += bulletin.Room.TotalArea * bulletin.Property.Share;
+                            break;
+                        case 0:
+                            question.MeetingResult.AreaAgainst += bulletin.Room.TotalArea * bulletin.Property.Share;
+                            break;
+                        case 2:
+                            question.MeetingResult.AreaAbstained += bulletin.Room.TotalArea * bulletin.Property.Share;
+                            break;
+                        default: 
+                            break;
+                    }
                 }
             }
 

@@ -1,9 +1,7 @@
-﻿using Azure;
-using IS_FHGMOABO.DAL;
+﻿using IS_FHGMOABO.DAL;
 using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models.MeetingsModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Xceed.Words.NET;
 using static IS_FHGMOABO.Models.MeetingsModels.DetailsMeetingModel;
@@ -110,7 +108,7 @@ namespace IS_FHGMOABO.Services.Meetings
         /// <returns>Модель отображения в представлении информации о вопросе</returns>
         public static QuestionResult ResponseСounter(List<VotingResult> results, Question question, decimal totalHouseArea)
         {
-            var areaQuestion = results.Sum(x => x.Bulletin.Room.TotalArea);
+            var areaQuestion = results.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
 
             bool quorum = areaQuestion / totalHouseArea * 100 > 50 ? true : false;
 
@@ -135,9 +133,9 @@ namespace IS_FHGMOABO.Services.Meetings
                     resultsAgainst = results.Where(x => x.Result == 0);
                     resultsAbstained = results.Where(x => x.Result == 2);
 
-                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
+                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
 
                     if (areaQuestion != 0)
                     {
@@ -158,9 +156,9 @@ namespace IS_FHGMOABO.Services.Meetings
                     resultsAgainst = results.Where(x => x.Result == 0);
                     resultsAbstained = results.Where(x => x.Result == 2);
 
-                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
+                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
 
                     if (areaQuestion != 0)
                     {
@@ -181,9 +179,9 @@ namespace IS_FHGMOABO.Services.Meetings
                     resultsAgainst = results.Where(x => x.Result == 0);
                     resultsAbstained = results.Where(x => x.Result == 2);
 
-                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
+                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
 
                     if (areaQuestion != 0)
                     {
@@ -204,9 +202,9 @@ namespace IS_FHGMOABO.Services.Meetings
                     resultsAgainst = results.Where(x => x.Result == 0);
                     resultsAbstained = results.Where(x => x.Result == 2);
 
-                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea);
-                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea);
+                    areaFor = resultsFor.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAgainst = resultsAgainst.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
+                    areaAbstained = resultsAbstained.Sum(x => x.Bulletin.Room.TotalArea * x.Bulletin.Property.Share);
 
                     if (areaQuestion != 0)
                     {
