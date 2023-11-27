@@ -105,21 +105,6 @@ namespace IS_FHGMOABO.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var house = await _applicationDBContext.Houses.FindAsync(id);
-
-            if (house != null)
-            {
-                _applicationDBContext.Remove(house);
-                _applicationDBContext.SaveChanges();
-            }
-
-            return RedirectToAction("Index", "House");
-        }
-
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {

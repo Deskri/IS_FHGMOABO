@@ -20,7 +20,7 @@
     </div>
 </div>
 
-<div class="row mt-3 shadow">
+<div class="row mt-3">
 
     @if (Model.Houses == null || Model.Houses.Count == 0)
     {
@@ -33,8 +33,8 @@
         @foreach (var house in Model.Houses)
         {
             <div class="col-lg-6 mt-3">
-                <div class="card shadow rounded-4">
-                    <div class="card-header bg-dark bg-gradient text-light rounded-top-4">
+                <div class="card border-dark shadow rounded-4">
+                    <div class="card-header bg-gradient rounded-top-4">
 
                         <div class="row">
                             <div class="col-11 text-center">
@@ -62,14 +62,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-dark bg-gradient text-end rounded-bottom-4">
+                    <div class="card-footer bg-gradient text-end rounded-bottom-4">
 
                         <a class="btn btn-warning mt-1 mb-1 me-1" asp-controller="Room" asp-action="Index" asp-route-id="@house.Id"><i class="bi bi-building-fill-up"></i> Помещения</a>
                         <button id="detailsButton_@house.Id" type="button" class="btn btn-warning mt-1 mb-1 ms-1 me-1" data-bs-toggle="modal" data-bs-target="#detailsModal_@house.Id">
                             <i class="bi bi-search"></i> Подробнее
-                        </button>
-                        <button class="btn btn-danger mt-1 mb-1 ms-1" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteHouseModal@(house.Id)">
-                            <i class="bi bi-trash2-fill"></i> Удалить
                         </button>
 
                     </div>
@@ -77,7 +74,6 @@
             </div>
 
             @await Html.PartialAsync("Details", house)
-            @await Html.PartialAsync("Delete", house.Id)
         }
     }
 
