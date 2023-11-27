@@ -644,5 +644,24 @@ namespace IS_FHGMOABO.Services.Meetings
                 }
             }
         }
+        public static MemoryStream MeetingProtocol(Meeting meeting)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (DocX document = DocX.Create(memoryStream))
+                {
+                    document.SetDefaultFont(new Font("Times New Roman"), 11);
+
+                    document.MarginLeft = 36;
+                    document.MarginRight = 36;
+                    document.MarginTop = 36;
+                    document.MarginBottom = 36;
+
+                    Paragraph header = document.InsertParagraph();
+
+                    return memoryStream;
+                }
+            }
+        }
     }
 }

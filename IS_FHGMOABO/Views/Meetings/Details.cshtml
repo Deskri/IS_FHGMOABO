@@ -22,24 +22,42 @@
                     <h2 class="mb-3">
                         Собрание собственников
                     </h2>
-                    <h5 class="mb-2">
-                        Статус: @Model.Meeting.Status
-                    </h5>
-                    <h5 class="mb-2">
+                    <p class="d-inline text-nowrap">
+                        Статус:
+                    </p>
+                    <h4 class="d-inline text-nowrap">
+                        @if (Model.Meeting.Status == "Создано" && Model.Meeting.StartDate.AddDays(-10) > DateTime.Now)
+                        {
+                            <span class="badge rounded-pill bg-primary">Запланировано</span>
+                        }
+                        else if (Model.Meeting.Status == "Создано" && Model.Meeting.StartDate.AddDays(-10) <= DateTime.Now)
+                        {
+                            <span class="badge rounded-pill bg-danger text-black">Требуется сформировать повестку дня</span>
+                        }
+                        else if (Model.Meeting.Status != "Создано" && Model.Meeting.Status != "Завершено")
+                        {
+                            <span class="badge rounded-pill bg-info">@Model.Meeting.Status</span>
+                        }
+                        else if (Model.Meeting.Status == "Завершено")
+                        {
+                            <span class="badge rounded-pill bg-success">@Model.Meeting.Status</span>
+                        }
+                    </h4>
+                    <p class="mb-1">
                         Адрес: @Model.Meeting.House.Type @Model.Meeting.House.Street, д.@Model.Meeting.House.Number
-                    </h5>
-                    <h5 class="mb-2">
+                    </p>
+                    <p class="mb-1">
                         Дата проведения: @Model.Meeting.StartDate.ToString("dd.MM.yyyy")
-                    </h5>
-                    <h5 class="mb-2">
+                    </p>
+                    <p class="mb-1">
                         Формат проведения: @Model.Meeting.Format
-                    </h5>
-                    <h5 class="mb-2">
+                    </p>
+                    <p class="mb-1">
                         Председатель: @Model.Meeting.Chairperson
-                    </h5>
-                    <h5 class="mb-2">
+                    </p>
+                    <p class="mb-1">
                         Секретарь: @Model.Meeting.Secretary
-                    </h5>
+                    </p>
                     <h5 class="mb-2">
                         Счетная комиссия:
                     </h5>
@@ -67,14 +85,56 @@
 
                 <div class="col-4 text-end">
                     <div class="btn-group-vertical">
-                        <a href="/Meetings/CreateNotification?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Meeting.Id">Сформировать реестр голосования</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Meeting.Id">Сформировать бюллетени</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingResults" asp-route-id="@Model.Meeting.Id">Сформировать подсчет голосов</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateMeetingClosing" asp-route-id="@Model.Meeting.Id">Закончить собрание</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Meeting.Id">Перейти к бюллетеням</a>
-                        <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="VotingResults" asp-route-id="@Model.Meeting.Id">Перейти к подсчету голосов</a>
-                        <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                        @if (Model.Meeting.Status == "Создано")
+                        {
+                            <a href="/Meetings/CreateNotification?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Сформировать повестку дня</a>
+                        }
+                        @if (Model.Meeting.Status == "Сформирована повестка дня")
+                        {
+                            @if (Model.Meeting.Format == "Очное")
+                            {
+                                <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingRegister" asp-route-id="@Model.Meeting.Id">Сформировать реестр голосования</a>
+                            }
+                            @if (Model.Meeting.Format == "Заочное")
+                            {
+                                <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletins" asp-route-id="@Model.Meeting.Id">Сформировать бюллетени</a>
+                            }
+                            @if (Model.Meeting.Format == "Очно-заочное")
+                            {
+                                <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateBulletinsAndVotingRegister" asp-route-id="@Model.Meeting.Id">Сформировать бюллетени и реестр голосования</a>
+                            }
+                        }
+                        @if (Model.Meeting.Status == "Сформирован реестр голосования"
+                        || Model.Meeting.Status == "Сформированы бюллетени голосования"
+                        || Model.Meeting.Status == "Сформированы бюллетени и реестр голосования")
+                        {
+                            <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateVotingResults" asp-route-id="@Model.Meeting.Id">Сформировать подсчет голосов</a>
+                        }
+                        @if (Model.Meeting.Status != "Создано" && Model.Meeting.Status != "Сформирована повестка дня" && Model.Meeting.Status != "Завершено")
+                        {
+                            @if (Model.Meeting.Format == "Очное")
+                            {
+                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                            }
+                            @if (Model.Meeting.Format == "Заочное")
+                            {
+                                <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Meeting.Id">Перейти к бюллетеням</a>
+                            }
+                            @if (Model.Meeting.Format == "Очно-заочное")
+                            {
+                                <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Meeting.Id">Перейти к бюллетеням</a>
+                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                            }
+                        }
+                        @if (Model.Meeting.Status == "Проходит подсчет голосов")
+                        {
+                            <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="VotingResults" asp-route-id="@Model.Meeting.Id">Перейти к подсчету голосов</a>
+                            <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="CreateMeetingClosing" asp-route-id="@Model.Meeting.Id">Закончить собрание</a>
+                        }
+                        @if (Model.Meeting.Status == "Завершено")
+                        {
+                            <a href="/Meetings/PrintProtocol?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать протокол</a>
+                        }
                     </div>
                 </div>
             </div>
@@ -107,84 +167,87 @@
             </div>
         </div>
 
-        <div class="card m-2 rounded-4">
-            @foreach (var qr in Model.QuestionResults)
-            {
-                <div class="card bg-opacity-10 rounded-4 m-3 @(qr.IsThereQuorum && qr.IsQuestionAccepted?"bg-success":"bg-danger")">
-                    <div class="card-body">
+        @if (Model.Meeting.Status == "Проходит подсчет голосов")
+        {
+            <div class="card m-2 rounded-4">
+                @foreach (var qr in Model.QuestionResults)
+                {
+                    <div class="card bg-opacity-10 rounded-4 m-3 @(qr.IsThereQuorum && qr.IsQuestionAccepted?"bg-success":"bg-danger")">
+                        <div class="card-body">
 
-                        <h4 class="mt-1 text-center">Вопрос @qr.Number</h4>
+                            <h4 class="mt-1 text-center">Вопрос @qr.Number</h4>
 
-                        @if (qr.IsThereQuorum)
-                        {
-                            <h5 class="text-success text-center">Есть кворум по вопросу</h5>
-                        }
-                        else
-                        {
-                            <h5 class="text-danger text-center">Отсутствует кворум по вопросу</h5>
-                        }
+                            @if (qr.IsThereQuorum)
+                            {
+                                <h5 class="text-success text-center">Есть кворум по вопросу</h5>
+                            }
+                            else
+                            {
+                                <h5 class="text-danger text-center">Отсутствует кворум по вопросу</h5>
+                            }
 
-                        @if (qr.IsQuestionAccepted)
-                        {
-                            <h5 class="text-success text-center">Вопрос принят</h5>
-                        }
-                        else
-                        {
-                            <h5 class="text-danger text-center">Вопрос не принят</h5>
-                        }
+                            @if (qr.IsQuestionAccepted)
+                            {
+                                <h5 class="text-success text-center">Вопрос принят</h5>
+                            }
+                            else
+                            {
+                                <h5 class="text-danger text-center">Вопрос не принят</h5>
+                            }
 
-                        <p class="text-center mb-0">@qr.Agenda</p>
-                        @if (qr.DecisionType == 0)
-                        {
-                            <p class="text-center">Условие принятия вопроса: большинством от общего числа голосов собственников в доме, участвующих в собрании.</p>
-                        }
-                        else if (qr.DecisionType == 1)
-                        {
-                            <p class="text-center">Условие принятия вопроса: 50%+1 голос от общего числа голосов всех собственников помещений в многоквартирном доме.</p>
-                        }
-                        else if (qr.DecisionType == 2)
-                        {
-                            <p class="text-center">Условие принятия вопроса: не менее ⅔ голосов от общего числа голосов собственников помещений в многоквартирном доме.</p>
-                        }
-                        else if (qr.DecisionType == 3)
-                        {
-                            <p class="text-center">Условие принятия вопроса: 100%, то есть все собственники в доме должны проголосовать «за».</p>
-                        }
+                            <p class="text-center mb-0">@qr.Agenda</p>
+                            @if (qr.DecisionType == 0)
+                            {
+                                <p class="text-center">Условие принятия вопроса: большинством от общего числа голосов собственников в доме, участвующих в собрании.</p>
+                            }
+                            else if (qr.DecisionType == 1)
+                            {
+                                <p class="text-center">Условие принятия вопроса: 50%+1 голос от общего числа голосов всех собственников помещений в многоквартирном доме.</p>
+                            }
+                            else if (qr.DecisionType == 2)
+                            {
+                                <p class="text-center">Условие принятия вопроса: не менее ⅔ голосов от общего числа голосов собственников помещений в многоквартирном доме.</p>
+                            }
+                            else if (qr.DecisionType == 3)
+                            {
+                                <p class="text-center">Условие принятия вопроса: 100%, то есть все собственники в доме должны проголосовать «за».</p>
+                            }
 
-                        <div class="row m-2">
-                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
-                                <h5 class="mt-2">За</h5>
+                            <div class="row m-2">
+                                <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                    <h5 class="mt-2">За</h5>
 
-                                <div class="border border-2 rounded-4">
-                                    <div class="pie animate" style="--p:@(Math.Round(qr.For.Percentage, 0));--c:lightgreen"> @(Math.Round(qr.For.Percentage, 2))%</div>
+                                    <div class="border border-2 rounded-4">
+                                        <div class="pie animate" style="--p:@(Math.Round(qr.For.Percentage, 0));--c:lightgreen"> @(Math.Round(qr.For.Percentage, 2))%</div>
+                                    </div>
+
+                                    <p>Проголосовало @(Math.Round(qr.For.Area)) м².</p>
                                 </div>
+                                <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                    <h5 class="mt-2">Против</h5>
 
-                                <p>Проголосовало @(Math.Round(qr.For.Area)) м².</p>
-                            </div>
-                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
-                                <h5 class="mt-2">Против</h5>
+                                    <div class="border border-2 rounded-4">
+                                        <div class="pie animate" style="--p:@(Math.Round(qr.Against.Percentage, 0));--c:LightCoral"> @(Math.Round(qr.Against.Percentage, 2))%</div>
+                                    </div>
 
-                                <div class="border border-2 rounded-4">
-                                    <div class="pie animate" style="--p:@(Math.Round(qr.Against.Percentage, 0));--c:LightCoral"> @(Math.Round(qr.Against.Percentage, 2))%</div>
+                                    <p>Проголосовало @(Math.Round(qr.Against.Area)) м².</p>
                                 </div>
+                                <div class="col-4 text-center border border-2 rounded-4 bg-light">
+                                    <h5 class="mt-2">Воздержались</h5>
 
-                                <p>Проголосовало @(Math.Round(qr.Against.Area)) м².</p>
-                            </div>
-                            <div class="col-4 text-center border border-2 rounded-4 bg-light">
-                                <h5 class="mt-2">Воздержались</h5>
+                                    <div class="border border-2 rounded-4">
+                                        <div class="pie animate" style="--p:@(Math.Round(qr.Abstained.Percentage, 0));--c:Khaki"> @(Math.Round(qr.Abstained.Percentage, 2))%</div>
+                                    </div>
 
-                                <div class="border border-2 rounded-4">
-                                    <div class="pie animate" style="--p:@(Math.Round(qr.Abstained.Percentage, 0));--c:Khaki"> @(Math.Round(qr.Abstained.Percentage, 2))%</div>
+                                    <p>Проголосовало @(Math.Round(qr.Abstained.Area, 2)) м².</p>
                                 </div>
-
-                                <p>Проголосовало @(Math.Round(qr.Abstained.Area, 2)) м².</p>
                             </div>
+
                         </div>
-
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
 
     </div>
 
