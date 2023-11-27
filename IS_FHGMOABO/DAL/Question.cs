@@ -65,5 +65,7 @@ namespace IS_FHGMOABO.DAL
         /// Навигационное свойство для связи с VotingResult
         /// </summary>
         public ICollection<VotingResult>? VotingResults { get; set; }
+
+        public MeetingResult? MeetingResult { get; set; }
     }
 }

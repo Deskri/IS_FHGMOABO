@@ -4,6 +4,7 @@ using IS_FHGMOABO.DBConection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IS_FHGMOABO.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231124073015_Add MeetingResults")]
+    partial class AddMeetingResults
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,42 +24,6 @@ namespace IS_FHGMOABO.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("IS_FHGMOABO.DAL.ArchivalInformationOfMeeting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MeetingId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("NonresidentialArea")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("OwnersParticipated")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ParticipatingArea")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ResidentialAreaInNonOwnership")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("ResidentialAreaInOwnership")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalAreaHouse")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MeetingId");
-
-                    b.ToTable("ArchivalInformationOfMeetings");
-                });
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.Bulletin", b =>
                 {
@@ -651,17 +618,6 @@ namespace IS_FHGMOABO.Migrations
                     b.HasIndex("PropertiesId");
 
                     b.ToTable("NaturalPersonProperty");
-                });
-
-            modelBuilder.Entity("IS_FHGMOABO.DAL.ArchivalInformationOfMeeting", b =>
-                {
-                    b.HasOne("IS_FHGMOABO.DAL.Meeting", "Meeting")
-                        .WithMany()
-                        .HasForeignKey("MeetingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Meeting");
                 });
 
             modelBuilder.Entity("IS_FHGMOABO.DAL.Bulletin", b =>
