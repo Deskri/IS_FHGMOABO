@@ -7,8 +7,10 @@ namespace IS_FHGMOABO.Models.PropertiesModels
     {
         public int Id { get; set; }
 
+        [Display(Name = "Юридическое лицо")]
         public EditLegalPerson? LegalPerson { get; set; }
 
+        [Display(Name = "Физическое лицо")]
         public List<EditNaturalPerson>? NaturalPerson { get; set; }
 
         public string Type { get; set; }
