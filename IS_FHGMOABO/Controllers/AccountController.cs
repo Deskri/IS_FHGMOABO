@@ -1,4 +1,5 @@
 ﻿using IS_FHGMOABO.Models.AccountsModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,6 +49,7 @@ namespace IS_FHGMOABO.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model)
         {
@@ -58,7 +60,6 @@ namespace IS_FHGMOABO.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
