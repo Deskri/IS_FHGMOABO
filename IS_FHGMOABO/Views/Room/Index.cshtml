@@ -42,105 +42,109 @@
 }
 else
 {
-    <table class="table table-striped table-bordered border border-2 border-dark bg-light bg-opacity-75">
-        <thead class="text-center align-middle">
-            <tr>
-                <th rowspan="2">
-                    Номер
-                </th>
-                <th rowspan="2">
-                    Назначение
-                </th>
-                <th colspan="3">
-                    Площади
-                </th>
-                <th rowspan="2">
-                    Этаж
-                </th>
-                <th rowspan="2">
-                    Подъезд
-                </th>
-                <th rowspan="2">
-                    Кадастровый номер
-                </th>
-                <th rowspan="2">
-                    Приватизировано
-                </th>
-                <th rowspan="2">
-                    Дейстия
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    Общая площадь
-                </th>
-                <th>
-                    Жилая площадь
-                </th>
-                <th>
-                    Полезная площадь
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var room in Model.Rooms)
-            {
-                <tr>
-                    <th>
-                        @room.Type №@room.Number
-                    </th>
-                    <th>
-                        @room.Purpose
-                    </th>
-                    <th>
-                        @room.TotalArea
-                    </th>
-                    <th>
-                        @room.LivingArea
-                    </th>
-                    <th>
-                        @room.UsableArea
-                    </th>
-                    <th>
-                        @room.Floor
-                    </th>
-                    <th>
-                        @room.Entrance
-                    </th>
-                    <th>
-                        @room.CadastralNumber
-                    </th>
-
-                    @if (room.IsPrivatized)
-                    {
-                        <th>
-                            Да
+    <div class="card border-dark rounded-4 bg-light bg-opacity-50">
+        <div class="card-body">
+            <table class="table table-striped table-bordered bg-light bg-opacity-50">
+                <thead class="text-center align-middle">
+                    <tr>
+                        <th rowspan="2">
+                            Номер
                         </th>
-                    }
-                    else
-                    {
-                        <th>
-                            Нет
+                        <th rowspan="2">
+                            Назначение
                         </th>
+                        <th colspan="3">
+                            Площади
+                        </th>
+                        <th rowspan="2">
+                            Этаж
+                        </th>
+                        <th rowspan="2">
+                            Подъезд
+                        </th>
+                        <th rowspan="2">
+                            Кадастровый номер
+                        </th>
+                        <th rowspan="2">
+                            Приватизировано
+                        </th>
+                        <th rowspan="2">
+                            Дейстия
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Общая площадь
+                        </th>
+                        <th>
+                            Жилая площадь
+                        </th>
+                        <th>
+                            Полезная площадь
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <tr>
+                            <th>
+                                @room.Type №@room.Number
+                            </th>
+                            <th>
+                                @room.Purpose
+                            </th>
+                            <th>
+                                @room.TotalArea
+                            </th>
+                            <th>
+                                @room.LivingArea
+                            </th>
+                            <th>
+                                @room.UsableArea
+                            </th>
+                            <th>
+                                @room.Floor
+                            </th>
+                            <th>
+                                @room.Entrance
+                            </th>
+                            <th>
+                                @room.CadastralNumber
+                            </th>
+
+                            @if (room.IsPrivatized)
+                            {
+                                <th>
+                                    Да
+                                </th>
+                            }
+                            else
+                            {
+                                <th>
+                                    Нет
+                                </th>
+                            }
+                            <th class="text-center">
+
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+
+                                    <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Room" asp-action="Edit" asp-route-id="@(room.Id)"><i class="bi bi-pencil"></i></a>
+
+                                    <button type="button" class="btn btn-danger" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteRoomModal@(room.Id)">
+                                        <i class="bi bi-trash2-fill"></i>
+                                    </button>
+
+                                </div>
+
+                            </th>
+
+                        </tr>
                     }
-                    <th class="text-center">
-
-                        <div class="btn-group mr-2" role="group" aria-label="First group">
-
-                            <a class="btn btn-warning" title="Изменить" asp-area="" asp-controller="Room" asp-action="Edit" asp-route-id="@(room.Id)"><i class="bi bi-pencil"></i></a>
-
-                            <button type="button" class="btn btn-danger" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteRoomModal@(room.Id)">
-                                <i class="bi bi-trash2-fill"></i>
-                            </button>
-
-                        </div>
-
-                    </th>
-
-                </tr>
-            }
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
 @foreach (var room in Model.Rooms)

@@ -35,7 +35,7 @@ else
         @foreach (var meeting in Model)
         {
             <div class="col-6 mt-2 mb-2">
-                <div class="card border-dark rounded-4">
+                <div class="card border-dark rounded-4 shadow">
                     <div class="card-header">
                         <h5 class="card-title mt-2">
                             Собрание собственников по адресу: @meeting.House.Type @meeting.House.Street, д.@meeting.House.Number
@@ -52,7 +52,15 @@ else
                             }
                             else if (meeting.Status == "Создано" && meeting.StartDate.AddDays(-10) <= DateTime.Now)
                             {
-                                <span class="badge rounded-pill bg-warning text-black">Требуется сформировать повестку дня</span>
+                                <span class="badge rounded-pill bg-danger text-black">Требуется сформировать повестку дня</span>
+                            }
+                            else if (meeting.Status != "Создано" && meeting.Status != "Завершено")
+                            {
+                                <span class="badge rounded-pill bg-info">@meeting.Status</span>
+                            }
+                            else if (meeting.Status == "Завершено")
+                            {
+                                <span class="badge rounded-pill bg-success">@meeting.Status</span>
                             }
                         </h4>
                         <p class="card-text mt-4">

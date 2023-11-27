@@ -347,6 +347,12 @@ namespace IS_FHGMOABO.Controllers
 
             var memoryStream = MeetingsDocuments.MeetingNotification(meeting);
 
+            if (meeting.Status == "Создано")
+            {
+                meeting.Status = "Сформирована повестка дня";
+                _applicationDBContext.SaveChanges();
+            }
+
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Уведомление о проведении ОСС.docx");
         }
 
@@ -392,6 +398,12 @@ namespace IS_FHGMOABO.Controllers
                     }
                 }
             }
+
+            if (meeting.Status == "Сформирована повестка дня")
+            {
+                meeting.Status = "Сформирован реестр голосования";
+            }
+
             await _applicationDBContext.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = id });
@@ -439,6 +451,65 @@ namespace IS_FHGMOABO.Controllers
                     }
                 }
             }
+
+            if (meeting.Status == "Сформирована повестка дня")
+            {
+                meeting.Status = "Сформированы бюллетени голосования";
+            }
+
+            await _applicationDBContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CreateBulletinsAndVotingRegister(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings
+                                                     .Where(x => x.Id == id)
+                                                     .Include(x => x.House)
+                                                     .Include(x => x.Bulletins)
+                                                     .FirstOrDefaultAsync();
+
+            meeting.House.Rooms = await _applicationDBContext.Rooms
+                                                             .Where(x => x.HouseId == meeting.HouseId)
+                                                             .Include(x => x.Properties)
+                                                             .ToListAsync();
+
+            if (meeting.Bulletins == null || meeting.Bulletins.Count == 0)
+            {
+                foreach (var room in meeting.House.Rooms)
+                {
+                    if (!room.IsPrivatized)
+                    {
+                        meeting.Bulletins.Add(new Bulletin()
+                        {
+                            RoomId = room.Id,
+                        });
+                    }
+                    else
+                    {
+                        foreach (var property in room.Properties)
+                        {
+                            if (property.EndDate == null)
+                            {
+                                meeting.Bulletins.Add(new Bulletin()
+                                {
+                                    RoomId = room.Id,
+                                    PropertyId = property.Id,
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (meeting.Status == "Сформирована повестка дня")
+            {
+                meeting.Status = "Сформированы бюллетени и реестр голосования";
+            }
+
             await _applicationDBContext.SaveChangesAsync();
 
             return RedirectToAction("Details", new { id = id });
@@ -448,6 +519,8 @@ namespace IS_FHGMOABO.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateVotingResults(int id)
         {
+            var meeting = await _applicationDBContext.Meetings.Where(x => x.Id == id).FirstOrDefaultAsync();
+
             var bulletins = await _applicationDBContext.Bulletins.Where(x => x.MeetingId == id)
                                                                  .Include(x => x.Meeting.Questions)
                                                                  .ToListAsync();
@@ -464,6 +537,13 @@ namespace IS_FHGMOABO.Controllers
 
                     await _applicationDBContext.AddAsync(result);
                 }
+            }
+
+            if (meeting.Status == "Сформирован реестр голосования" 
+                || meeting.Status == "Сформированы бюллетени голосования" 
+                || meeting.Status == "Сформированы бюллетени и реестр голосования")
+            {
+                meeting.Status = "Проходит подсчет голосов";
             }
 
             await _applicationDBContext.SaveChangesAsync();
@@ -552,6 +632,11 @@ namespace IS_FHGMOABO.Controllers
                             break;
                     }
                 }
+            }
+
+            if (meeting.Status == "Проходит подсчет голосов")
+            {
+                meeting.Status = "Завершено";
             }
 
             await _applicationDBContext.SaveChangesAsync();
