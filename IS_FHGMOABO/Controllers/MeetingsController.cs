@@ -633,5 +633,25 @@ namespace IS_FHGMOABO.Controllers
 
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетенm общего собрания от {bulletin.Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletin.Room.House.Type} {bulletin.Room.House.Street}, дом {bulletin.Room.House.Number} {bulletin.Room.Type} {bulletin.Room.Number}.docx");
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintBulletinsWithoutAttachment(int id)
+        {
+            var bulletins = await _applicationDBContext.Bulletins
+                                           .Where(x => x.MeetingId == id)
+                                           .Include(x => x.Meeting)
+                                           .Include(x => x.Meeting.Questions)
+                                           .Include(x => x.Property)
+                                           .Include(x => x.Property.LegalPerson)
+                                           .Include(x => x.Property.NaturalPersons)
+                                           .Include(x => x.Room)
+                                           .Include(x => x.Room.House)
+                                           .ToListAsync();
+
+            var memoryStream = MeetingsDocuments.MeetingBulletinsWithoutAttachment(bulletins);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания от {bulletins[0].Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletins[0].Room.House.Type} {bulletins[0].Room.House.Street}, дом {bulletins[0].Room.House.Number} (без приложений).docx");
+        }
     }
 }
