@@ -1,8 +1,237 @@
-﻿@{
+﻿@model IS_FHGMOABO.Models.HomeModels.IndexModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row m-2">
+    <div class="col-12">
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-5" style="background-image: url('https://images.wallpaperscraft.ru/image/single/gorod_pejzazh_art_164397_1920x3456.jpg');background-position: center;background-size: cover;">
+                <h1 class="text-center text-light pt-5" style="text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+                1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">
+                    Добро пожаловать в информационную систему
+                </h1>
+                <h1 class="text-center text-warning pb-5" style="text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+                1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">
+                    "Общедомовые собрания собственников"
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-3">
+                <h4 class="text-center mb-3">Текущие собрания</h4>
+                <div class="card shadow border-dark rounded-4 bg-light bg-opacity-50 p-1">
+                    <table class="table-light table-striped bg-light bg-opacity-10">
+                        <tbody>
+                            @if (Model.СurrentMeetings.Count == 0)
+                            {
+                                <tr>
+                                    <th class="p-2 text-center">Нет в системе активных собраний.</th>
+                                </tr>
+                            }
+                            else if (Model.СurrentMeetings.Count < 5)
+                            {
+
+                                @for (int i = 0; i < Model.СurrentMeetings.Count; i++)
+                                {
+                                    <tr>
+                                        <th class="p-2 text-center">@(i + 1).</th>
+                                        <td class="p-2">
+                                            <a class="text-black" asp-controller="Meetings" asp-action="Details" asp-route-id="@Model.СurrentMeetings[i].Id">
+                                                @Model.СurrentMeetings[i].House.Type @Model.СurrentMeetings[i].House.Street, д. @Model.СurrentMeetings[i].House.Number от @Model.СurrentMeetings[i].StartDate.ToString("dd.MM.yyyy")
+                                                @if (Model.СurrentMeetings[i].Status == "Создано" && Model.СurrentMeetings[i].StartDate.AddDays(-10) > DateTime.Now)
+                                                {
+                                                    <span class="badge rounded-pill bg-primary">Запланировано</span>
+                                                }
+                                                else if (Model.СurrentMeetings[i].Status == "Создано" && Model.СurrentMeetings[i].StartDate.AddDays(-10) <= DateTime.Now)
+                                                {
+                                                    <span class="badge rounded-pill bg-danger text-black">Требуется сформировать повестку дня</span>
+                                                }
+                                                else if (Model.СurrentMeetings[i].Status != "Создано" && Model.СurrentMeetings[i].Status != "Завершено")
+                                                {
+                                                    <span class="badge rounded-pill bg-info">@Model.СurrentMeetings[i].Status</span>
+                                                }
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    <tr>
+                                        <th class="p-2 text-center">@(i + 1).</th>
+                                        <td class="p-2">
+                                            <a class="text-black" asp-controller="Meetings" asp-action="Details" asp-route-id="@Model.СurrentMeetings[i].Id">
+                                                @Model.СurrentMeetings[i].House.Type @Model.СurrentMeetings[i].House.Street, д. @Model.СurrentMeetings[i].House.Number от @Model.СurrentMeetings[i].StartDate.ToString("dd.MM.yyyy")
+                                                @if (Model.СurrentMeetings[i].Status == "Создано" && Model.СurrentMeetings[i].StartDate.AddDays(-10) > DateTime.Now)
+                                                {
+                                                    <span class="badge rounded-pill bg-primary">Запланировано</span>
+                                                }
+                                                else if (Model.СurrentMeetings[i].Status == "Создано" && Model.СurrentMeetings[i].StartDate.AddDays(-10) <= DateTime.Now)
+                                                {
+                                                    <span class="badge rounded-pill bg-danger text-black">Требуется сформировать повестку дня</span>
+                                                }
+                                                else if (Model.СurrentMeetings[i].Status != "Создано" && Model.СurrentMeetings[i].Status != "Завершено")
+                                                {
+                                                    <span class="badge rounded-pill bg-info">@Model.СurrentMeetings[i].Status</span>
+                                                }
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <a class="text-center mt-2 mb-2" asp-controller="Meetings" asp-action="Index">Перейти ко всем собраниям...</a>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-3">
+                <h4 class="text-center mb-2">Собраний за 3 года</h4>
+                <div class="card shadow border-dark rounded-4 bg-light bg-opacity-50 p-1">
+                    <div>
+                        <canvas id="meetingsAtYears"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-3">
+                <h4 class="text-center mb-2">Сегодняшняя дата</h4>
+                <h1 class="text-center text-warning" style="text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+                1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;">
+                    @DateTime.Now.ToString("dd.MM.yyyy")
+                </h1>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-3">
+                <h4 class="text-center mb-3">Дома в системе</h4>
+                <div class="card shadow border-dark rounded-4 bg-light bg-opacity-50 p-1">
+                    <table class="table-light table-striped bg-light bg-opacity-10">
+
+                        @if (Model.Houses.Count == 0)
+                        {
+                            <tbody>
+                                <tr>
+                                    <th class="p-2 text-center">Нет домов в системе.</th>
+                                </tr>
+                            </tbody>
+                        }
+                        else if (Model.Houses.Count < 5)
+                        {
+                            <thead>
+                                <tr>
+                                    <th class="p-2 text-center">
+                                        #
+                                    </th>
+                                    <th class="p-2 text-center">
+                                        Дом
+                                    </th>
+                                    <th class="p-2 text-center">
+                                        Помещений
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Houses.Count; i++)
+                                {
+
+                                    <tr>
+                                        <th class="p-2 text-center">@(i + 1).</th>
+                                        <td class="p-2 text-center">
+                                            @Model.Houses[i].Type @Model.Houses[i].Street, д. @Model.Houses[i].Number
+                                        </td>
+                                        <td class="p-2 text-center">
+                                            <a class="text-black" asp-controller="Room" asp-action="Index" asp-route-id="@Model.Houses[i].Id">
+                                                @Model.Houses[i].Rooms.Count
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        }
+                    </table>
+                </div>
+                <a class="text-center mt-2 mb-2" asp-controller="House" asp-action="Index">Перейти в раздел с домами...</a>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="card shadow border-dark rounded-4 bg-secondary bg-opacity-10 p-3">
+                <h4 class="text-center mb-2">Принятые и непринятые собрания</h4>
+                <div class="card shadow border-dark rounded-4 bg-light bg-opacity-50 m-5 mb-0 mt-0 p-1">
+                    @if (Model.UnacceptedMeetingsCount <= 0 && Model.AdoptedMeetingsCount <= 0)
+                    {
+                        <p class="text-center pt-3">Нет в системе завершеных собраний.</p>
+                    }
+                    else
+                    {
+                        <div>
+                            <canvas id="acceptedAndUnacceptedMeetings"></canvas>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('meetingsAtYears');
+
+    const modelData = @Html.Raw(Json.Serialize(Model.MeetingsDuringTheYears));
+
+    const labels = modelData.map(item => item.date);
+    const data = modelData.map(item => item.count);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Собраний',
+                data: data,
+                fill: false,
+                borderColor: 'rgb(255,193,7)',
+                tension: 0.1
+            }]
+        }
+    });
+
+    const ctx2 = document.getElementById('acceptedAndUnacceptedMeetings');
+
+    const modelDataAdopted = @Html.Raw(Json.Serialize(Model.AdoptedMeetingsCount));
+    const modelDataUnaccepted = @Html.Raw(Json.Serialize(Model.UnacceptedMeetingsCount));
+
+    const labels2 = [
+        'Непринятые',
+        'Принятые'
+    ];
+
+    new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+            labels: labels2,
+            datasets: [{
+                label: 'Собраний',
+                data: [modelDataUnaccepted, modelDataAdopted],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(100, 205, 100)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+    });
+</script>
