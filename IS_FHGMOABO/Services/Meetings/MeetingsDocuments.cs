@@ -735,97 +735,100 @@ namespace IS_FHGMOABO.Services.Meetings
                         }
                     }
 
-                    Paragraph results = document.InsertParagraph();
-                    results.Append("\nРЕЗУЛЬТАТЫ ГОЛОСОВАНИЯ\n").Bold().Alignment = Alignment.center;
-                    if (meeting.Questions != null)
+                    if (meeting.ArchivalInformationOfMeeting.ParticipatingArea / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100 >= 50)
                     {
-                        foreach (var question in meeting.Questions)
+                        Paragraph results = document.InsertParagraph();
+                        results.Append("\nРЕЗУЛЬТАТЫ ГОЛОСОВАНИЯ\n").Bold().Alignment = Alignment.center;
+                        if (meeting.Questions != null)
                         {
-                            bool quorum = (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100 > 50 ? true : false;
+                            foreach (var question in meeting.Questions)
+                            {
+                                bool quorum = (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100 > 50 ? true : false;
 
-                            document.InsertParagraph().Append($"{question.Number}. {question.Agenda}").Bold().Alignment = Alignment.both;
-                            document.InsertParagraph().Append($"Предложено: {question.Proposed}").Alignment = Alignment.both;
-                            document.InsertParagraph().Append("").Alignment = Alignment.both;
-                            Table result = document.AddTable(3, 3);
-                            result.Rows[0].Cells[0].Paragraphs.First().Append("ЗА");
-                            result.Rows[1].Cells[0].Paragraphs.First().Append("ПРОТИВ");
-                            result.Rows[2].Cells[0].Paragraphs.First().Append("ВОЗДЕРЖАЛСЯ");
-                            result.Rows[0].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaFor}").Alignment = Alignment.center;
-                            result.Rows[1].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaAgainst}").Alignment = Alignment.center;
-                            result.Rows[2].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaAbstained}").Alignment = Alignment.center;
-                            if (question.DecisionType == 0)
-                            {
-                                result.Rows[0].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaFor / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
-                                result.Rows[1].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAgainst / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
-                                result.Rows[2].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAbstained / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
-                            }
-                            else
-                            {
-                                result.Rows[0].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
-                                result.Rows[1].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAgainst / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
-                                result.Rows[2].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAbstained / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
-                            }
-                            document.InsertTable(result);
+                                document.InsertParagraph().Append($"{question.Number}. {question.Agenda}").Bold().Alignment = Alignment.both;
+                                document.InsertParagraph().Append($"Предложено: {question.Proposed}").Alignment = Alignment.both;
+                                document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                Table result = document.AddTable(3, 3);
+                                result.Rows[0].Cells[0].Paragraphs.First().Append("ЗА");
+                                result.Rows[1].Cells[0].Paragraphs.First().Append("ПРОТИВ");
+                                result.Rows[2].Cells[0].Paragraphs.First().Append("ВОЗДЕРЖАЛСЯ");
+                                result.Rows[0].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaFor}").Alignment = Alignment.center;
+                                result.Rows[1].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaAgainst}").Alignment = Alignment.center;
+                                result.Rows[2].Cells[1].Paragraphs.First().Append($"{question.MeetingResult.AreaAbstained}").Alignment = Alignment.center;
+                                if (question.DecisionType == 0)
+                                {
+                                    result.Rows[0].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaFor / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
+                                    result.Rows[1].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAgainst / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
+                                    result.Rows[2].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAbstained / (question.MeetingResult.AreaFor + question.MeetingResult.AreaAgainst + question.MeetingResult.AreaAbstained) * 100, 2)}%").Alignment = Alignment.center;
+                                }
+                                else
+                                {
+                                    result.Rows[0].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
+                                    result.Rows[1].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAgainst / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
+                                    result.Rows[2].Cells[2].Paragraphs.First().Append($"{Math.Round(question.MeetingResult.AreaAbstained / meeting.ArchivalInformationOfMeeting.TotalAreaHouse * 100, 2)}%").Alignment = Alignment.center;
+                                }
+                                document.InsertTable(result);
 
-                            switch (question.DecisionType)
-                            {
-                                case 0:
-                                    if (question.MeetingResult.AreaFor > question.MeetingResult.AreaAgainst
-                                        && question.MeetingResult.AreaFor > question.MeetingResult.AreaAbstained
-                                        && quorum)
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    else
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    break;
-                                case 1:
-                                    if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse > (decimal)0.5
-                                        && quorum)
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    else
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    break;
-                                case 2:
-                                    if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse > 2 / 3
-                                        && quorum)
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    else
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    break;
-                                case 3:
-                                    if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse >= 1
-                                        && quorum)
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    else
-                                    {
-                                        document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
-                                        document.InsertParagraph().Append("").Alignment = Alignment.both;
-                                    }
-                                    break;
+                                switch (question.DecisionType)
+                                {
+                                    case 0:
+                                        if (question.MeetingResult.AreaFor > question.MeetingResult.AreaAgainst
+                                            && question.MeetingResult.AreaFor > question.MeetingResult.AreaAbstained
+                                            && quorum)
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        else
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        break;
+                                    case 1:
+                                        if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse > (decimal)0.5
+                                            && quorum)
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        else
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        break;
+                                    case 2:
+                                        if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse > 2 / 3
+                                            && quorum)
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        else
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        break;
+                                    case 3:
+                                        if (question.MeetingResult.AreaFor / meeting.ArchivalInformationOfMeeting.TotalAreaHouse >= 1
+                                            && quorum)
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append($"Решили: {question.Proposed}").Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        else
+                                        {
+                                            document.InsertParagraph().Append("Решение по вопросу повестки дня НЕ ПРИНЯТО.").Bold().Alignment = Alignment.both;
+                                            document.InsertParagraph().Append("").Alignment = Alignment.both;
+                                        }
+                                        break;
+                                }
                             }
                         }
                     }
