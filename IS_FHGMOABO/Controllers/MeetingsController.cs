@@ -738,5 +738,25 @@ namespace IS_FHGMOABO.Controllers
 
             return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Бюллетени общего собрания от {bulletins[0].Meeting.StartDate.ToString("dd.MM.yyyy")} по адресу {bulletins[0].Room.House.Type} {bulletins[0].Room.House.Street}, дом {bulletins[0].Room.House.Number} (без приложений).docx");
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PrintProtocol(int id)
+        {
+            var meeting = await _applicationDBContext.Meetings
+                                         .Where(x => x.Id == id)
+                                         .Include(x => x.House)
+                                         .Include(x => x.ArchivalInformationOfMeeting)
+                                         .Include(x => x.CountingCommitteeMembers)
+                                         .FirstOrDefaultAsync();
+            if(meeting != null)
+            {
+                meeting.Questions = await _applicationDBContext.Questions.Where(x => x.MeetingId == id).Include(x => x.MeetingResult).ToListAsync();
+            }
+
+            var memoryStream = MeetingsDocuments.MeetingProtocol(meeting);
+
+            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.wordprocessingml.document", $"Протокол ОСС по адресу {meeting.House.Type} {meeting.House.Street}, дом {meeting.House.Number}.docx");
+        }
     }
 }
