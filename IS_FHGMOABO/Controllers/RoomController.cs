@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 using static IS_FHGMOABO.Models.RoomModels.EditRoomModel;
 
 namespace IS_FHGMOABO.Controllers
@@ -32,6 +33,14 @@ namespace IS_FHGMOABO.Controllers
                         .OrderBy(x => x.Type)
                         .ThenBy(x => x.Number)
                         .ToListAsync();
+
+            if (model.Rooms != null)
+            {
+                model.Rooms = model.Rooms.OrderBy(x => x.Type)
+                                         .ThenBy(x => int.Parse(Regex.Match(x.Number, @"\d+").Value))
+                                         .ThenBy(x => Regex.Match(x.Number, @"\D+").Value)
+                                         .ToList();
+            }
 
             model.House = await _applicationDBContext.Houses
                         .FirstOrDefaultAsync(x => x.Id == id);
