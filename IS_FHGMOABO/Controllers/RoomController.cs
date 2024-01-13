@@ -1,13 +1,10 @@
 ﻿using IS_FHGMOABO.DAL;
 using IS_FHGMOABO.DBConection;
-using IS_FHGMOABO.Models.HouseModels;
-using IS_FHGMOABO.Models.PropertiesModels;
 using IS_FHGMOABO.Models.RoomModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using static IS_FHGMOABO.Models.RoomModels.EditRoomModel;
 

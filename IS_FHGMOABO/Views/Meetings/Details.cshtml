@@ -114,7 +114,7 @@
                         {
                             @if (Model.Meeting.Format == "Очное")
                             {
-                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечатать реестр голосования</a>
                             }
                             @if (Model.Meeting.Format == "Заочное")
                             {
@@ -123,7 +123,7 @@
                             @if (Model.Meeting.Format == "Очно-заочное")
                             {
                                 <a class="btn btn-outline-dark" asp-controller="Meetings" asp-action="Bulletins" asp-route-id="@Model.Meeting.Id">Перейти к бюллетеням</a>
-                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать реестр голосования</a>
+                                <a href="/Meetings/PrintVotingRegister?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечатать реестр голосования</a>
                             }
                         }
                         @if (Model.Meeting.Status == "Проходит подсчет голосов")
@@ -133,7 +133,7 @@
                         }
                         @if (Model.Meeting.Status == "Завершено")
                         {
-                            <a href="/Meetings/PrintProtocol?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечтать протокол</a>
+                            <a href="/Meetings/PrintProtocol?id=@Model.Meeting.Id" target="_blank" class="btn btn-outline-dark">Распечатать протокол</a>
                         }
                     </div>
                 </div>

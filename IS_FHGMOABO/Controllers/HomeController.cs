@@ -1,5 +1,4 @@
-﻿using IS_FHGMOABO.DAL;
-using IS_FHGMOABO.DBConection;
+﻿using IS_FHGMOABO.DBConection;
 using IS_FHGMOABO.Models;
 using IS_FHGMOABO.Models.HomeModels;
 using Microsoft.AspNetCore.Authorization;
@@ -44,7 +43,7 @@ namespace IS_FHGMOABO.Controllers
                 _meetingsDuringTheYears.Add(new DateAndCount()
                 {
                     Date = date,
-                    Count = count,//ксененок очень любит котеночка
+                    Count = count,
                 });
             }
 

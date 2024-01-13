@@ -15,7 +15,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie(options =>
 {
-    options.LoginPath = "/Account/Login"; // Путь к форме входа
+    options.LoginPath = "/Account/Login";
 });
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
@@ -29,19 +29,18 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("Identity.Application", options =>
 {
-    // Настройки обработчика аутентификации для Identity.Application
+
 })
 .AddCookie("Identity.External", options =>
 {
-    // Настройки обработчика аутентификации для Identity.External
+
 }).AddCookie("Identity.TwoFactorUserId", options =>
 {
-    // Настройки обработчика аутентификации для Identity.TwoFactorUserId
+
 });
 
 builder.Services.AddSession();
 
-// Добавление сервисов Identity
 builder.Services.AddIdentityCore<IdentityUser>(options =>
 options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDBContext>()
@@ -50,11 +49,9 @@ options.SignIn.RequireConfirmedAccount = false)
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -63,7 +60,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Добавление аутентификации и авторизации
 app.UseAuthentication();
 app.UseAuthorization();
 

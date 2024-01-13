@@ -1,9 +1,6 @@
 ﻿using Xceed.Document.NET;
 using Xceed.Words.NET;
 using IS_FHGMOABO.DAL;
-using Microsoft.VisualBasic;
-using Microsoft.AspNetCore.Http;
-using System.Net.Mail;
 
 namespace IS_FHGMOABO.Services.Meetings
 {
